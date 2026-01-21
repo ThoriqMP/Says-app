@@ -133,10 +133,10 @@
                                 <div class="border border-gray-300 dark:border-gray-600 rounded-lg p-4 bg-white dark:bg-gray-800">
                                     <canvas id="signatureCanvas" width="400" height="150" class="border border-gray-200 dark:border-gray-600 rounded bg-white cursor-crosshair w-full max-w-full"></canvas>
                                     <div class="mt-3 flex flex-col sm:flex-row gap-2">
-                                        <button type="button" id="clearSignature" class="w-full sm:w-auto px-3 py-1 text-xs bg-red-100 text-red-700 hover:bg-red-200 rounded dark:bg-red-900 dark:text-red-300 dark:hover:bg-red-800 transition">
+                                        <button type="button" id="clearSignature" class="inline-flex items-center justify-center gap-1.5 w-full sm:w-auto px-4 py-2 rounded-md text-sm font-semibold bg-red-600 text-white hover:bg-red-700 transition">
                                             Hapus
                                         </button>
-                                        <button type="button" id="saveSignature" class="w-full sm:w-auto px-3 py-1 text-xs bg-green-100 text-green-700 hover:bg-green-200 rounded dark:bg-green-900 dark:text-green-300 dark:hover:bg-green-800 transition">
+                                        <button type="button" id="saveSignature" class="inline-flex items-center justify-center gap-1.5 w-full sm:w-auto px-4 py-2 rounded-md text-sm font-semibold bg-green-600 text-white hover:bg-green-700 transition">
                                             Simpan Gambar
                                         </button>
                                     </div>

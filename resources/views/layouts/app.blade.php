@@ -10,13 +10,17 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700&display=swap" rel="stylesheet" />
-    
+
+    <script>
+        (() => {
+            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const initialDark = localStorage.theme === 'dark' || (!('theme' in localStorage) && prefersDark);
+            document.documentElement.classList.toggle('dark', initialDark);
+        })();
+    </script>
+
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
-    
-    <!-- Alpine.js -->
-    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <script defer src="https://unpkg.com/@alpinejs/focus@3.x.x/dist/cdn.min.js"></script>
 
     <style>
         [x-cloak] { display: none !important; }
@@ -24,26 +28,34 @@
     
     @stack('styles')
 </head>
-<body class="font-sans antialiased bg-gray-50 dark:bg-gray-900" x-data="darkMode()" x-init="init()">
+<body class="font-sans antialiased bg-gray-50 dark:bg-gray-900" x-data="appShell">
     <div class="min-h-screen">
         @if(auth()->check())
-            <!-- Navigation -->
-            @include('layouts.navigation')
-            
-            <!-- Page Heading -->
-            @if(isset($header))
-                <header class="bg-white dark:bg-gray-800 shadow">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                        {{ $header }}
-                    </div>
-                </header>
-            @endif
+            <div class="lg:flex">
+                @include('layouts.navigation')
+
+                <div class="flex-1 lg:pl-64">
+                    @if(isset($header))
+                        <header class="bg-white dark:bg-gray-800 shadow">
+                            <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                                {{ $header }}
+                            </div>
+                        </header>
+                    @endif
+
+                    <main>
+                        @yield('content')
+                    </main>
+                </div>
+            </div>
         @endif
         
         <!-- Page Content -->
-        <main>
-            @yield('content')
-        </main>
+        @if(!auth()->check())
+            <main>
+                @yield('content')
+            </main>
+        @endif
     </div>
     
     @stack('scripts')

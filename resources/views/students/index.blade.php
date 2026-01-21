@@ -80,17 +80,20 @@
                                         {{ $student->created_at->format('d/m/Y') }}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
-                                        <a href="{{ route('students.edit', $student) }}" class="text-blue-600 hover:text-blue-800 transition">
-                                            Edit
-                                        </a>
-                                        <form action="{{ route('students.destroy', $student) }}" method="POST" class="inline-block" 
-                                              onsubmit="return confirm('Apakah Anda yakin ingin menghapus siswa ini?')">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="text-red-600 hover:text-red-800 transition">
-                                                Hapus
-                                            </button>
-                                        </form>
+                                        <div class="flex items-center gap-2">
+                                            <a href="{{ route('students.edit', $student) }}"
+                                               class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold bg-yellow-500 text-white hover:bg-yellow-600 transition">
+                                                Edit
+                                            </a>
+                                            <form action="{{ route('students.destroy', $student) }}" method="POST" class="inline"
+                                                  onsubmit="return confirm('Apakah Anda yakin ingin menghapus siswa ini?')">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold bg-red-600 text-white hover:bg-red-700 transition">
+                                                    Hapus
+                                                </button>
+                                            </form>
+                                        </div>
                                     </td>
                                 </tr>
                             @empty

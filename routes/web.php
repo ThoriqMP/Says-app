@@ -3,6 +3,7 @@
 use App\Http\Controllers\Assessment\AssessmentController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\FamilyMappingController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\SchoolProfileController;
 use App\Http\Controllers\ServiceController;
@@ -69,6 +70,10 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/assessments/{assessment}', [AssessmentController::class, 'destroy'])->name('assessments.destroy');
     Route::get('/assessments/{assessment}/pdf', [AssessmentController::class, 'pdf'])->name('assessments.pdf');
     Route::get('/assessments/{assessment}/pdf/view', [AssessmentController::class, 'pdfView'])->name('assessments.pdf.view');
+
+    // Family Mapping Routes
+    Route::get('/family-mapping', [FamilyMappingController::class, 'index'])->name('family-mapping.index');
+    Route::get('/family-mapping/pdf', [FamilyMappingController::class, 'pdf'])->name('family-mapping.pdf');
 });
 
 // Default redirect

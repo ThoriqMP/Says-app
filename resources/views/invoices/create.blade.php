@@ -9,7 +9,10 @@
             <div class="p-6 text-gray-900 dark:text-gray-100">
                 <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-6">
                     <h2 class="text-2xl font-semibold text-gray-800 dark:text-gray-200">Buat Invoice Baru</h2>
-                    <a href="{{ route('invoices.index') }}" class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition w-full sm:w-auto text-center">
+                    <a href="{{ route('invoices.index') }}" class="inline-flex items-center justify-center gap-2 bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition w-full sm:w-auto">
+                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                        </svg>
                         Kembali
                     </a>
                 </div>
@@ -66,8 +69,8 @@
                         <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-4">
                             <h3 class="text-lg font-medium text-gray-800 dark:text-gray-200">Item Invoice</h3>
                             <button type="button" @click="addItem" 
-                                    class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition flex items-center justify-center w-full sm:w-auto">
-                                <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    class="inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition w-full sm:w-auto">
+                                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                                 </svg>
                                 Tambah Item
@@ -122,11 +125,12 @@
                                             </td>
                                             <td class="px-6 py-4">
                                                 <button type="button" @click="removeItem(index)" 
-                                                        class="text-red-600 hover:text-red-800 transition"
+                                                        class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold bg-red-600 text-white hover:bg-red-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
                                                         :disabled="items.length <= 1">
-                                                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                                                     </svg>
+                                                    Hapus
                                                 </button>
                                             </td>
                                         </tr>
@@ -150,7 +154,10 @@
                     <!-- Submit Button -->
                     <div class="flex justify-end">
                         <button type="submit" 
-                                class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition w-full sm:w-auto">
+                                class="inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition w-full sm:w-auto">
+                            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
                             Simpan Invoice
                         </button>
                     </div>

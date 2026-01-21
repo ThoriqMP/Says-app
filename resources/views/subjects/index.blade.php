@@ -85,12 +85,19 @@
                                     <td class="px-4 py-2">{{ $subject->phone }}</td>
                                     <td class="px-4 py-2">{{ $subject->assessments_count ?? 0 }}</td>
                                     <td class="px-4 py-2 whitespace-nowrap">
-                                        <a href="{{ route('subjects.edit', $subject) }}" class="text-yellow-600 hover:text-yellow-800 transition">Edit</a>
-                                        <form action="{{ route('subjects.destroy', $subject) }}" method="POST" class="inline" onsubmit="return confirm('Hapus subjek ini?')">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="text-red-600 hover:text-red-800 transition ml-2">Hapus</button>
-                                        </form>
+                                        <div class="flex items-center gap-2">
+                                            <a href="{{ route('subjects.edit', $subject) }}"
+                                               class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold bg-yellow-500 text-white hover:bg-yellow-600 transition">
+                                                Edit
+                                            </a>
+                                            <form action="{{ route('subjects.destroy', $subject) }}" method="POST" class="inline" onsubmit="return confirm('Hapus subjek ini?')">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold bg-red-600 text-white hover:bg-red-700 transition">
+                                                    Hapus
+                                                </button>
+                                            </form>
+                                        </div>
                                     </td>
                                 </tr>
                             @empty

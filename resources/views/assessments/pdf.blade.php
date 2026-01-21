@@ -364,8 +364,14 @@
                             @if(!empty($logoProsekar))
                                 <img src="{{ $logoProsekar }}" style="height: 60px; margin-bottom: 5px;">
                             @endif
-                            <div style="font-weight: bold; font-size: 10pt; color: #333;">PROSEKAR PSYCHOLOGICAL SERVICES</div>
-                            <div style="font-size: 8pt; color: #666;">Windelrio Townhouse Blok A No 9,<br>Bogor 16112</div>
+                            <div style="font-weight: bold; font-size: 10pt; color: #333;">PRO SEKAR PSYCHOLOGICAL SERVICES</div>
+                            <div style="font-size: 8pt; color: #666;">
+                                Windelrio Townhouse Blok A No 9 <br>
+                                Jl. Brigjen Saptadji Hadiprawira<br>
+                                Semplak – Bogor Barat 16112 <br>
+                                Phone : 0851-1765-8225<br>
+                                Instagram: @prosekar_psikologibogor
+                            </div>
                         </td>
                     </tr>
                 </table>
@@ -397,7 +403,7 @@
     <!-- DASHBOARD PAGE -->
     <div class="page page-break">
         <div class="content-wrapper">
-            <h2 style="color: #4c1d95; margin-bottom: 12px; font-size: 14pt; border-bottom: 2px solid #4c1d95; padding-bottom: 4px; display: inline-block;">DASHBOARD HASIL PEMERIKSAAN</h2>
+            <h2 style="color: #4c1d95; margin-bottom: 12px; font-size: 14pt; border-bottom: 2px solid #4c1d95; padding-bottom: 4px; display: inline-block;">HASIL PEMERIKSAAN</h2>
 
             <table class="table" style="margin-bottom: 8px;">
                 <tr>
@@ -606,7 +612,7 @@
                     <div style="height: 55px;"></div>
                 @endif
                 <div style="font-weight: bold; font-size: 9.5pt; text-decoration: underline;">Anggia Chrisanti, S.Psi, M.Psi, Psikolog</div>
-                <div style="font-size: 7.5pt;">SIPP: 0336-21-2-1</div>
+                <div style="font-size: 7.5pt;">No.SIAP HIMPSI 20250719</div>
             </div>
         </div>
     </div>

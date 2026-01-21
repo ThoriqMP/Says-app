@@ -148,7 +148,7 @@
                     <div class="bg-white w-full max-w-4xl mx-4 rounded-lg shadow-lg overflow-hidden">
                         <div class="flex justify-between items-center px-4 py-2 border-b relative z-10">
                             <h3 class="font-semibold">Preview Laporan</h3>
-                            <button type="button" @click="openPreview = false" class="text-gray-500 hover:text-gray-700">Tutup</button>
+                            <button type="button" @click="openPreview = false" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold bg-gray-500 text-white hover:bg-gray-600 transition">Tutup</button>
                         </div>
                         <div class="p-4 max-h-[80vh] relative z-0">
                             <iframe 

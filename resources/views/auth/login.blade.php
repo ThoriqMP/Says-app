@@ -3,19 +3,19 @@
 @section('title', 'Login')
 
 @section('content')
-<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-4 sm:px-6 lg:px-8">
+<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 py-12 px-4 sm:px-6 lg:px-8">
     <div class="max-w-md w-full space-y-8">
-        <div class="bg-white rounded-lg shadow-lg p-8">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8">
             <div class="text-center">
                 <div class="mx-auto h-16 w-16 bg-blue-600 rounded-full flex items-center justify-center mb-4">
                     <svg class="h-8 w-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                     </svg>
                 </div>
-                <h2 class="text-3xl font-bold text-gray-900 mb-2">
+                <h2 class="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">
                     {{ config('app.name') }}
                 </h2>
-                <p class="text-gray-600 mb-8">Masuk ke akun Anda</p>
+                <p class="text-gray-600 dark:text-gray-300 mb-8">Masuk ke akun Anda</p>
             </div>
 
             @if ($errors->any())
@@ -40,7 +40,7 @@
                 @csrf
                 
                 <div>
-                    <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
+                    <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                         Email
                     </label>
                     <div class="relative">
@@ -50,13 +50,13 @@
                             </svg>
                         </div>
                         <input id="email" name="email" type="email" value="{{ old('email') }}" required 
-                               class="appearance-none rounded-lg relative block w-full pl-10 pr-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" 
+                               class="appearance-none rounded-lg relative block w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" 
                                placeholder="Masukkan email">
                     </div>
                 </div>
 
                 <div>
-                    <label for="password" class="block text-sm font-medium text-gray-700 mb-2">
+                    <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                         Password
                     </label>
                     <div class="relative">
@@ -66,7 +66,7 @@
                             </svg>
                         </div>
                         <input id="password" name="password" type="password" required 
-                               class="appearance-none rounded-lg relative block w-full pl-10 pr-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" 
+                               class="appearance-none rounded-lg relative block w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-600 placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-700 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" 
                                placeholder="Masukkan password">
                     </div>
                 </div>
@@ -75,7 +75,7 @@
                     <div class="flex items-center">
                         <input id="remember" name="remember" type="checkbox" value="1" {{ old('remember') ? 'checked' : '' }}
                                class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
-                        <label for="remember" class="ml-2 block text-sm text-gray-700">
+                        <label for="remember" class="ml-2 block text-sm text-gray-700 dark:text-gray-300">
                             Ingat saya
                         </label>
                     </div>
@@ -95,9 +95,9 @@
             </form>
 
             <div class="mt-6 text-center">
-                <p class="text-sm text-gray-600">
+                <p class="text-sm text-gray-600 dark:text-gray-300">
                     Belum punya akun? 
-                    <a href="#" class="font-medium text-blue-600 hover:text-blue-500">
+                    <a href="#" class="font-medium text-blue-600 hover:text-blue-500 dark:text-blue-400 dark:hover:text-blue-300">
                         Hubungi administrator
                     </a>
                 </p>

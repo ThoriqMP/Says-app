@@ -250,12 +250,7 @@ class AssessmentController extends Controller
 
         $pdf->setPaper('a4', 'portrait');
 
-        $subjectName = $assessment->subject?->name ?? 'TanpaNama';
-        $subjectName = preg_replace('/[^A-Za-z0-9]+/', '_', $subjectName);
-        $subjectName = trim($subjectName, '_');
-        if ($subjectName === '') {
-            $subjectName = 'TanpaNama';
-        }
+        $subjectName = $this->safeFilename($assessment->subject?->name ?? 'TanpaNama');
 
         $testDate = $assessment->test_date?->format('dmY') ?? now()->format('dmY');
         $filename = 'PMA_'.$subjectName.'_'.$testDate.'.pdf';
@@ -315,7 +310,11 @@ class AssessmentController extends Controller
 
         $pdf->setPaper('a4', 'portrait');
 
-        return $pdf->stream('assessment-'.$assessment->id.'.pdf');
+        $subjectName = $this->safeFilename($assessment->subject?->name ?? 'TanpaNama');
+        $testDate = $assessment->test_date?->format('dmY') ?? now()->format('dmY');
+        $filename = 'PMA_'.$subjectName.'_'.$testDate.'.pdf';
+
+        return $pdf->stream($filename);
     }
 
     private function buildKamusPages(string $kamusContent): array
@@ -380,6 +379,14 @@ class AssessmentController extends Controller
         }
 
         return $pages;
+    }
+
+    private function safeFilename(string $value): string
+    {
+        $value = preg_replace('/[^A-Za-z0-9]+/', '_', $value);
+        $value = trim((string) $value, '_');
+
+        return $value !== '' ? $value : 'TanpaNama';
     }
 
     private function splitKamusSections(string $kamusContent): array
