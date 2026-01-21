@@ -45,7 +45,25 @@
         .content-wrapper { padding-bottom: 18mm; position: relative; width: 100%; }
         .dashboard-wrapper { padding-bottom: 45mm; }
 
-        .cover-page { padding: 0; height: 297mm; }
+        .cover-page { padding: 0; height: 297mm; background-color: white; z-index: 50; position: relative; }
+        
+        .watermark {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 450px;
+            height: 450px;
+            margin-left: -225px;
+            margin-top: -225px;
+            opacity: 0.1;
+            z-index: -10;
+        }
+
+        .watermark img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
         .cover-header-table { width: 100%; margin-bottom: 2cm; }
         .cover-headline { font-size: 22pt; font-weight: bold; color: #111; line-height: 1.1; }
         .cover-subheadline { font-size: 12pt; margin-top: 10px; color: #555; letter-spacing: 1px; }
@@ -79,7 +97,7 @@
         .kv-value { font-size: 11.5pt; font-weight: bold; color: #1f2937; margin-bottom: 10px; }
 
         .card {
-            background: #fff;
+            background: transparent;
             border: 1px solid #e5e7eb;
             border-radius: 8px;
             margin-bottom: 8px;
@@ -152,6 +170,11 @@
     </style>
 </head>
 <body>
+    @if(!empty($logoProsekar))
+    <div class="watermark">
+        <img src="{{ $logoProsekar }}" alt="Watermark">
+    </div>
+    @endif
     <div class="page cover-page">
         <div class="cover-content">
             <div class="cover-decor"></div>

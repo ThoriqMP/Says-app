@@ -79,6 +79,27 @@
         .cover-page {
             padding: 0;
             height: 297mm;
+            background-color: white;
+            z-index: 50;
+            position: relative;
+        }
+
+        .watermark {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            width: 450px;
+            height: 450px;
+            margin-left: -225px;
+            margin-top: -225px;
+            opacity: 0.1;
+            z-index: -10;
+        }
+
+        .watermark img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
         }
 
         .cover-header-table {
@@ -160,7 +181,7 @@
         }
 
         .subject-card {
-            background-color: rgba(255, 255, 255, 0.95);
+            background-color: rgba(255, 255, 255, 0.85);
             padding: 30px 40px;
             border-radius: 15px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.1);
@@ -189,7 +210,7 @@
 
         /* Dashboard Styles */
         .card {
-            background: #fff;
+            background: transparent;
             border: 1px solid #e5e7eb;
             border-radius: 8px;
             margin-bottom: 10px;
@@ -345,6 +366,11 @@
     </style>
 </head>
 <body>
+    @if(!empty($logoProsekar))
+    <div class="watermark">
+        <img src="{{ $logoProsekar }}" alt="Watermark">
+    </div>
+    @endif
 
     <!-- COVER PAGE -->
     <div class="page cover-page">
