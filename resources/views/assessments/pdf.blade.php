@@ -888,146 +888,38 @@
         <table class="kamus-table">
             <tr>
                 <td>
-                    <p><strong>ADMINISTRATOR (ADM)</strong><br>
-                        Menyukai keteraturan, perencanaan, dan administrasi.
-                    </p>
+                    <p><strong>ADMINISTRATOR</strong>: Anda suka dengan keteraturan, terencana dan rapih dalam pengelolaan administrasi.</p>
+                    <p><strong>AMBASSADOR</strong>: Anda senang membina hubungan persahabatan, berkomunikasi, dan menjadi perwakilan organisasi.</p>
+                    <p><strong>ANALYST</strong>: Anda berpikiran analisis, senang data, dan suka menguraikan sesuatu ke bagian kecil.</p>
+                    <p><strong>ARRANGER</strong>: Anda senang mengatur sumber daya manusia untuk hasil optimum.</p>
+                    <p><strong>CARETAKER</strong>: Anda bisa merasakan perasaan orang lain sehingga senang merawat atau membantu orang lain.</p>
+                    <p><strong>COMMANDER</strong>: Anda keras, berani menghadapi konfrontasi dan mengambil alih tanggung jawab.</p>
+                    <p><strong>COMMUNICATOR</strong>: Anda senang menjelaskan sesuatu baik lisan maupun tertulis, dan suka tampil di depan.</p>
+                    <p><strong>CREATOR</strong>: Anda punya banyak ide, berpikiran jauh kedepan dan strategis.</p>
+                    <p><strong>DESIGNER</strong>: Anda punya banyak ide, kemampuan analisis, dan menyatakannya ke dalam gambar.</p>
+                    <p><strong>DISTRIBUTOR</strong>: Anda senang mengatur sumber daya, bertanggung jawab, dan pekerja keras.</p>
+                    <p><strong>EDUCATOR</strong>: Anda suka memajukan orang lain dengan mengajar, melatih, atau memberi nasehat.</p>
+                    <p><strong>EVALUATOR</strong>: Anda teliti sesuai aturan dan suka tugas analisis untuk membuktikan sesuatu.</p>
+                    <p><strong>EXPLORER</strong>: Anda senang mengumpulkan informasi dan mempelajari sesuatu melalui penelitian.</p>
+                    <p><strong>INTERPRETER</strong>: Anda senang menjelaskan sesuatu dan memiliki daya analisis untuk mengartikan sesuatu.</p>
+                    <p><strong>JOURNALIST</strong>: Anda mudah menyesuaikan diri, senang menulis, dan menjelaskan sesuatu secara strategis.</p>
                 </td>
                 <td>
-                    <p><strong>EXPLORER (EXP)</strong><br>
-                        Menyukai riset dan penemuan baru.
-                    </p>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <p><strong>AMBASSADOR (AMB)</strong><br>
-                        Membangun relasi dan mewakili organisasi.
-                    </p>
-                </td>
-                <td>
-                    <p><strong>INTERPRETER (INT)</strong><br>
-                        Menganalisis dan menjelaskan makna.
-                    </p>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <p><strong>ANALYST (ANA)</strong><br>
-                        Berpikir analitis dan berbasis data.
-                    </p>
-                </td>
-                <td>
-                    <p><strong>JOURNALIST (JOU)</strong><br>
-                        Menulis dan beradaptasi dengan cepat.
-                    </p>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <p><strong>ARRANGER (ARR)</strong><br>
-                        Mengatur sumber daya manusia secara optimal.
-                    </p>
-                </td>
-                <td>
-                    <p><strong>MARKETER (MAR)</strong><br>
-                        Mengkomunikasikan nilai dan peluang.
-                    </p>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <p><strong>CARETAKER (CAR)</strong><br>
-                        Peduli dan membantu orang lain.
-                    </p>
-                </td>
-                <td>
-                    <p><strong>MEDIATOR (MED)</strong><br>
-                        Menyelesaikan konflik secara aktif.
-                    </p>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <p><strong>COMMANDER (CMD)</strong><br>
-                        Tegas dan berani memimpin.
-                    </p>
-                </td>
-                <td>
-                    <p><strong>MOTIVATOR (MOT)</strong><br>
-                        Memberi semangat dan inspirasi.
-                    </p>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <p><strong>COMMUNICATOR (COM)</strong><br>
-                        Pandai menjelaskan dan tampil di depan.
-                    </p>
-                </td>
-                <td>
-                    <p><strong>OPERATOR (OPE)</strong><br>
-                        Pekerja keras dan teratur.
-                    </p>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <p><strong>CREATOR (CRE)</strong><br>
-                        Penuh ide dan berpikir strategis.
-                    </p>
-                </td>
-                <td>
-                    <p><strong>PRODUCER (PRO)</strong><br>
-                        Mengubah ide menjadi hasil nyata.
-                    </p>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <p><strong>DESIGNER (DES)</strong><br>
-                        Menuangkan ide ke dalam visual.
-                    </p>
-                </td>
-                <td>
-                    <p><strong>QUALITY CONTROLLER (QCA)</strong><br>
-                        Menjaga mutu dan standar.
-                    </p>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <p><strong>DISTRIBUTOR (DIS)</strong><br>
-                        Bertanggung jawab dan pekerja keras.
-                    </p>
-                </td>
-                <td>
-                    <p><strong>RESTORER (RES)</strong><br>
-                        Mendiagnosis dan memperbaiki.
-                    </p>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <p><strong>EDUCATOR (EDU)</strong><br>
-                        Senang mengajar dan membimbing.
-                    </p>
-                </td>
-                <td>
-                    <p><strong>STRATEGIST (STR)</strong><br>
-                        Memilih jalur terbaik menuju tujuan.
-                    </p>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <p><strong>EVALUATOR (EVA)</strong><br>
-                        Teliti dan patuh pada standar.
-                    </p>
-                </td>
-                <td>
-                    <p><strong>VISIONARY (VIS)</strong><br>
-                        Melihat masa depan secara intuitif.
-                    </p>
+                    <p><strong>MARKETER</strong>: Anda senang menonjolkan kelebihan, mengkomunikasikannya, dan menggali peluang pasar.</p>
+                    <p><strong>MEDIATOR</strong>: Anda berani menghadapi konfrontasi untuk mengatasi dan menyelesaikan konflik.</p>
+                    <p><strong>MOTIVATOR</strong>: Anda suka memajukan orang lain dengan memberi panduan, semangat, atau inspirasi.</p>
+                    <p><strong>OPERATOR</strong>: Pekerja keras yang senang keteraturan dan melayani melalui perangkat kerja.</p>
+                    <p><strong>PRODUCER</strong>: Pekerja keras yang tidak sabar bertindak dan senang membuat ide menjadi produk nyata.</p>
+                    <p><strong>QUALITY CONTROLLER</strong>: Memegang teguh aturan, teliti, dan senang dengan tugas pengontrolan mutu.</p>
+                    <p><strong>RESTORER</strong>: Berpikiran analitis, senang mendiagnosa, dan mengembalikan sesuatu ke fungsi semula.</p>
+                    <p><strong>SAFEKEEPER</strong>: Teliti, waspada, bertanggung jawab terkait keselamatan dan keamanan.</p>
+                    <p><strong>SELECTOR</strong>: Mengerti keunikan orang dan berani menentukan pilihan orang tepat untuk tugas tertentu.</p>
+                    <p><strong>SELLER</strong>: Senang meyakinkan orang lain dengan memelihara hubungan atau menonjolkan kehebatan produk.</p>
+                    <p><strong>SERVER</strong>: Anda orang yang senang melayani dan mendahulukan orang lain.</p>
+                    <p><strong>STRATEGIST</strong>: Memilih jalan terbaik mencapai tujuan melalui kemampuan analisis atau intuisi.</p>
+                    <p><strong>SYTHESIZER</strong>: Senang mengatur sumber daya dan mampu merangkum berbagai hal menjadi sesuatu yang baru.</p>
+                    <p><strong>TREASURY</strong>: Berpikiran analitis, teliti, teratur, dan senang dengan tugas pengelolaan keuangan.</p>
+                    <p><strong>VISIONARY</strong>: Dapat melihat jauh kedepan melampaui cakrawala secara intuisi atau perasaan.</p>
                 </td>
             </tr>
         </table>
@@ -1044,22 +936,12 @@
         <table class="kamus-table">
             <tr>
                 <td>
-                    <p><strong>SANGUINIS</strong><br>
-                        Optimis, riang, dan kreatif. Cocok untuk marketing, travel, dan kuliner.
-                    </p>
-
-                    <p><strong>PHLEGMATIS</strong><br>
-                        Cinta damai dan setia. Cocok untuk perawat, guru, psikolog.
-                    </p>
+                    <p><strong>1. SANGUINIS</strong><br>Optimis, ringan, riang, menyukai petualangan dan risiko. Kreatif, cocok untuk marketing, travel, fashion, atau kuliner.</p>
+                    <p><strong>2. PHLEGMATIS</strong><br>Cinta damai, mencari keharmonisan, setia, dan menghindari konflik. Ideal sebagai perawat, guru, psikolog, atau layanan sosial.</p>
                 </td>
                 <td>
-                    <p><strong>KHOLERIS</strong><br>
-                        Berorientasi tujuan dan logis. Cocok untuk teknologi dan manajemen.
-                    </p>
-
-                    <p><strong>MELANKHOLIS</strong><br>
-                        Teliti dan mencintai keteraturan. Cocok untuk akuntansi dan administrasi.
-                    </p>
+                    <p><strong>3. KHOLERIS</strong><br>Berorientasi tujuan, cerdas, analitis, logis, praktis, dan menyukai percakapan mendalam. Cocok untuk industri pengelolaan, teknologi, statistik, atau teknik.</p>
+                    <p><strong>4. MELANKHOLIS</strong><br>Menyukai tradisi, mencintai keluarga, teliti, dan akurat. Karier sempurna di bidang manajemen, akuntansi, atau administrasi.</p>
                 </td>
             </tr>
         </table>
@@ -1074,13 +956,13 @@
         <table class="kamus-table">
             <tr>
                 <td>
-                    <p><strong>Words of Affirmation</strong> — Menghargai kata-kata penegasan dan apresiasi.</p>
-                    <p><strong>Quality Time</strong> — Mengutamakan perhatian penuh dan kebersamaan.</p>
-                    <p><strong>Receiving Gifts</strong> — Merasa dicintai melalui pemberian hadiah.</p>
+                    <p><strong>1. WORD OF AFFIRMATION</strong><br>Perlu mendengar kata-kata penegasan, apresiasi tulus, dan ungkapan kasih sayang secara langsung atau tulisan.</p>
+                    <p><strong>2. QUALITY TIME</strong><br>Fokus pada perhatian penuh tanpa gangguan. Menghabiskan waktu bersama melalui komunikasi dan kebersamaan bermakna.</p>
+                    <p><strong>3. RECEIVING GIFTS</strong><br>Merasa dicintai melalui hadiah sebagai bukti nyata kasih sayang dan perhatian khusus.</p>
                 </td>
                 <td>
-                    <p><strong>Acts of Service</strong> — Merasa dihargai melalui tindakan nyata.</p>
-                    <p><strong>Physical Touch</strong> — Merasa dicintai melalui sentuhan fisik.</p>
+                    <p><strong>4. ACTS OF SERVICE</strong><br>Tindakan nyata untuk meringankan beban tanggung jawab pasangan, seperti membantu pekerjaan rumah atau tugas.</p>
+                    <p><strong>5. PHYSICAL TOUCH</strong><br>Senang dengan sentuhan fisik seperti pelukan, berpegangan tangan, atau tepukan sebagai cara komunikasi cinta langsung.</p>
                 </td>
             </tr>
         </table>
