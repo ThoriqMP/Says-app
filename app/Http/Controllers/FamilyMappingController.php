@@ -19,7 +19,10 @@ class FamilyMappingController extends Controller
             ->latest('test_date')
             ->get();
 
-        return view('family-mapping.index', compact('assessments'));
+        $assessmentsAyah = $assessments->filter(fn ($a) => $a->subject?->gender === 'male');
+        $assessmentsIbu = $assessments->filter(fn ($a) => $a->subject?->gender === 'female');
+
+        return view('family-mapping.index', compact('assessmentsAyah', 'assessmentsIbu'));
     }
 
     public function pdf(Request $request)

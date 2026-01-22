@@ -30,7 +30,7 @@
                             <select name="ayah_id" required x-model="ayahId"
                                     class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-purple-500 focus:border-purple-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
                                 <option value="">Pilih Asesmen Ayah</option>
-                                @foreach($assessments as $a)
+                                @foreach($assessmentsAyah as $a)
                                     <option value="{{ $a->id }}">
                                         #{{ $a->id }} - {{ $a->subject->name }} ({{ $a->test_date?->format('d/m/Y') }})
                                     </option>
@@ -43,7 +43,7 @@
                             <select name="ibu_id" required x-model="ibuId"
                                     class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-purple-500 focus:border-purple-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
                                 <option value="">Pilih Asesmen Ibu</option>
-                                @foreach($assessments as $a)
+                                @foreach($assessmentsIbu as $a)
                                     <option value="{{ $a->id }}">
                                         #{{ $a->id }} - {{ $a->subject->name }} ({{ $a->test_date?->format('d/m/Y') }})
                                     </option>

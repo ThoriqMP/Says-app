@@ -746,41 +746,42 @@
             <table class="kamus-table">
                 <tr>
                     <td>
-                        <p><strong>ADMINISTRATOR (ADM)</strong>: Anda suka dengan keteraturan, terencana dan rapih dalam pengelolaan administrasi.</p>
-                        <p><strong>AMBASSADOR (AMB)</strong>: Anda senang membina hubungan persahabatan, berkomunikasi, dan menjadi perwakilan organisasi.</p>
-                        <p><strong>ANALYST (ANA)</strong>: Anda berpikiran analisis, senang data, dan suka menguraikan sesuatu ke bagian kecil.</p>
-                        <p><strong>ARRANGER (ARR)</strong>: Anda senang mengatur sumber daya manusia untuk hasil optimum.</p>
-                        <p><strong>CARETAKER (CAR)</strong>: Anda bisa merasakan perasaan orang lain sehingga senang merawat atau membantu orang lain.</p>
-                        <p><strong>COMMANDER (CMD)</strong>: Anda keras, berani menghadapi konfrontasi dan mengambil alih tanggung jawab.</p>
-                        <p><strong>COMMUNICATOR (COM)</strong>: Anda senang menjelaskan sesuatu baik lisan maupun tertulis, dan suka tampil di depan.</p>
-                        <p><strong>CREATOR (CRE)</strong>: Anda punya banyak ide, berpikiran jauh kedepan dan strategis.</p>
-                        <p><strong>DESIGNER (DES)</strong>: Anda punya banyak ide, kemampuan analisis, dan menyatakannya ke dalam gambar.</p>
-                        <p><strong>DISTRIBUTOR (DIS)</strong>: Anda senang mengatur sumber daya, bertanggung jawab, dan pekerja keras.</p>
-                        <p><strong>EDUCATOR (EDU)</strong>: Anda suka memajukan orang lain dengan mengajar, melatih, atau memberi nasehat.</p>
-                        <p><strong>EVALUATOR (EVA)</strong>: Anda teliti sesuai aturan dan suka tugas analisis untuk membuktikan sesuatu.</p>
-                        <p><strong>EXPLORER (EXP)</strong>: Anda senang mengumpulkan informasi dan mempelajari sesuatu melalui penelitian.</p>
-                        <p><strong>INTERPRETER (INT)</strong>: Anda senang menjelaskan sesuatu dan memiliki daya analisis untuk mengartikan sesuatu.</p>
-                        <p><strong>JOURNALIST (JOU)</strong>: Anda mudah menyesuaikan diri, senang menulis, dan menjelaskan sesuatu secara strategis.</p>
+                        <p><strong>ADMINISTRATOR</strong>: Anda suka dengan keteraturan, terencana dan rapih dalam pengelolaan administrasi.</p>
+                        <p><strong>AMBASSADOR</strong>: Anda senang membina hubungan persahabatan, berkomunikasi, dan menjadi perwakilan organisasi.</p>
+                        <p><strong>ANALYST</strong>: Anda berpikiran analisis, senang data, dan suka menguraikan sesuatu ke bagian kecil.</p>
+                        <p><strong>ARRANGER</strong>: Anda senang mengatur sumber daya manusia untuk hasil optimum.</p>
+                        <p><strong>CARETAKER</strong>: Anda bisa merasakan perasaan orang lain sehingga senang merawat atau membantu orang lain.</p>
+                        <p><strong>COMMANDER</strong>: Anda keras, berani menghadapi konfrontasi dan mengambil alih tanggung jawab.</p>
+                        <p><strong>COMMUNICATOR</strong>: Anda senang menjelaskan sesuatu baik lisan maupun tertulis, dan suka tampil di depan.</p>
+                        <p><strong>CREATOR</strong>: Anda punya banyak ide, berpikiran jauh kedepan dan strategis.</p>
+                        <p><strong>DESIGNER</strong>: Anda punya banyak ide, kemampuan analisis, dan menyatakannya ke dalam gambar.</p>
+                        <p><strong>DISTRIBUTOR</strong>: Anda senang mengatur sumber daya, bertanggung jawab, dan pekerja keras.</p>
+                        <p><strong>EDUCATOR</strong>: Anda suka memajukan orang lain dengan mengajar, melatih, atau memberi nasehat.</p>
+                        <p><strong>EVALUATOR</strong>: Anda teliti sesuai aturan dan suka tugas analisis untuk membuktikan sesuatu.</p>
+                        <p><strong>EXPLORER</strong>: Anda senang mengumpulkan informasi dan mempelajari sesuatu melalui penelitian.</p>
+                        <p><strong>INTERPRETER</strong>: Anda senang menjelaskan sesuatu dan memiliki daya analisis untuk mengartikan sesuatu.</p>
+                        <p><strong>JOURNALIST</strong>: Anda mudah menyesuaikan diri, senang menulis, dan menjelaskan sesuatu secara strategis.</p>
                     </td>
                     <td>
-                        <p><strong>MARKETER (MAR)</strong>: Anda senang menonjolkan kelebihan, mengkomunikasikannya, dan menggali peluang pasar.</p>
-                        <p><strong>MEDIATOR (MED)</strong>: Anda berani menghadapi konfrontasi untuk mengatasi dan menyelesaikan konflik.</p>
-                        <p><strong>MOTIVATOR (MOT)</strong>: Anda suka memajukan orang lain dengan memberi panduan, semangat, atau inspirasi.</p>
-                        <p><strong>OPERATOR (OPE)</strong>: Pekerja keras yang senang keteraturan dan melayani melalui perangkat kerja.</p>
-                        <p><strong>PRODUCER (PRO)</strong>: Pekerja keras yang tidak sabar bertindak dan senang membuat ide menjadi produk nyata.</p>
-                        <p><strong>QUALITY CONTROLLER (QCA)</strong>: Memegang teguh aturan, teliti, dan senang dengan tugas pengontrolan mutu.</p>
-                        <p><strong>RESTORER (RES)</strong>: Berpikiran analitis, senang mendiagnosa, dan mengembalikan sesuatu ke fungsi semula.</p>
-                        <p><strong>SAFEKEEPER (SAF)</strong>: Teliti, waspada, bertanggung jawab terkait keselamatan dan keamanan.</p>
-                        <p><strong>SELECTOR (SLC)</strong>: Mengerti keunikan orang dan berani menentukan pilihan orang tepat untuk tugas tertentu.</p>
-                        <p><strong>SELLER (SEL)</strong>: Senang meyakinkan orang lain dengan memelihara hubungan atau menonjolkan kehebatan produk.</p>
-                        <p><strong>SERVER (SER)</strong>: Anda orang yang senang melayani dan mendahulukan orang lain.</p>
-                        <p><strong>STRATEGIST (STR)</strong>: Memilih jalan terbaik mencapai tujuan melalui kemampuan analisis atau intuisi.</p>
-                        <p><strong>SYTHESIZER (SYN)</strong>: Senang mengatur sumber daya dan mampu merangkum berbagai hal menjadi sesuatu yang baru.</p>
-                        <p><strong>TREASURY (TRE)</strong>: Berpikiran analitis, teliti, teratur, dan senang dengan tugas pengelolaan keuangan.</p>
-                        <p><strong>VISIONARY (VIS)</strong>: Dapat melihat jauh kedepan melampaui cakrawala secara intuisi atau perasaan.</p>
+                        <p><strong>MARKETER</strong>: Anda senang menonjolkan kelebihan, mengkomunikasikannya, dan menggali peluang pasar.</p>
+                        <p><strong>MEDIATOR</strong>: Anda berani menghadapi konfrontasi untuk mengatasi dan menyelesaikan konflik.</p>
+                        <p><strong>MOTIVATOR</strong>: Anda suka memajukan orang lain dengan memberi panduan, semangat, atau inspirasi.</p>
+                        <p><strong>OPERATOR</strong>: Pekerja keras yang senang keteraturan dan melayani melalui perangkat kerja.</p>
+                        <p><strong>PRODUCER</strong>: Pekerja keras yang tidak sabar bertindak dan senang membuat ide menjadi produk nyata.</p>
+                        <p><strong>QUALITY CONTROLLER</strong>: Memegang teguh aturan, teliti, dan senang dengan tugas pengontrolan mutu.</p>
+                        <p><strong>RESTORER</strong>: Berpikiran analitis, senang mendiagnosa, dan mengembalikan sesuatu ke fungsi semula.</p>
+                        <p><strong>SAFEKEEPER</strong>: Teliti, waspada, bertanggung jawab terkait keselamatan dan keamanan.</p>
+                        <p><strong>SELECTOR</strong>: Mengerti keunikan orang dan berani menentukan pilihan orang tepat untuk tugas tertentu.</p>
+                        <p><strong>SELLER</strong>: Senang meyakinkan orang lain dengan memelihara hubungan atau menonjolkan kehebatan produk.</p>
+                        <p><strong>SERVER</strong>: Anda orang yang senang melayani dan mendahulukan orang lain.</p>
+                        <p><strong>STRATEGIST</strong>: Memilih jalan terbaik mencapai tujuan melalui kemampuan analisis atau intuisi.</p>
+                        <p><strong>SYTHESIZER</strong>: Senang mengatur sumber daya dan mampu merangkum berbagai hal menjadi sesuatu yang baru.</p>
+                        <p><strong>TREASURY</strong>: Berpikiran analitis, teliti, teratur, dan senang dengan tugas pengelolaan keuangan.</p>
+                        <p><strong>VISIONARY</strong>: Dapat melihat jauh kedepan melampaui cakrawala secara intuisi atau perasaan.</p>
                     </td>
                 </tr>
             </table>
+           
 
             <div class="page-break"></div>
 
