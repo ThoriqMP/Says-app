@@ -663,246 +663,210 @@
             <tr>
                 <td>
                     <p><strong>ACHIEVER</strong><br>
-                        Memiliki stamina tinggi dan selalu bekerja keras. Kepuasan hidup berasal dari kesibukan dan keberhasilan.
-                        Cocok untuk Sales, Teknisi Lapangan, Relawan, Petugas SAR.
+                        memiliki stamina yang tinggi dan selalu bekerja keras, kepuasan hidupnya berasal dari kesibukan dan keberhasilan yang diperoleh. Tema bakat ini banyak terdapat pada peran: Tenaga Penjual/Sales, Teknisi Proyek, Teknisi Lapangan, Pekerja Lapangan, Relawan, Petugas SAR.
                     </p>
                 </td>
                 <td>
-                    <p><strong>FOKUS</strong><br>
-                        Membutuhkan tujuan jelas sebagai arah prioritas.
-                        Cocok untuk Team Leader.
+                    <p><strong>FUTURISTIC</strong><br>
+                        senang membayangkan masa depan dan memberikan inspirasi visi. Tema bakat ini banyak terdapat pada peran: Entrepreneur, Perencana jangka panjang, Visioner, Pengembang produk baru.
                     </p>
                 </td>
             </tr>
             <tr>
                 <td>
                     <p><strong>ACTIVATOR</strong><br>
-                        Mampu mengubah ide menjadi tindakan nyata.
-                        Cocok untuk Entrepreneur dan Sales.
+                        dapat membuat sesuatunya terjadi dengan mengubah pikiran menjadi tindakan. Tema bakat ini sering terdapat pada peran: usaha-usaha baru atau yang memerlukan perubahan besar, Entrepreneur, Sales.
                     </p>
                 </td>
                 <td>
-                    <p><strong>FUTURISTIC</strong><br>
-                        Memiliki visi masa depan yang inspiratif.
-                        Cocok untuk Visioner, Entrepreneur.
+                    <p><strong>HARMONY</strong><br>
+                        dapat bekerja sama secara baik dengan orang lain dan mencari titik temu. Tema bakat ini banyak terdapat pada peran: Juru Damai, Penasehat, Pembangun jaringan.
                     </p>
                 </td>
             </tr>
             <tr>
                 <td>
                     <p><strong>ADAPTABILITY</strong><br>
-                        Fleksibel dan bekerja sesuai situasi saat ini.
-                        Cocok untuk Wartawan, Produksi Live TV, Perawat IGD.
+                        melakukan tugas sesuai dengan apa yang diterimnya saat itu. Peran yang mungkin sesuai: Wartawan, Produksi live TV, Perawat Gawat Darurat, Pelayanan Pelanggan (Customer Service), Pemadam Kebakaran, Dispatcher.
                     </p>
                 </td>
                 <td>
-                    <p><strong>HARMONY</strong><br>
-                        Menghindari konflik dan mencari titik temu.
-                        Cocok untuk Mediator.
+                    <p><strong>IDEATION</strong><br>
+                        menyukai diskusi bebas, brainstorming, dan menemukan benang merah antar fenomena. Tema bakat ini banyak terdapat pada peran: Marketing, Advertising, Wartawan, Pengembang produk.
                     </p>
                 </td>
             </tr>
             <tr>
                 <td>
                     <p><strong>ANALYTICAL</strong><br>
-                        Mencari sebab dan pola secara logis.
-                        Cocok untuk Analis, Periset, Accounting, Programmer.
+                        mencari alasan dan sebab-musabab. Memiliki kemampuan untuk memikirkan semua faktor yang dapat mempengaruhi situasi atau kondisi. Tema bakat ini banyak terdapat pada peran: Analis, Periset, Manajemen Database, Editor, Manajemen Risiko, Accounting, Programmer.
                     </p>
                 </td>
                 <td>
-                    <p><strong>IDEATION</strong><br>
-                        Senang brainstorming dan eksplorasi ide.
-                        Cocok untuk Marketing, Product Developer.
+                    <p><strong>INCLUDER</strong><br>
+                        kecenderungan untuk menerima semua orang agar merasa memiliki dalam kelompok. Tema bakat ini banyak terdapat pada peran: Motivator kelompok, Mentor, Pemimpin beragam budaya.
                     </p>
                 </td>
             </tr>
             <tr>
                 <td>
                     <p><strong>ARRANGER</strong><br>
-                        Pandai mengorganisir sumber daya secara fleksibel.
-                        Cocok untuk Manajer, Supervisor, Event Organizer.
+                        dapat mengorganisir dan memiliki fleksibilitas yang membantunya untuk mengatur sesuatu. Tema bakat ini banyak terdapat pada peran: Supervisor, Manajer, Event Organizer, Programmer.
                     </p>
                 </td>
                 <td>
-                    <p><strong>INCLUDER</strong><br>
-                        Mengajak semua orang agar merasa diterima.
-                        Cocok untuk Mentor.
+                    <p><strong>INDIVIDUALIZATION</strong><br>
+                        mampu melihat keunikan masing-masing orang secara individual. Tema bakat ini banyak terdapat pada peran: Manajer, Penasihat, Rekrutmen, Pengajar, Penulis, HRD.
                     </p>
                 </td>
             </tr>
             <tr>
                 <td>
                     <p><strong>BELIEF</strong><br>
-                        Memiliki nilai luhur dan dorongan melayani.
-                        Cocok untuk Pekerja Sosial, Perawat.
+                        senang melayani orang lain dengan tulus karena menganggapnya sebagai perbuatan mulia. Memiliki nilai-nilai luhur yang tidak pernah berubah. Tema bakat ini banyak terdapat pada peran: Pelayanan Pelanggan, CRM, Maintenance, Perawat, Pekerja Sosial Relawan.
                     </p>
                 </td>
                 <td>
-                    <p><strong>INDIVIDUALIZATION</strong><br>
-                        Melihat keunikan setiap individu.
-                        Cocok untuk HRD, Recruiter.
+                    <p><strong>INPUT</strong><br>
+                        memiliki hasrat untuk mengetahui lebih jauh dan senang mengumpulkan informasi. Tema bakat ini banyak terdapat pada peran: Pengajar, Periset, Wartawan, Petugas Arsip.
                     </p>
                 </td>
             </tr>
             <tr>
                 <td>
                     <p><strong>COMMAND</strong><br>
-                        Berani mengambil kendali dan menghadapi tantangan.
-                        Cocok untuk Leader, HRD, Negosiator.
+                        senang menjadi penanggung jawab dan berani menghadapi masalah secara langsung. Tema bakat ini banyak terdapat pada peran: Sales, Negosiator, Wartawan, Pengacara, Komandan, HRD, Pembelian.
                     </p>
                 </td>
                 <td>
-                    <p><strong>INPUT</strong><br>
-                        Haus akan informasi dan pengetahuan.
-                        Cocok untuk Periset.
+                    <p><strong>INTELLECTION</strong><br>
+                        senang berpikir, mawas diri dan menyukai diskusi intelektual. Tema bakat ini banyak terdapat pada peran: Filusuf, Peneliti, Psikolog.
                     </p>
                 </td>
             </tr>
             <tr>
                 <td>
                     <p><strong>COMMUNICATION</strong><br>
-                        Mampu menyampaikan ide secara jelas dan menarik.
-                        Cocok untuk Pengajar, Presenter, Marketing.
+                        mudah mengungkapkan apa yang dipikirkannya melalui kata-kata atau tulisan yang mudah dimengerti. Tema bakat ini banyak terdapat pada peran: Pengajar, Marketing, Humas, Juru Bicara, Presenter, MC, Penulis.
                     </p>
                 </td>
                 <td>
-                    <p><strong>INTELLECTION</strong><br>
-                        Menyukai pemikiran mendalam.
-                        Cocok untuk Peneliti.
+                    <p><strong>LEARNER</strong><br>
+                        senang mempelajari sesuatu dan tertarik pada proses pembelajaran. Tema bakat ini sering terdapat pada peran: Konsultan, Teknisi TI, Programmer, Guru.
                     </p>
                 </td>
             </tr>
             <tr>
                 <td>
                     <p><strong>COMPETITION</strong><br>
-                        Termotivasi untuk menjadi yang terbaik.
-                        Cocok untuk Sales, Pelatih Olahraga.
+                        senang membandingkan kemajuannya dengan orang lain dan selalu berusaha menjadi nomor satu. Tema bakat ini banyak terdapat pada peran: Sales, Pelatih Olahraga.
                     </p>
                 </td>
                 <td>
-                    <p><strong>LEARNER</strong><br>
-                        Menikmati proses belajar.
-                        Cocok untuk Guru, Programmer.
+                    <p><strong>MAXIMIZER</strong><br>
+                        fokus pada kekuatan untuk merangsang keunggulan pribadi dan kelompok. Tema bakat ini banyak terdapat pada peran: Pelatih, Manajer, Mentor, Transformational leader.
                     </p>
                 </td>
             </tr>
             <tr>
                 <td>
                     <p><strong>CONNECTEDNESS</strong><br>
-                        Percaya semua kejadian saling terhubung.
-                        Cocok untuk Counselor, Team Leader.
+                        senang mengaitkan peristiwa dan percaya setiap kejadian memiliki alasan/sebab. Tema bakat ini banyak terdapat pada peran: Counselor, Leader dalam membangun team.
                     </p>
                 </td>
                 <td>
-                    <p><strong>MAXIMIZER</strong><br>
-                        Mengembangkan kekuatan menjadi keunggulan.
-                        Cocok untuk Manajer.
+                    <p><strong>POSITIVITY</strong><br>
+                        memiliki antusiasme tinggi dan optimisme yang menular. Tema bakat ini banyak terdapat pada peran: Pengajar, Entertainer, Motivator, Sales, Entrepreneur.
                     </p>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <p><strong>CONSISTENCY / FAIRNESS</strong><br>
-                        Menjunjung keadilan dan kesetaraan.
-                        Cocok untuk Hakim, Quality Control.
+                    <p><strong>CONSISTENCY/FAIRNESS</strong><br>
+                        memiliki bakat untuk melihat “kesamaan” orang dan memperlakukan semua orang secara sama. Tema bakat ini banyak terdapat pada peran: Hakim, Quantity Surveyor, Petugas Kontrol standar.
                     </p>
                 </td>
                 <td>
-                    <p><strong>POSITIVITY</strong><br>
-                        Optimis dan menularkan semangat.
-                        Cocok untuk Motivator.
+                    <p><strong>RELATOR</strong><br>
+                        menikmati hubungan dekat dan bekerja keras dengan teman untuk mencapai tujuan. Tema bakat ini banyak terdapat pada peran: Account Sales, Katalisator hubungan kepercayaan.
                     </p>
                 </td>
             </tr>
             <tr>
                 <td>
                     <p><strong>CONTEXT</strong><br>
-                        Belajar melalui pemahaman masa lalu.
-                        Cocok untuk Guru Sejarah, Arkeolog.
+                        menikmati mempelajari sesuatu melalui riset dan studi tentang masa lalu. Tema bakat ini banyak terdapat pada peran: Guru Sejarah, Arkeolog, Penyusun budaya perusahaan, Hakim.
                     </p>
                 </td>
                 <td>
-                    <p><strong>RELATOR</strong><br>
-                        Mengutamakan hubungan yang erat.
-                        Cocok untuk Account Manager.
+                    <p><strong>RESPONSIBILITY</strong><br>
+                        memiliki rasa tanggung jawab tinggi atas komitmen yang telah dibuat. Tema bakat ini banyak terdapat pada peran: HSE, Manajer, Keuangan, Quality Control, Keamanan.
                     </p>
                 </td>
             </tr>
             <tr>
                 <td>
                     <p><strong>DELIBERATIVE</strong><br>
-                        Hati-hati dan penuh pertimbangan.
-                        Cocok untuk Advisor, Legal.
+                        berhati-hati dan memiliki karakter “melihat sebelum melompat”. Tema bakat ini sering terdapat pada peran: Pilot, Advisor, Urusan Legal, Membuat Kontrak Bisnis.
                     </p>
                 </td>
                 <td>
-                    <p><strong>RESPONSIBILITY</strong><br>
-                        Bertanggung jawab atas komitmen.
-                        Cocok untuk Quality Control.
+                    <p><strong>RESTORATIVE</strong><br>
+                        senang memecahkan masalah dan mengembalikan fungsi segala sesuatu. Tema bakat ini banyak terdapat pada peran: Pengobatan, Konsultan, Teknisi Perbaikan, Terapist.
                     </p>
                 </td>
             </tr>
             <tr>
                 <td>
                     <p><strong>DEVELOPER</strong><br>
-                        Senang mengembangkan potensi orang lain.
-                        Cocok untuk Guru, Pelatih, Manajer.
+                        senang mengenali dan menggali potensi orang lain. Tema bakat ini banyak terdapat pada peran: Manajer, Guru, Pelatih, Pembimbing, Petugas Sosial.
                     </p>
                 </td>
                 <td>
-                    <p><strong>RESTORATIVE</strong><br>
-                        Senang memecahkan masalah.
-                        Cocok untuk Teknisi.
+                    <p><strong>SELF-ASSURANCE</strong><br>
+                        memiliki kepercayaan diri tinggi dan keyakinan pada keputusan sendiri. Tema bakat ini banyak terdapat pada peran: Leader, Legal, Entrepreneur.
                     </p>
                 </td>
             </tr>
             <tr>
                 <td>
                     <p><strong>DISCIPLINE</strong><br>
-                        Menyukai keteraturan dan struktur.
-                        Cocok untuk Administrasi, Accounting.
+                        senang berada dalam kondisi yang teratur, terstruktur, dan terencana. Tema bakat ini banyak terdapat pada peran: Keuangan, Sekretaris, Administrasi, Petugas ISO, Accounting, Programmer.
                     </p>
                 </td>
                 <td>
-                    <p><strong>SELF-ASSURANCE</strong><br>
-                        Percaya diri dan mandiri dalam keputusan.
-                        Cocok untuk Leader.
+                    <p><strong>SIGNIFICANCE</strong><br>
+                        senang menjadi pusat perhatian, dikenal, dan dihargai atas keunikannya. Tema bakat ini banyak terdapat pada peran: Marketing, Presenter, MC, Sales.
                     </p>
                 </td>
             </tr>
             <tr>
                 <td>
                     <p><strong>EMPATHY</strong><br>
-                        Mampu merasakan emosi orang lain.
-                        Cocok untuk HRD, Psikolog.
+                        mampu merasakan perasaan orang lain seakan-akan mengalaminya sendiri. Tema bakat ini banyak terdapat pada peran: Sales, HRD, Perawat, Psikiater, Layanan Pelanggan.
                     </p>
                 </td>
-                <td>
-                    <p><strong>SIGNIFICANCE</strong><br>
-                        Ingin diakui dan memberi dampak.
-                        Cocok untuk Presenter.
-                    </p>
-                </td>
-            </tr>
-            <tr>
-                <td></td>
                 <td>
                     <p><strong>STRATEGIC</strong><br>
-                        Cepat melihat solusi terbaik.
-                        Cocok untuk Manajer.
+                        mampu memilah masalah dan menemukan jalan terbaik untuk solusinya. Tema bakat ini banyak terdapat pada peran: Perencana Strategi, Manajer, Leader.
                     </p>
                 </td>
             </tr>
             <tr>
-                <td></td>
                 <td>
-                    <p><strong>WOO</strong><br>
-                        Mudah membangun relasi baru.
-                        Cocok untuk Sales.
+                    <p><strong>FOKUS</strong><br>
+                        membutuhkan tujuan yang jelas sebagai kompas prioritas. Tema bakat ini banyak terdapat pada peran: Project Officer, Team Leader.
+                    </p>
+                </td>
+                <td>
+                    <p><strong>WOO (Winning Others Over)</strong><br>
+                        senang tantangan untuk bertemu orang baru dan menjadi akrab. Tema bakat ini banyak terdapat pada peran: Duta Organisasi, Sales, Entertainer, Resepsionis.
                     </p>
                 </td>
             </tr>
         </table>
+
+        <div class="page-break"></div>
 
         {{-- ======================================================
             STRENGTH TYPOLOGY (ST-30)
@@ -949,6 +913,28 @@
                 </td>
             </tr>
         </table>
+
+        <div class="card" style="margin-top: 10px;">
+            <div class="card-header">Cluster Strength Typology</div>
+            <div class="card-body">
+                <table style="width: 100%; font-size: 8pt;">
+                    <tr>
+                        <td style="width: 50%; vertical-align: top;">
+                            <div style="margin-bottom: 4px;"><strong>H</strong> : Headman (Mempengaruhi orang lain)</div>
+                            <div style="margin-bottom: 4px;"><strong>S</strong> : Servicing (Melayani orang lain)</div>
+                            <div style="margin-bottom: 4px;"><strong>Gi</strong> : Generating Ideal (Individual otak kanan)</div>
+                            <div style="margin-bottom: 4px;"><strong>Te</strong> : Technical (Individual Teknik)</div>
+                        </td>
+                        <td style="width: 50%; vertical-align: top;">
+                            <div style="margin-bottom: 4px;"><strong>E</strong> : Elementary (Admin Bahasa)</div>
+                            <div style="margin-bottom: 4px;"><strong>R</strong> : Reasoning (Otak kiri bawah)</div>
+                            <div style="margin-bottom: 4px;"><strong>T</strong> : Thinking (Otak kiri atas)</div>
+                            <div style="margin-bottom: 4px;"><strong>N</strong> : Networking (Bekerjasama dengan orang lain)</div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
 
         <div class="page-break"></div>
 
