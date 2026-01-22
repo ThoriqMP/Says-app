@@ -948,12 +948,20 @@
         <table class="kamus-table">
             <tr>
                 <td>
-                    <p><strong>1. SANGUINIS</strong><br>Optimis, ringan, riang, menyukai petualangan dan risiko. Kreatif, cocok untuk marketing, travel, fashion, atau kuliner.</p>
-                    <p><strong>2. PHLEGMATIS</strong><br>Cinta damai, mencari keharmonisan, setia, dan menghindari konflik. Ideal sebagai perawat, guru, psikolog, atau layanan sosial.</p>
+                    <p><strong>1. SANGUINIS</strong><br>
+                        Individu sanguinis cenderung responsif terhadap rangsangan baru, menyukai variasi, dan memiliki toleransi risiko yang tinggi. Mereka kurang tahan terhadap rutinitas dan kebosanan, sehingga terdorong mencari pengalaman yang bersifat menyenangkan. Pola ini dapat memengaruhi stabilitas relasi dan kontrol impuls. Sanguinis umumnya memiliki kapasitas kreativitas tinggi dan sesuai pada bidang kerja dinamis seperti marketing, pariwisata, hiburan, kuliner, fashion, dan olahraga.
+                    </p>
+                    <p><strong>2. PLEGMATIS</strong><br>
+                        Individu plegmatis berorientasi pada kestabilan hubungan dan keharmonisan sosial. Mereka cenderung menghindari konflik, berperan sebagai penengah, serta menunjukkan empati dan kepedulian terhadap orang lain. Plegmatis konsisten dalam relasi jangka panjang dan cocok pada peran yang menuntut kesabaran serta pelayanan, seperti pendidikan, kesehatan, konseling, dan layanan sosial.
+                    </p>
                 </td>
                 <td>
-                    <p><strong>3. KHOLERIS</strong><br>Berorientasi tujuan, cerdas, analitis, logis, praktis, dan menyukai percakapan mendalam. Cocok untuk industri pengelolaan, teknologi, statistik, atau teknik.</p>
-                    <p><strong>4. MELANKHOLIS</strong><br>Menyukai tradisi, mencintai keluarga, teliti, dan akurat. Karier sempurna di bidang manajemen, akuntansi, atau administrasi.</p>
+                    <p><strong>3. KOLERIS</strong><br>
+                        Individu koleris berfokus pada tujuan, efisiensi, dan hasil. Mereka berpikir logis, analitis, serta cenderung langsung pada inti persoalan. Koleris kurang menyukai interaksi sosial yang bersifat dangkal dan lebih nyaman bekerja secara mandiri atau dengan individu yang setara secara intelektual. Bidang yang sesuai meliputi manajemen, teknologi, teknik, statistik, dan pemrograman.
+                    </p>
+                    <p><strong>4. MELANKOLIS</strong><br>
+                        Individu melankolis menilai stabilitas, struktur, dan ketertiban sebagai hal penting. Mereka cenderung berhati-hati, teliti, dan konsisten, serta kurang tertarik pada perubahan drastis atau risiko tinggi. Melankolis memiliki orientasi sosial yang kuat dalam konteks tanggung jawab dan kontribusi. Tipe ini sesuai untuk peran manajerial, administrasi, akuntansi, dan pekerjaan yang menuntut ketepatan serta perencanaan.
+                    </p>
                 </td>
             </tr>
         </table>
@@ -965,19 +973,19 @@
             Love Language
         </div>
 
-        <table class="kamus-table">
-            <tr>
-                <td>
-                    <p><strong>1. WORD OF AFFIRMATION</strong><br>Perlu mendengar kata-kata penegasan, apresiasi tulus, dan ungkapan kasih sayang secara langsung atau tulisan.</p>
-                    <p><strong>2. QUALITY TIME</strong><br>Fokus pada perhatian penuh tanpa gangguan. Menghabiskan waktu bersama melalui komunikasi dan kebersamaan bermakna.</p>
-                    <p><strong>3. RECEIVING GIFTS</strong><br>Merasa dicintai melalui hadiah sebagai bukti nyata kasih sayang dan perhatian khusus.</p>
-                </td>
-                <td>
-                    <p><strong>4. ACTS OF SERVICE</strong><br>Tindakan nyata untuk meringankan beban tanggung jawab pasangan, seperti membantu pekerjaan rumah atau tugas.</p>
-                    <p><strong>5. PHYSICAL TOUCH</strong><br>Senang dengan sentuhan fisik seperti pelukan, berpegangan tangan, atau tepukan sebagai cara komunikasi cinta langsung.</p>
-                </td>
-            </tr>
-        </table>
+         <table class="kamus-table">
+                <tr>
+                    <td>
+                        <p><strong>1. WORD OF AFFIRMATION</strong><br>Individu dengan bahasa cinta ini merasakan afeksi melalui ungkapan verbal yang jelas dan tulus. Pernyataan penghargaan, pengakuan, dan apresiasi berperan penting dalam membangun rasa diterima dan dihargai.</p>
+                        <p><strong>2. QUALITY TIME</strong><br>Bahasa cinta ini ditandai oleh kebutuhan akan kehadiran penuh dan perhatian tanpa distraksi. Interaksi bermakna melalui kebersamaan, percakapan, dan aktivitas bersama menjadi indikator utama rasa peduli.</p>
+                        <p><strong>3. RECEIVING GIFTS</strong><br>Individu dengan bahasa cinta ini menilai perhatian melalui pemberian simbolis yang bermakna. Hadiah dipahami sebagai bentuk usaha, pemikiran, dan kepedulian, bukan semata nilai materi.</p>
+                    </td>
+                    <td>
+                        <p><strong>4. ACTS OF SERVICE</strong><br>Bahasa cinta ini diwujudkan melalui tindakan nyata yang membantu atau meringankan beban. Dukungan praktis dipersepsikan sebagai bentuk tanggung jawab dan kepedulian emosional.</p>
+                        <p><strong>5. PHYSICAL TOUCH</strong><br>Individu dengan bahasa cinta ini merasakan kedekatan melalui kontak fisik yang wajar dan aman, seperti sentuhan ringan atau pelukan. Sentuhan berfungsi sebagai sarana komunikasi afeksi secara langsung.</p>
+                    </td>
+                </tr>
+            </table>
 
         {{-- ======================================================
             MULTIPLE INTELLIGENCE
