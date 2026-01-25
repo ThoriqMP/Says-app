@@ -36,4 +36,9 @@ class Assessment extends Model
     {
         return $this->hasOne(TalentsMapping::class);
     }
+
+    public function psychologicalAssessment()
+    {
+        return $this->hasOne(PsychologicalAssessment::class);
+    }
 }

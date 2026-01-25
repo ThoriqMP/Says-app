@@ -37,7 +37,7 @@ class AssessmentController extends Controller
         if (! empty($data['new_subject_name'])) {
             $subject = Subject::create([
                 'name' => $data['new_subject_name'],
-                'age' => $data['new_subject_age'] ?? null,
+                'date_of_birth' => $data['new_subject_dob'] ?? null,
                 'gender' => $data['new_subject_gender'] ?? null,
                 'phone' => $data['new_subject_phone'] ?? null,
             ]);
@@ -51,6 +51,7 @@ class AssessmentController extends Controller
             'test_date' => $data['test_date'],
             'psychologist_name' => $data['psychologist_name'],
         ]);
+
 
         $scoresPayload = [];
 

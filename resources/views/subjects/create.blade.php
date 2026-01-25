@@ -33,11 +33,33 @@
                             <input type="text" name="name" value="{{ old('name') }}" required
                                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
                         </div>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4" x-data="{ 
+                            dob: '{{ old('date_of_birth') }}',
+                            age: '',
+                            calculateAge() {
+                                if (!this.dob) return;
+                                const birthDate = new Date(this.dob);
+                                const today = new Date();
+                                let years = today.getFullYear() - birthDate.getFullYear();
+                                let months = today.getMonth() - birthDate.getMonth();
+                                let days = today.getDate() - birthDate.getDate();
+
+                                if (days < 0) {
+                                    months--;
+                                    days += new Date(today.getFullYear(), today.getMonth(), 0).getDate();
+                                }
+                                if (months < 0) {
+                                    years--;
+                                    months += 12;
+                                }
+                                this.age = `${years} thn ${months} bln ${days} hari`;
+                            }
+                        }" x-init="calculateAge()">
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Usia</label>
-                                <input type="number" name="age" min="0" max="120" value="{{ old('age') }}"
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tanggal Lahir</label>
+                                <input type="date" name="date_of_birth" x-model="dob" @change="calculateAge()" required
                                        class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+                                <p class="text-sm text-gray-500 mt-1" x-show="age" x-text="age"></p>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Jenis Kelamin</label>

@@ -409,7 +409,7 @@
                     <div style="display: table; width: 100%;">
                         <div style="display: table-cell; width: 50%;">
                             <div class="subject-label">Usia</div>
-                            <div class="subject-value" style="font-size: 12pt;">{{ $assessment->subject->age }} Tahun</div>
+                            <div class="subject-value" style="font-size: 12pt;">{{ $assessment->subject->precise_age }}</div>
                         </div>
                         <div style="display: table-cell; width: 50%;">
                             <div class="subject-label">Jenis Kelamin</div>
@@ -990,6 +990,7 @@
         {{-- ======================================================
             MULTIPLE INTELLIGENCE
         ====================================================== --}}
+        <div class="page-break"></div>
         <div class="kamus-section-title">
             Multiple Intelligence
         </div>
@@ -997,16 +998,16 @@
         <table class="kamus-table">
             <tr>
                 <td>
-                    <p><strong>Linguistik</strong> — Kemampuan menggunakan kata secara efektif.</p>
-                    <p><strong>Numerikal</strong> — Kemampuan berpikir logis dan matematis.</p>
-                    <p><strong>Visual-Spasial</strong> — Kepekaan terhadap ruang dan bentuk.</p>
-                    <p><strong>Musikal</strong> — Kepekaan terhadap ritme dan melodi.</p>
+                    <p><strong>Linguistic Intelligence</strong><br>Kecerdasan linguistik adalah kemampuan seseorang dalam menggunakan dan memahami bahasa secara efektif, baik secara lisan maupun tulisan. Individu dengan kecerdasan ini biasanya peka terhadap makna kata, susunan kalimat, serta mampu menyampaikan dan menerima informasi dengan jelas. Kelebihannya terlihat pada kemampuan berbicara, menulis, mengingat informasi verbal, dan mempelajari bahasa. Namun, kecerdasan linguistik tidak selalu diikuti oleh kemampuan yang sama baiknya pada bidang lain seperti logika, visual, atau gerak tubuh.</p>
+                    <p><strong>Logical-Mathematical Intelligence</strong><br>Kecerdasan numerikal merupakan kemampuan berpikir logis dan teratur dalam memecahkan masalah yang berkaitan dengan angka, pola, dan hubungan sebab akibat. Individu dengan kecerdasan ini cenderung mudah mengelompokkan masalah, menyusun langkah penyelesaian, dan melihat inti persoalan secara rasional. Kelebihannya terletak pada ketelitian dan kejelasan berpikir, sedangkan keterbatasannya dapat muncul pada situasi yang menuntut pendekatan emosional atau intuisi.</p>
+                    <p><strong>Visual-Spatial Intelligence</strong><br>Kecerdasan visual-spasial adalah kemampuan memahami dan mengolah informasi yang berkaitan dengan gambar, bentuk, warna, dan ruang. Individu dengan kecerdasan ini mampu membayangkan objek, memahami posisi dan arah, serta melihat hubungan antar unsur visual. Kelebihannya tampak pada daya imajinasi dan orientasi ruang, sementara keterbatasannya dapat terlihat pada tugas yang sangat bergantung pada bahasa atau simbol abstrak.</p>
+                    <p><strong>Musical Intelligence</strong><br>Kecerdasan musik adalah kemampuan mengenali, membedakan, dan mengekspresikan unsur-unsur musik seperti ritme, melodi, dan nada. Individu dengan kecerdasan ini peka terhadap bunyi dan dapat menggunakan musik untuk membantu konsentrasi, suasana belajar, dan daya ingat. Kelebihannya terletak pada kepekaan terhadap suara dan pola bunyi, sedangkan keterbatasannya adalah kemampuan ini tidak selalu berkaitan langsung dengan bidang akademik lain.</p>
                 </td>
                 <td>
-                    <p><strong>Interpersonal</strong> — Memahami dan berinteraksi dengan orang lain.</p>
-                    <p><strong>Intrapersonal</strong> — Kesadaran dan pengendalian diri.</p>
-                    <p><strong>Bodily Kinestetik</strong> — Menggunakan tubuh secara terampil.</p>
-                    <p><strong>Naturalis</strong> — Mengenali dan mengklasifikasi alam.</p>
+                    <p><strong>Interpersonal Intelligence</strong><br>Kecerdasan interpersonal adalah kemampuan memahami perasaan, niat, dan perilaku orang lain melalui komunikasi verbal dan nonverbal. Individu dengan kecerdasan ini biasanya mudah berinteraksi, bekerja sama, dan menyesuaikan diri dalam lingkungan sosial. Kelebihannya adalah kemampuan membangun hubungan dan bekerja dalam kelompok, sementara keterbatasannya dapat berupa ketergantungan pada respons sosial dalam mengambil keputusan.</p>
+                    <p><strong>Intrapersonal Intelligence</strong><br>Kecerdasan intrapersonal adalah kemampuan memahami diri sendiri, termasuk emosi, motivasi, kekuatan, dan kelemahan pribadi. Individu dengan kecerdasan ini mampu mengelola diri, menetapkan tujuan, dan bertindak sesuai nilai yang diyakini. Kelebihannya terletak pada kesadaran diri dan pengendalian emosi, sedangkan keterbatasannya dapat berupa kecenderungan menarik diri atau terlalu fokus pada pemikiran internal.</p>
+                    <p><strong>Bodily-Kinesthetic Intelligence</strong><br>Kecerdasan bodily-kinestetik adalah kemampuan menggunakan tubuh secara terampil untuk melakukan aktivitas fisik dan mengekspresikan ide atau perasaan. Individu dengan kecerdasan ini memiliki koordinasi gerak, keseimbangan, dan kontrol tubuh yang baik. Kelebihannya tampak pada keterampilan fisik dan aktivitas yang melibatkan gerakan, sementara keterbatasannya dapat muncul pada tugas yang menuntut pemrosesan verbal atau simbolik tinggi.</p>
+                    <p><strong>Naturalist Intelligence</strong><br>Kecerdasan naturalis adalah kemampuan mengenali, membedakan, dan mengelompokkan unsur-unsur alam dan lingkungan sekitar. Individu dengan kecerdasan ini peka terhadap tanaman, hewan, dan fenomena alam serta menunjukkan perhatian terhadap lingkungan. Kelebihannya adalah kemampuan observasi dan klasifikasi alam, sedangkan keterbatasannya terletak pada penerapan yang lebih terbatas di luar konteks lingkungan hidup.</p>
                 </td>
             </tr>
         </table>

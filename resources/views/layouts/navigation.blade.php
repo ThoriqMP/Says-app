@@ -88,7 +88,11 @@
                 <span>Invoice</span>
             </a>
             <a href="{{ route('assessments.index') }}" class="{{ $navLink(route('assessments.index'), request()->routeIs('assessments.*')) }}">
-                <span>Asesmen Psikologi</span>
+                <span>Personal Mapping</span>
+            </a>
+
+            <a href="{{ route('psychological-assessments.index') }}" class="{{ $navLink(route('psychological-assessments.index'), request()->routeIs('psychological-assessments.*')) }}">
+                <span>Asesmen Psikologis</span>
             </a>
 
             @if(auth()->user()->isPimpinan() || auth()->user()->isAdmin())
@@ -171,7 +175,11 @@
                     <span>Invoice</span>
                 </a>
                 <a href="{{ route('assessments.index') }}" class="{{ $navLink(route('assessments.index'), request()->routeIs('assessments.*')) }}" @click="mobileOpen = false">
-                    <span>Asesmen Psikologi</span>
+                    <span>Personal Mapping</span>
+                </a>
+
+                <a href="{{ route('psychological-assessments.index') }}" class="{{ $navLink(route('psychological-assessments.index'), request()->routeIs('psychological-assessments.*')) }}" @click="mobileOpen = false">
+                    <span>Asesmen Psikologis</span>
                 </a>
 
                 @if(auth()->user()->isPimpinan() || auth()->user()->isAdmin())

@@ -36,9 +36,7 @@
                     <div>
                         <h3 class="text-lg font-semibold mb-2">Data Subjek</h3>
                         <p class="text-sm">Nama: {{ $assessment->subject->name }}</p>
-                        @if($assessment->subject->age)
-                            <p class="text-sm">Usia: {{ $assessment->subject->age }}</p>
-                        @endif
+                        <p class="text-sm">Usia: {{ $assessment->subject->precise_age }}</p>
                         @if($assessment->subject->gender)
                             <p class="text-sm">Jenis Kelamin: {{ $assessment->subject->gender === 'male' ? 'Laki-laki' : 'Perempuan' }}</p>
                         @endif

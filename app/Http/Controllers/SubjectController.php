@@ -23,10 +23,15 @@ class SubjectController extends Controller
     {
         $data = $request->validate([
             'name' => 'required|string|max:255',
-            'age' => 'nullable|integer|min:0|max:120',
+            'date_of_birth' => 'required|date',
             'gender' => 'nullable|in:male,female',
             'phone' => 'nullable|string|max:50',
         ]);
+
+        // Calculate age for backward compatibility or sorting
+        if (isset($data['date_of_birth'])) {
+            $data['age'] = \Carbon\Carbon::parse($data['date_of_birth'])->age;
+        }
 
         Subject::create($data);
 
@@ -42,11 +47,17 @@ class SubjectController extends Controller
     {
         $data = $request->validate([
             'name' => 'required|string|max:255',
-            'age' => 'nullable|integer|min:0|max:120',
+            'date_of_birth' => 'nullable|date', // Nullable in case they don't want to update it, but preferably required
+            'age' => 'nullable|integer|min:0|max:120', // Allow manual age update if DOB is not provided? No, user wants replacement.
             'gender' => 'nullable|in:male,female',
             'phone' => 'nullable|string|max:50',
         ]);
 
+        if ($request->filled('date_of_birth')) {
+             $data['age'] = \Carbon\Carbon::parse($data['date_of_birth'])->age;
+        }
+        // If age is provided manually (legacy), it might be in $data['age'] already
+        
         $subject->update($data);
 
         return redirect()->route('subjects.index')->with('success', 'Subjek berhasil diperbarui.');

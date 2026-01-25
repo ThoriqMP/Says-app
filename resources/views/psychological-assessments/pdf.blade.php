@@ -1,8 +1,12 @@
+@php
+    $labels = ['TD', 'KD', 'AD', 'D', 'SD'];
+    $psych = $assessment->psychologicalAssessment;
+@endphp
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Laporan Family Mapping - {{ $ayah->subject->name }}</title>
+    <title>Laporan Asesmen Psikologis - {{ $assessment->subject->name }}</title>
     <style>
         @page {
             size: A4;
@@ -18,11 +22,13 @@
             padding: 0;
         }
 
-        * { box-sizing: border-box; }
+        * {
+            box-sizing: border-box;
+        }
 
         body {
             font-family: 'Helvetica', 'Arial', sans-serif;
-            color: #1f2937;
+            color: #1f2937; /* Gray-800 */
             font-size: 9pt;
             line-height: 1.3;
             margin: 0;
@@ -30,23 +36,55 @@
             width: 100%;
         }
 
+        /* Utilities */
         .text-center { text-align: center; }
         .text-right { text-align: right; }
         .text-left { text-align: left; }
         .font-bold { font-weight: bold; }
         .uppercase { text-transform: uppercase; }
-        .text-purple { color: #5b21b6; }
+        .text-white { color: white; }
+        .text-purple { color: #5b21b6; } /* Purple-800 */
+        .bg-purple { background-color: #5b21b6; }
+        .bg-purple-light { background-color: #f3e8ff; } /* Purple-100 */
+        .bg-white { background-color: white; }
+        .w-full { width: 100%; }
         .table { display: table; width: 100%; border-collapse: collapse; table-layout: fixed; }
         .table-cell { display: table-cell; }
         .align-top { vertical-align: top; }
-
-        .page { width: 100%; position: relative; clear: both; }
-        .page-break { page-break-before: always; }
-        .content-wrapper { padding-bottom: 18mm; position: relative; width: 100%; }
-        .dashboard-wrapper { padding-bottom: 45mm; }
-
-        .cover-page { padding: 0; height: 297mm; background-color: white; z-index: 50; position: relative; }
+        .align-middle { vertical-align: middle; }
+        .mb-1 { margin-bottom: 4px; }
+        .mb-2 { margin-bottom: 8px; }
+        .mb-4 { margin-bottom: 16px; }
+        .mt-4 { margin-top: 16px; }
+        .p-2 { padding: 8px; }
+        .p-4 { padding: 16px; }
         
+        /* Page Containers */
+        .page {
+            width: 100%;
+            position: relative;
+            clear: both;
+        }
+
+        .page-break {
+            page-break-before: always;
+        }
+
+        .content-wrapper {
+            padding-bottom: 20mm;
+            position: relative;
+            width: 100%;
+        }
+
+        /* Cover Page */
+        .cover-page {
+            padding: 0;
+            height: 297mm;
+            background-color: white;
+            z-index: 50;
+            position: relative;
+        }
+
         .watermark {
             position: fixed;
             top: 50%;
@@ -64,43 +102,119 @@
             height: 100%;
             object-fit: contain;
         }
-        .cover-header-table { width: 100%; margin-bottom: 2cm; }
-        .cover-headline { font-size: 22pt; font-weight: bold; color: #111; line-height: 1.1; }
-        .cover-subheadline { font-size: 12pt; margin-top: 10px; color: #555; letter-spacing: 1px; }
 
-        .cover-content { position: relative; overflow: hidden; padding: 0; min-height: 273mm; height: 297mm; }
-        .cover-safe-area { position: relative; padding: 10mm; z-index: 1; }
-
-        .cover-decor { position: absolute; left: 0; right: 0; bottom: 0; height: 65mm; background-color: #4c1d95; z-index: 0; }
-        .cover-decor-accent { position: absolute; left: 0; right: 0; bottom: 40mm; height: 35mm; background-color: #7c3aed; opacity: 0.35; z-index: 0; }
-        .cover-shape-left { position: absolute; left: -35mm; bottom: 20mm; width: 95mm; height: 55mm; background-color: #5b21b6; border-radius: 55mm 55mm 0 0; opacity: 0.22; z-index: 0; }
-        .cover-shape-right { position: absolute; right: -40mm; bottom: 10mm; width: 105mm; height: 70mm; background-color: #a78bfa; border-radius: 70mm 70mm 0 0; opacity: 0.22; z-index: 0; }
-
-        .pair-card {
-            background-color: rgba(255, 255, 255, 0.95);
-            padding: 18px 18px;
-            border-radius: 14px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            border-left: 5px solid #5b21b6;
+        .cover-header-table {
+            width: 100%;
+            margin-bottom: 2cm;
         }
 
-        .pair-title {
+        .cover-headline {
+            font-size: 24pt;
+            font-weight: bold;
+            color: #111;
+            line-height: 1.1;
+        }
+
+        .cover-subheadline {
+            font-size: 12pt;
+            margin-top: 10px;
+            color: #555;
+            letter-spacing: 1px;
+        }
+
+        .cover-content {
+            position: relative;
+            overflow: hidden;
+            padding: 0;
+            min-height: 273mm;
+            height: 297mm;
+        }
+
+        .cover-safe-area {
+            position: relative;
+            padding: 10mm;
+            z-index: 1;
+        }
+
+        .cover-decor {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 65mm;
+            background-color: #4c1d95;
+            z-index: 0;
+        }
+
+        .cover-decor-accent {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 40mm;
+            height: 35mm;
+            background-color: #7c3aed;
+            opacity: 0.35;
+            z-index: 0;
+        }
+
+        .cover-shape-left {
+            position: absolute;
+            left: -35mm;
+            bottom: 20mm;
+            width: 95mm;
+            height: 55mm;
+            background-color: #5b21b6;
+            border-radius: 55mm 55mm 0 0;
+            opacity: 0.22;
+            z-index: 0;
+        }
+
+        .cover-shape-right {
+            position: absolute;
+            right: -40mm;
+            bottom: 10mm;
+            width: 105mm;
+            height: 70mm;
+            background-color: #a78bfa;
+            border-radius: 70mm 70mm 0 0;
+            opacity: 0.22;
+            z-index: 0;
+        }
+
+        .subject-card {
+            background-color: rgba(255, 255, 255, 0.85);
+            padding: 30px 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            width: 60%;
+            margin: 4cm auto 0;
+            text-align: center;
+            border-left: 5px solid #5b21b6;
+            position: relative;
+            z-index: 1;
+        }
+
+        .subject-label {
             font-size: 9pt;
             color: #6b7280;
             text-transform: uppercase;
             letter-spacing: 1px;
-            margin-bottom: 10px;
-            font-weight: bold;
+            margin-bottom: 5px;
         }
 
-        .kv-label { font-size: 7.5pt; color: #6b7280; text-transform: uppercase; letter-spacing: 0.6px; margin-bottom: 2px; }
-        .kv-value { font-size: 11.5pt; font-weight: bold; color: #1f2937; margin-bottom: 10px; }
+        .subject-value {
+            font-size: 16pt;
+            font-weight: bold;
+            color: #1f2937;
+            margin-bottom: 15px;
+        }
 
+        /* Dashboard Styles */
         .card {
             background: transparent;
             border: 1px solid #e5e7eb;
             border-radius: 8px;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             box-shadow: 0 1px 2px rgba(0,0,0,0.02);
             overflow: hidden;
             page-break-inside: avoid;
@@ -110,63 +224,144 @@
             background-color: #5b21b6;
             color: white;
             padding: 5px 10px;
-            font-size: 8.2pt;
+            font-size: 8.5pt;
             font-weight: bold;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
-        .card-body { padding: 8px; }
-
-        .mini-label {
-            font-size: 6.5pt;
-            color: #6b7280;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 2px;
+        .card-body {
+            padding: 8px;
         }
 
-        .mini-value { font-size: 8.8pt; font-weight: bold; margin-bottom: 6px; }
-
-        .badge-wrap { margin: 0 0 6px 0; }
-        .badge {
-            display: inline-block;
-            background-color: #f3e8ff;
-            color: #4c1d95;
-            border: 1px solid #ddd6fe;
-            padding: 2px 6px;
-            border-radius: 999px;
+        .score-table {
+            width: 100%;
             font-size: 7.5pt;
-            font-weight: bold;
-            margin-right: 4px;
-            margin-bottom: 4px;
         }
 
-        .muted { color: #6b7280; font-size: 8pt; }
+        .score-table th {
+            text-align: center;
+            padding: 3px;
+            color: #5b21b6;
+            border-bottom: 1px solid #e5e7eb;
+        }
 
-        .progress-table { width: 100%; border-collapse: collapse; height: 6px; }
-        .progress-fill { background-color: #7c3aed; }
-        .progress-empty { background-color: #f3e8ff; }
+        .score-table td {
+            padding: 3px;
+            border-bottom: 1px solid #f3f4f6;
+        }
 
-        .legend-grid { width: 100%; font-size: 7pt; }
-        .legend-item { display: inline-block; margin-right: 8px; padding: 2px 5px; background: #f9fafb; border-radius: 3px; border: 1px solid #e5e7eb; }
+        .score-box {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            line-height: 16px;
+            text-align: center;
+            border-radius: 3px;
+            border: 1px solid #d1d5db;
+            color: #d1d5db;
+            font-size: 6.5pt;
+        }
 
-        .signature-box-fixed { position: absolute; right: 0; bottom: 0; width: 40%; text-align: center; }
-
-        .kamus-section-title {
-            margin-top: 18px;
-            margin-bottom: 8px;
+        .score-box.active {
+            background-color: #5b21b6;
+            border-color: #5b21b6;
+            color: white;
             font-weight: bold;
-            font-size: 10pt;
+        }
+
+        .progress-table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+            margin-top: 2px;
+        }
+
+        .progress-table td {
+            padding: 0;
+            height: 6px;
+        }
+
+        .progress-fill {
+            background-color: #7c3aed;
+        }
+
+        .progress-empty {
+            background-color: #f3e8ff;
+        }
+
+        .legend-grid {
+            width: 100%;
+            font-size: 7pt;
+        }
+        .legend-item {
+            display: inline-block;
+            margin-right: 8px;
+            padding: 2px 5px;
+            background: #f9fafb;
+            border-radius: 3px;
+            border: 1px solid #e5e7eb;
+            color: #4b5563;
+        }
+
+        .signature-box {
+            float: right;
+            width: 300px;
+            text-align: center;
+            margin-top: 5px;
+            page-break-inside: avoid;
+        }
+
+        /* New Styles for Psychological Report */
+        .psych-grid {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        
+        .psych-label {
+            font-size: 8pt;
+            font-weight: bold;
+            color: #374151;
+        }
+
+        .psych-value {
+            font-size: 9pt;
+            color: #111827;
+        }
+
+        .kamus-container {
+            column-count: 2;
+            column-gap: 20px;
+            font-size: 8.5pt;
+        }
+        
+        .kamus-item {
+            break-inside: avoid;
+            margin-bottom: 12px;
+        }
+
+        .kamus-title {
+            font-weight: bold;
             color: #4c1d95;
+            margin-bottom: 4px;
+            display: block;
+        }
+
+        .kamus-desc {
+            text-align: justify;
+            color: #374151;
+        }
+
+        .section-header {
+            color: #4c1d95;
+            margin-top: 15px;
+            margin-bottom: 8px;
+            font-size: 11pt;
+            font-weight: bold;
             border-bottom: 1px solid #c4b5fd;
             padding-bottom: 2px;
+            break-after: avoid;
         }
-
-        .kamus-table { width: 100%; border-collapse: collapse; table-layout: fixed; }
-        .kamus-table td { width: 50%; vertical-align: top; padding: 0 10px; font-size: 8.5pt; line-height: 1.4; text-align: left; }
-        .kamus-table tr { page-break-inside: avoid; }
-        .kamus-table p { margin: 0 0 7px 0; text-align: left; }
     </style>
 </head>
 <body>
@@ -175,6 +370,8 @@
         <img src="{{ $logoProsekar }}" alt="Watermark">
     </div>
     @endif
+
+    <!-- COVER PAGE -->
     <div class="page cover-page">
         <div class="cover-content">
             <div class="cover-decor"></div>
@@ -185,7 +382,7 @@
                 <table class="cover-header-table">
                     <tr>
                         <td class="align-top" style="width: 60%">
-                            <div class="cover-headline">LAPORAN<br>HASIL ASESMEN<br>FAMILY MAPPING</div>
+                            <div class="cover-headline">LAPORAN<br>ASESMEN PSIKOLOGIS</div>
                             <div class="cover-subheadline">DOKUMEN RAHASIA</div>
                         </td>
                         <td class="align-top text-right" style="width: 40%">
@@ -198,296 +395,432 @@
                                 Jl. Brigjen Saptadji Hadiprawira<br>
                                 Semplak – Bogor Barat 16112 <br>
                                 Phone : 0851-1765-8225<br>
-                                Instagram : @prosekar_psikologibogor
+                                Instagram: @prosekar_psikologibogor
                             </div>
                         </td>
                     </tr>
                 </table>
 
-                <table class="table" style="width: 86%; margin: 3.2cm auto 0;">
-                    <tr>
-                        <td class="table-cell align-top" style="width: 100%; padding-right: 0;">
-                            <div class="pair-card">
-                                <div class="pair-title">Atas Nama Keluarga</div>
-                                <div class="kv-label">Kepala Keluarga</div>
-                                <div class="kv-value">{{ $ayah->subject->name }}</div>
-                                <div style="display: table; width: 100%;">
-                                    <div style="display: table-cell; width: 50%;">
-                                        <div class="kv-label">Usia</div>
-                                        <div class="kv-value" style="font-size: 10.5pt;">
-                                            {{ $ayah->subject->age !== null ? $ayah->subject->age.' Tahun' : '-' }}
-                                        </div>
-                                    </div>
-                                    <div style="display: table-cell; width: 50%;">
-                                        <div class="kv-label">Jenis Kelamin</div>
-                                        <div class="kv-value" style="font-size: 10.5pt;">
-                                            {{ ($ayah->subject->gender ?? '') === 'male' ? 'Laki-Laki' : ((($ayah->subject->gender ?? '') === 'female') ? 'Perempuan' : '-') }}
-                                        </div>
-                                    </div>
-                                </div>
-                                <div style="margin-top: 8px; border-top: 1px solid #eee; padding-top: 8px;">
-                                    <div class="kv-label">Tanggal Asesmen</div>
-                                    <div style="font-size: 10pt; font-weight: bold; color: #4b5563;">
-                                        {{ $ayah->test_date?->format('d F Y') ?? '-' }}
-                                    </div>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                </table>
+                <div class="subject-card">
+                    <div class="subject-label">Nama Lengkap</div>
+                    <div class="subject-value">{{ $assessment->subject->name }}</div>
+                    
+                    <div style="display: table; width: 100%;">
+                        <div style="display: table-cell; width: 50%;">
+                            <div class="subject-label">Usia</div>
+                            <div class="subject-value" style="font-size: 12pt;">{{ $assessment->subject->precise_age }}</div>
+                        </div>
+                        <div style="display: table-cell; width: 50%;">
+                            <div class="subject-label">Jenis Kelamin</div>
+                            <div class="subject-value" style="font-size: 12pt;">{{ $assessment->subject->gender === 'male' ? 'Laki-Laki' : 'Perempuan' }}</div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 15px; border-top: 1px solid #eee; padding-top: 15px;">
+                        <div class="subject-label">Tanggal Asesmen</div>
+                        <div style="font-size: 11pt; font-weight: bold; color: #4b5563;">{{ $assessment->test_date->format('d F Y') }}</div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
+    <!-- DASHBOARD PAGE -->
     <div class="page page-break">
-        <div class="content-wrapper dashboard-wrapper">
-            <h2 style="color: #4c1d95; margin-bottom: 10px; font-size: 14pt; border-bottom: 2px solid #4c1d95; padding-bottom: 4px; display: inline-block;">HASIL PEMERIKSAAN FAMILY MAPPING</h2>
+        <div class="content-wrapper">
+            <h2 style="color: #4c1d95; margin-bottom: 12px; font-size: 14pt; border-bottom: 2px solid #4c1d95; padding-bottom: 4px; display: inline-block;">HASIL PEMERIKSAAN</h2>
 
+            <!-- NEW SECTION: COGNITIVE & POTENTIAL -->
+            @if($psych)
+            <div class="card">
+                <div class="card-header">ASPEK KOGNITIF & POTENSI</div>
+                <div class="card-body">
+                    <!-- Aspek Kognitif -->
+                    <div style="font-weight: bold; color: #5b21b6; margin-bottom: 5px; font-size: 8pt;">ASPEK KOGNITIF</div>
+                    <table class="score-table mb-4" style="border: 1px solid #e5e7eb;">
+                        <tr style="background-color: #93c5fd;">
+                            <th align="left" style="padding: 4px; border: 1px solid #9ca3af; color: black;">ASPEK KOGNITIF</th>
+                            <th align="left" style="padding: 4px; border: 1px solid #9ca3af; color: black;">KETERANGAN ASPEK</th>
+                            <th width="40" style="padding: 4px; border: 1px solid #9ca3af; color: black;">SKALA</th>
+                        </tr>
+                        @php
+                            $cogDescriptions = [
+                                'Verbal' => 'Kemampuan berkomunikasi dan memahami bahasa',
+                                'Numerical' => 'Kemampuan berpikir praktis matematis dan berhitung',
+                                'Logical' => 'Kemampuan untuk memahami masalah secara hubungan sebab akibat dan menemukan solusi',
+                                'Spatial' => 'Kemampuan untuk berlaku cermat dalam menyelesaikan suatu pekerjaan atau tugas'
+                            ];
+                            $cogMap = [
+                                'Verbal' => 'Kemampuan Verbal',
+                                'Numerical' => 'Kemampuan Numerikal',
+                                'Logical' => 'Kemampuan Berpikir Logis',
+                                'Spatial' => 'Kemampuan Visual Spasial'
+                            ];
+                        @endphp
+                        @foreach(['Verbal', 'Numerical', 'Logical', 'Spatial'] as $aspect)
+                        <tr>
+                            <td style="border: 1px solid #9ca3af;">{{ $cogMap[$aspect] }}</td>
+                            <td style="border: 1px solid #9ca3af;">{{ $cogDescriptions[$aspect] }}</td>
+                            <td align="center" style="border: 1px solid #9ca3af; font-weight: bold;">
+                                {{ $psych->{'cognitive_'.strtolower($aspect).'_score'} ?? '-' }}
+                                <span style="margin-left: 5px;">{{ $psych->{'cognitive_'.strtolower($aspect).'_scale'} ?? '' }}</span>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </table>
+
+                    <!-- Aspek Potensi -->
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <tr>
+                            <td class="align-top" style="width: 50%; padding-right: 5px;">
+                                <table class="score-table" style="border: 1px solid #9ca3af;">
+                                    <tr style="background-color: #93c5fd;">
+                                        <th align="left" style="border: 1px solid #9ca3af; color: black;">ASPEK POTENSI</th>
+                                        <th width="40" style="border: 1px solid #9ca3af; color: black;">SKOR</th>
+                                    </tr>
+                                    <tr>
+                                        <td style="border: 1px solid #9ca3af; font-weight: bold;">Intelektual (Original Scale)</td>
+                                        <td align="center" style="border: 1px solid #9ca3af; font-weight: bold;">{{ $psych->potential_intellectual_score ?? '-' }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border: 1px solid #9ca3af; font-weight: bold;">Sosial</td>
+                                        <td align="center" style="border: 1px solid #9ca3af; font-weight: bold;">
+                                            {{ $psych->potential_social_score ? '(-) ' . $psych->potential_social_score : '-' }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border: 1px solid #9ca3af; font-weight: bold;">Emosional</td>
+                                        <td align="center" style="border: 1px solid #9ca3af; font-weight: bold;">
+                                            {{ $psych->potential_emotional_score ? '(-) ' . $psych->potential_emotional_score : '-' }}
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td class="align-top" style="width: 50%; padding-left: 5px;">
+                                <table class="score-table" style="border: 1px solid #9ca3af; height: 100%;">
+                                    <tr style="background-color: #93c5fd;">
+                                        <th style="border: 1px solid #9ca3af; color: black;">SKALA ASSESSMENT GRAFIS</th>
+                                    </tr>
+                                    <tr>
+                                        <td style="border: 1px solid #9ca3af; vertical-align: middle;">
+                                            <table style="width: 100%; font-size: 7pt;">
+                                                <tr>
+                                                    <td width="20" style="border: none;">Keterangan</td>
+                                                    <td width="10" style="border: none;">3</td>
+                                                    <td width="10" style="border: none;">=</td>
+                                                    <td style="border: none;">Berkembang Baik / Optimal</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="border: none;"></td>
+                                                    <td style="border: none;">2</td>
+                                                    <td style="border: none;">=</td>
+                                                    <td style="border: none;">Cukup Berkembang</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="border: none;"></td>
+                                                    <td style="border: none;">1</td>
+                                                    <td style="border: none;">=</td>
+                                                    <td style="border: none;">Kurang Berkembang</td>
+                                                </tr>
+                                                <tr>
+                                                    <td style="border: none;"></td>
+                                                    <td style="border: none;">(-)</td>
+                                                    <td style="border: none;">=</td>
+                                                    <td style="border: none;">Berkembang namun Ada Hambatan</td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <div style="margin-top: 15px;"></div>
+
+                    <!-- Taraf Kecerdasan & Kematangan -->
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <tr>
+                            <!-- IQ Table -->
+                            <td class="align-top" style="width: 48%; padding-right: 10px;">
+                                <table class="score-table" style="border: 1px solid #9ca3af;">
+                                    <tr style="background-color: #93c5fd;">
+                                        <th colspan="3" style="border: 1px solid #9ca3af; color: black;">TARAF KECERDASAN (FULL SCALE)</th>
+                                    </tr>
+                                    @php
+                                        $iqRanges = [
+                                            'Very Superior' => '119 - Ke atas',
+                                            'Tinggi' => '105 - 118',
+                                            'Cukup' => '100 - 104',
+                                            'Sedang' => '95 - 99',
+                                            'Rendah' => '81 - 94'
+                                        ];
+                                        // Normalize category for comparison
+                                        $currentIqCat = trim($psych->iq_category ?? '');
+                                    @endphp
+                                    @foreach($iqRanges as $cat => $range)
+                                    <tr>
+                                        <td style="border: 1px solid #9ca3af; font-weight: bold;">{{ $cat }}</td>
+                                        <td align="center" style="border: 1px solid #9ca3af;">{{ $range }}</td>
+                                        <td width="30" align="center" style="border: 1px solid #9ca3af;">
+                                            @if(strcasecmp($currentIqCat, $cat) === 0)
+                                                √
+                                            @endif
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                </table>
+                            </td>
+                            <!-- Maturity Table -->
+                            <td class="align-top" style="width: 52%; padding-left: 10px;">
+                                <table class="score-table" style="border: 1px solid #9ca3af;">
+                                    <tr style="background-color: #93c5fd;">
+                                        <th colspan="2" style="border: 1px solid #9ca3af; color: black;">TARAF KEMATANGAN PERKEMBANGAN<br>SESUAI TINGKAT USIA</th>
+                                    </tr>
+                                    @php
+                                        $maturityLevels = ['Disarankan', 'Dipertimbangkan', 'Tidak Disarankan'];
+                                        $currentMaturity = trim($psych->maturity_recommendation ?? '');
+                                    @endphp
+                                    @foreach($maturityLevels as $level)
+                                    <tr>
+                                        <td style="border: 1px solid #9ca3af; font-weight: bold; height: 25px;">{{ $level }}</td>
+                                        <td width="40" align="center" style="border: 1px solid #9ca3af;">
+                                            @if(strcasecmp($currentMaturity, $level) === 0)
+                                                √
+                                            @endif
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+
+                </div>
+            </div>
+            @endif
+
+            <h2 style="color: #4c1d95; margin-top: 20px; margin-bottom: 12px; font-size: 14pt; border-bottom: 2px solid #4c1d95; padding-bottom: 4px; display: inline-block;">(PERSONAL MAPPING)</h2>
             <table class="table" style="margin-bottom: 8px;">
-                <tr>
-                    <td class="align-top" style="width: 33.33%; padding-right: 8px;">
-                        <div class="card">
-                            <div class="card-header">Data Ayah</div>
-                            <div class="card-body">
-                                <div class="mini-label">Personality (Dominan)</div>
-                                <div class="badge-wrap">
-                                    @if(!empty($ayahPersonality))
-                                        @foreach($ayahPersonality as $item)
-                                            <span class="badge">{{ $item }}</span>
-                                        @endforeach
-                                    @else
-                                        <span class="muted">-</span>
-                                    @endif
-                                </div>
-
-                                <div class="mini-label">Love Language (Dominan)</div>
-                                <div class="badge-wrap" style="margin-bottom: 0;">
-                                    @if(!empty($ayahLoveLanguage))
-                                        @foreach($ayahLoveLanguage as $item)
-                                            <span class="badge">{{ $item }}</span>
-                                        @endforeach
-                                    @else
-                                        <span class="muted">-</span>
-                                    @endif
-                                </div>
-                            </div>
-                        </div>
-                    </td>
-
-                    <td class="align-top" style="width: 33.33%; padding-left: 4px; padding-right: 4px;">
-                        <div class="card">
-                            <div class="card-header">Family Mapping</div>
-                            <div class="card-body">
-                                <div class="mini-label">Personality (Kesamaan)</div>
-                                <div class="badge-wrap">
-                                    @if(!empty($irisanPersonality))
-                                        @foreach($irisanPersonality as $item)
-                                            <span class="badge">{{ $item }}</span>
-                                        @endforeach
-                                    @else
-                                        <span class="muted">-</span>
-                                    @endif
-                                </div>
-
-                                <div class="mini-label">Love Language (Kesamaan)</div>
-                                <div class="badge-wrap" style="margin-bottom: 0;">
-                                    @if(!empty($irisanLoveLanguage))
-                                        @foreach($irisanLoveLanguage as $item)
-                                            <span class="badge">{{ $item }}</span>
-                                        @endforeach
-                                    @else
-                                        <span class="muted">-</span>
-                                    @endif
-                                </div>
-                            </div>
-                        </div>
-                    </td>
-
-                    <td class="align-top" style="width: 33.33%; padding-left: 8px;">
-                        <div class="card">
-                            <div class="card-header">Data Ibu</div>
-                            <div class="card-body">
-                                <div class="mini-label">Personality (Dominan)</div>
-                                <div class="badge-wrap">
-                                    @if(!empty($ibuPersonality))
-                                        @foreach($ibuPersonality as $item)
-                                            <span class="badge">{{ $item }}</span>
-                                        @endforeach
-                                    @else
-                                        <span class="muted">-</span>
-                                    @endif
-                                </div>
-
-                                <div class="mini-label">Love Language (Dominan)</div>
-                                <div class="badge-wrap" style="margin-bottom: 0;">
-                                    @if(!empty($ibuLoveLanguage))
-                                        @foreach($ibuLoveLanguage as $item)
-                                            <span class="badge">{{ $item }}</span>
-                                        @endforeach
-                                    @else
-                                        <span class="muted">-</span>
-                                    @endif
-                                </div>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
 
                 <tr>
-                    <td class="align-top" style="width: 33.33%; padding-right: 8px; padding-top: 8px;">
+                    <!-- LEFT COLUMN: Personality & Love Language -->
+                    <td class="align-top" style="width: 55%; padding-right: 10px;">
+                        
+                        <!-- Personality Card -->
                         <div class="card">
-                            <div class="card-header">Multiple Intelligence (Top)</div>
+                            <div class="card-header">PERSONALITY</div>
                             <div class="card-body">
-                                @if(!empty($ayahMiTop))
-                                    @foreach($ayahMiTop as $row)
-                                        <div style="margin-bottom: 6px;">
-                                            <div style="margin-bottom: 2px; font-size: 7.5pt;">
-                                                <span style="font-weight: bold;">{{ $row['label'] }}</span>
-                                                <span style="float: right;">{{ $row['percent'] }}%</span>
+                                @php
+                                    $personalityScores = $assessment->scores->where('category', 'personality')->values();
+                                @endphp
+                                <table class="score-table">
+                                    <tr>
+                                        <th style="text-align: left;">ASPEK</th>
+                                        @foreach($labels as $l) <th width="18">{{ $l }}</th> @endforeach
+                                    </tr>
+                                    @foreach($personalityScores as $s)
+                                    <tr>
+                                        <td>{{ $s?->aspect_name ?? '' }}</td>
+                                        @foreach($labels as $l)
+                                        <td align="center">
+                                            <div class="score-box {{ $s && $s->label === $l ? 'active' : '' }}">
+                                                {{ $s && $s->label === $l ? 'X' : '' }}
                                             </div>
-                                            <table class="progress-table">
-                                                <tr>
-                                                    <td class="progress-fill" width="{{ $row['percent'] }}%"></td>
-                                                    <td class="progress-empty"></td>
-                                                </tr>
-                                            </table>
-                                        </div>
+                                        </td>
+                                        @endforeach
+                                    </tr>
                                     @endforeach
-                                @else
-                                    <div class="muted">-</div>
-                                @endif
+                                </table>
                             </div>
                         </div>
+
+                        <!-- Love Language Card -->
+                        <div class="card">
+                            <div class="card-header">LOVE LANGUAGE</div>
+                            <div class="card-body">
+                                @php
+                                    $loveLanguageScores = $assessment->scores->where('category', 'love_language')->values();
+                                @endphp
+                                <table class="score-table">
+                                    <tr>
+                                        <th style="text-align: left;">ASPEK</th>
+                                        @foreach($labels as $l) <th width="18">{{ $l }}</th> @endforeach
+                                    </tr>
+                                    @foreach($loveLanguageScores as $s)
+                                    <tr>
+                                        <td>{{ $s?->aspect_name ?? '' }}</td>
+                                        @foreach($labels as $l)
+                                        <td align="center">
+                                            <div class="score-box {{ $s && $s->label === $l ? 'active' : '' }}">
+                                                {{ $s && $s->label === $l ? 'X' : '' }}
+                                            </div>
+                                        </td>
+                                        @endforeach
+                                    </tr>
+                                    @endforeach
+                                </table>
+                            </div>
+                        </div>
+
                     </td>
 
-                    <td class="align-top" style="width: 33.33%; padding-left: 4px; padding-right: 4px; padding-top: 8px;">
+                    <!-- RIGHT COLUMN: Multiple Intelligence & Legend -->
+                    <td class="align-top" style="width: 45%;">
+                        
+                        <!-- MI Card -->
                         <div class="card">
-                            <div class="card-header">Kesamaan MI (Top)</div>
+                            <div class="card-header">MULTIPLE INTELLIGENCE</div>
                             <div class="card-body">
-                                <div class="badge-wrap" style="margin-bottom: 0;">
-                                    @if(!empty($irisanMiLabels))
-                                        @foreach($irisanMiLabels as $item)
-                                            <span class="badge">{{ $item }}</span>
-                                        @endforeach
-                                    @else
-                                        <span class="muted">-</span>
-                                    @endif
+                                @php
+                                    $miOrder = [
+                                        'linguistik',
+                                        'logika matematika',
+                                        'visual spasial',
+                                        'musikal',
+                                        'kinestetik',
+                                        'interpersonal',
+                                        'intrapersonal',
+                                        'naturalis',
+                                    ];
+
+                                    $miIndex = function (?string $name) use ($miOrder): int {
+                                        $raw = mb_strtolower((string) $name);
+                                        $norm = preg_replace('/[^a-z0-9]+/u', ' ', $raw);
+                                        $norm = trim((string) $norm);
+
+                                        $aliases = [
+                                            'linguistik' => ['linguistik', 'linguistic'],
+                                            'logika matematika' => ['logika matematika', 'logical mathematical', 'logicalmathematical', 'logical mathematical', 'logico mathematical'],
+                                            'visual spasial' => ['visual spasial', 'visual spatial', 'visualspatial', 'spatial'],
+                                            'musikal' => ['musikal', 'musical'],
+                                            'kinestetik' => ['kinestetik', 'bodily kinesthetic', 'bodilykinesthetic', 'kinaesthetic', 'kinesthetic'],
+                                            'interpersonal' => ['interpersonal'],
+                                            'intrapersonal' => ['intrapersonal'],
+                                            'naturalis' => ['naturalis', 'naturalist', 'naturalistic'],
+                                        ];
+
+                                        $key = null;
+                                        foreach ($aliases as $candidate => $terms) {
+                                            foreach ($terms as $t) {
+                                                $tNorm = trim((string) preg_replace('/[^a-z0-9]+/u', ' ', mb_strtolower($t)));
+                                                if ($tNorm !== '' && (str_contains($norm, $tNorm) || str_contains(str_replace(' ', '', $norm), str_replace(' ', '', $tNorm)))) {
+                                                    $key = $candidate;
+                                                    break 2;
+                                                }
+                                            }
+                                        }
+
+                                        $idx = $key !== null ? array_search($key, $miOrder, true) : false;
+                                        return $idx === false ? 999 : $idx;
+                                    };
+
+                                    $miScores = $assessment->scores
+                                        ->where('category', 'multiple_intelligence')
+                                        ->sortBy(fn ($s) => $miIndex($s->aspect_name))
+                                        ->values();
+                                @endphp
+
+                                @foreach($miScores as $s)
+                                @php $p = $s->score_value * 2; @endphp
+                                <div style="margin-bottom: 6px;">
+                                    <div style="margin-bottom: 2px; font-size: 7.5pt;">
+                                        <span style="font-weight: bold;">{{ $s->aspect_name }}</span>
+                                        <span style="float: right;">{{ $p }}%</span>
+                                    </div>
+                                    <table class="progress-table">
+                                        <tr>
+                                            <td class="progress-fill" width="{{ $p }}%"></td>
+                                            <td class="progress-empty"></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                @endforeach
+                            </div>
+                        </div>
+
+                        <!-- Legend Card -->
+                        <div class="card" style="background-color: #f9fafb; border-style: dashed;">
+                            <div class="card-body">
+                                <div style="font-weight: bold; font-size: 7.5pt; margin-bottom: 4px; color: #4c1d95;">KETERANGAN SKOR:</div>
+                                <div class="legend-grid">
+                                    <div class="legend-item">TD = Tidak Dominan</div>
+                                    <div class="legend-item">KD = Kurang Dominan</div>
+                                    <div class="legend-item">AD = Agak Dominan</div>
+                                    <div class="legend-item">D = Dominan</div>
+                                    <div class="legend-item">SD = Sangat Dominan</div>
                                 </div>
                             </div>
                         </div>
-                    </td>
 
-                    <td class="align-top" style="width: 33.33%; padding-left: 8px; padding-top: 8px;">
-                        <div class="card">
-                            <div class="card-header">Multiple Intelligence (Top)</div>
-                            <div class="card-body">
-                                @if(!empty($ibuMiTop))
-                                    @foreach($ibuMiTop as $row)
-                                        <div style="margin-bottom: 6px;">
-                                            <div style="margin-bottom: 2px; font-size: 7.5pt;">
-                                                <span style="font-weight: bold;">{{ $row['label'] }}</span>
-                                                <span style="float: right;">{{ $row['percent'] }}%</span>
-                                            </div>
-                                            <table class="progress-table">
-                                                <tr>
-                                                    <td class="progress-fill" width="{{ $row['percent'] }}%"></td>
-                                                    <td class="progress-empty"></td>
-                                                </tr>
-                                            </table>
-                                        </div>
-                                    @endforeach
-                                @else
-                                    <div class="muted">-</div>
-                                @endif
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-
-                <tr>
-                    <td class="align-top" style="width: 33.33%; padding-right: 8px; padding-top: 8px;">
-                        <div class="card">
-                            <div class="card-header">Talents Mapping</div>
-                            <div class="card-body">
-                                <div class="mini-label">Brain Dominance</div>
-                                <div class="mini-value">{{ $ayahTalents['brain_dominance'] !== '' ? $ayahTalents['brain_dominance'] : '-' }}</div>
-                                <div class="mini-label">Social Dominance</div>
-                                <div class="mini-value">{{ $ayahTalents['social_dominance'] !== '' ? $ayahTalents['social_dominance'] : '-' }}</div>
-                                <div class="mini-label">Skill Dominance</div>
-                                <div class="mini-value">{{ $ayahTalents['skill_dominance'] !== '' ? $ayahTalents['skill_dominance'] : '-' }}</div>
-                                <div class="mini-label">Strength Approach</div>
-                                <div class="mini-value">{{ $ayahTalents['strengths'] !== '' ? $ayahTalents['strengths'] : '-' }}</div>
-                                <div class="mini-label">Deficit Approach</div>
-                                <div class="mini-value">{{ $ayahTalents['deficits'] !== '' ? $ayahTalents['deficits'] : '-' }}</div>
-                                <div class="mini-label">Cluster Strength</div>
-                                <div class="mini-value">{{ $ayahTalents['cluster_strength'] !== '' ? $ayahTalents['cluster_strength'] : '-' }}</div>
-                                <div class="mini-label">Personal Branding</div>
-                                <div class="mini-value" style="margin-bottom: 0;">{{ $ayahTalents['personal_branding'] !== '' ? $ayahTalents['personal_branding'] : '-' }}</div>
-                            </div>
-                        </div>
-                    </td>
-
-                    <td class="align-top" style="width: 33.33%; padding-left: 4px; padding-right: 4px; padding-top: 8px;">
-                        <div class="card">
-                            <div class="card-header">Kesamaan Talents Mapping</div>
-                            <div class="card-body">
-                                <div class="mini-label">Brain Dominance</div>
-                                <div class="mini-value">{{ ($irisanTalents['brain_dominance'] ?? '') !== '' ? $irisanTalents['brain_dominance'] : '-' }}</div>
-                                <div class="mini-label">Social Dominance</div>
-                                <div class="mini-value">{{ ($irisanTalents['social_dominance'] ?? '') !== '' ? $irisanTalents['social_dominance'] : '-' }}</div>
-                                <div class="mini-label">Skill Dominance</div>
-                                <div class="mini-value">{{ ($irisanTalents['skill_dominance'] ?? '') !== '' ? $irisanTalents['skill_dominance'] : '-' }}</div>
-                                <div class="mini-label">Strength Approach</div>
-                                <div class="mini-value">{{ ($irisanTalents['strengths'] ?? '') !== '' ? $irisanTalents['strengths'] : '-' }}</div>
-                                <div class="mini-label">Deficit Approach</div>
-                                <div class="mini-value">{{ ($irisanTalents['deficits'] ?? '') !== '' ? $irisanTalents['deficits'] : '-' }}</div>
-                                <div class="mini-label">Cluster Strength</div>
-                                <div class="mini-value">{{ ($irisanTalents['cluster_strength'] ?? '') !== '' ? $irisanTalents['cluster_strength'] : '-' }}</div>
-                                <div class="mini-label">Personal Branding</div>
-                                <div class="mini-value" style="margin-bottom: 0;">{{ ($irisanTalents['personal_branding'] ?? '') !== '' ? $irisanTalents['personal_branding'] : '-' }}</div>
-                            </div>
-                        </div>
-                    </td>
-
-                    <td class="align-top" style="width: 33.33%; padding-left: 8px; padding-top: 8px;">
-                        <div class="card">
-                            <div class="card-header">Talents Mapping</div>
-                            <div class="card-body">
-                                <div class="mini-label">Brain Dominance</div>
-                                <div class="mini-value">{{ $ibuTalents['brain_dominance'] !== '' ? $ibuTalents['brain_dominance'] : '-' }}</div>
-                                <div class="mini-label">Social Dominance</div>
-                                <div class="mini-value">{{ $ibuTalents['social_dominance'] !== '' ? $ibuTalents['social_dominance'] : '-' }}</div>
-                                <div class="mini-label">Skill Dominance</div>
-                                <div class="mini-value">{{ $ibuTalents['skill_dominance'] !== '' ? $ibuTalents['skill_dominance'] : '-' }}</div>
-                                <div class="mini-label">Strength Approach</div>
-                                <div class="mini-value">{{ $ibuTalents['strengths'] !== '' ? $ibuTalents['strengths'] : '-' }}</div>
-                                <div class="mini-label">Deficit Approach</div>
-                                <div class="mini-value">{{ $ibuTalents['deficits'] !== '' ? $ibuTalents['deficits'] : '-' }}</div>
-                                <div class="mini-label">Cluster Strength</div>
-                                <div class="mini-value">{{ $ibuTalents['cluster_strength'] !== '' ? $ibuTalents['cluster_strength'] : '-' }}</div>
-                                <div class="mini-label">Personal Branding</div>
-                                <div class="mini-value" style="margin-bottom: 0;">{{ $ibuTalents['personal_branding'] !== '' ? $ibuTalents['personal_branding'] : '-' }}</div>
-                            </div>
-                        </div>
                     </td>
                 </tr>
             </table>
 
-
-
-            <div class="signature-box-fixed">
-                <div style="font-size: 8.5pt; margin-bottom: 8px;">Bogor, {{ $ayah->test_date?->format('d F Y') ?? '-' }}</div>
-                @if(!empty($signatureAnggia))
-                    <img src="{{ $signatureAnggia }}" style="height: 55px; margin-bottom: 4px;">
-                @else
-                    <div style="height: 55px;"></div>
-                @endif
-                <div style="font-weight: bold; font-size: 9.5pt; text-decoration: underline;">Anggia Chrisanti, S.Psi, M.Psi, Psikolog</div>
-                <div style="font-size: 7.5pt;">No.SIAP HIMPSI 20250719</div>
+            @if($assessment->talentsMapping)
+            <div class="card" style="margin-top: 10px; page-break-inside: avoid;">
+                <div class="card-header">TALENTS MAPPING</div>
+                <div class="card-body">
+                    <table class="table">
+                        <tr>
+                            <td class="align-top" style="width: 50%; padding-right: 15px; border-right: 1px solid #e5e7eb;">
+                                <div class="mb-2">
+                                    <div class="psych-label" style="color: #6b7280; font-size: 7pt;">BRAIN DOMINANCE</div>
+                                    <div class="psych-value" style="font-weight: bold;">{{ $assessment->talentsMapping->brain_dominance ?? '-' }}</div>
+                                </div>
+                                <div class="mb-2">
+                                    <div class="psych-label" style="color: #6b7280; font-size: 7pt;">SOCIAL DOMINANCE</div>
+                                    <div class="psych-value" style="font-weight: bold;">{{ $assessment->talentsMapping->social_dominance ?? '-' }}</div>
+                                </div>
+                                <div class="mb-2">
+                                    <div class="psych-label" style="color: #6b7280; font-size: 7pt;">SKILL DOMINANCE</div>
+                                    <div class="psych-value" style="font-weight: bold;">{{ $assessment->talentsMapping->skill_dominance ?? '-' }}</div>
+                                </div>
+                            </td>
+                            <td class="align-top" style="width: 50%; padding-left: 15px;">
+                                <div class="mb-2">
+                                    <div class="psych-label" style="color: #6b7280; font-size: 7pt;">CLUSTER STRENGTH</div>
+                                    <div class="psych-value" style="font-weight: bold;">{{ $assessment->talentsMapping->cluster_strength ?? '-' }}</div>
+                                </div>
+                                <div class="mb-2">
+                                    <div class="psych-label" style="color: #6b7280; font-size: 7pt;">PERSONAL BRANDING</div>
+                                    <div class="psych-value" style="font-weight: bold;">{{ $assessment->talentsMapping->personal_branding ?? '-' }}</div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                    
+                    <div style="margin-top: 8px; border-top: 1px dashed #e5e7eb; padding-top: 8px;">
+                         <div class="mb-2">
+                            <div class="psych-label" style="color: #059669; font-weight: bold;">STRENGTHS</div>
+                            <div class="psych-value" style="text-align: justify; font-size: 8.5pt;">
+                                {{ $assessment->talentsMapping->strengths ?? '-' }}
+                            </div>
+                        </div>
+                        <div class="mb-2">
+                            <div class="psych-label" style="color: #DC2626; font-weight: bold;">DEFICITS</div>
+                            <div class="psych-value" style="text-align: justify; font-size: 8.5pt;">
+                                {{ $assessment->talentsMapping->deficits ?? '-' }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
+            @endif
+
+            @if(!empty($signature))
+            <div class="signature-box">
+                <div style="margin-bottom: 10px;">Bogor, {{ $assessment->test_date->format('d F Y') }}</div>
+                <div style="margin-bottom: 5px;">Psikolog Pemeriksa,</div>
+                <img src="{{ $signature }}" style="height: 60px; margin-bottom: 5px;">
+                <div style="font-weight: bold; text-decoration: underline;">{{ $assessment->psychologist_name }}</div>
+                <div>SIPP: {{ $assessment->psychologist_sipp ?? '0514-22-2-1' }}</div>
+            </div>
+            @endif
         </div>
     </div>
 
+    <!-- KAMUS LAPORAN PAGE -->
     <div class="page page-break">
         <div class="content-wrapper">
             <h2 style="color:#4c1d95; margin-bottom:12px; font-size:14pt; border-bottom:2px solid #4c1d95; padding-bottom:4px; display:inline-block;">KAMUS LAPORAN</h2>
@@ -690,15 +1023,11 @@
                     </td>
                 </tr>
                 <tr>
-                    <td></td>
                     <td>
                         <p><strong>STRATEGIC</strong><br>
                             mampu memilah masalah dan menemukan jalan terbaik untuk solusinya. Tema bakat ini banyak terdapat pada peran: Perencana Strategi, Manajer, Leader.
                         </p>
                     </td>
-                </tr>
-                <tr>
-                    <td></td>
                     <td>
                         <p><strong>WOO (Winning Others Over)</strong><br>
                             senang tantangan untuk bertemu orang baru dan menjadi akrab. Tema bakat ini banyak terdapat pada peran: Duta Organisasi, Sales, Entertainer, Resepsionis.

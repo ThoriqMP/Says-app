@@ -9,7 +9,7 @@
             <div class="p-6 text-gray-900 dark:text-gray-100" x-data="assessmentForm()">
                 <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-6">
                     <h2 class="text-2xl font-semibold text-gray-800 dark:text-gray-200">Buat Asesmen Psikologi</h2>
-                    <a href="{{ route('assessments.index') }}" 
+                    <a href="{{ route('psychological-assessments.index') }}" 
                        class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition w-full sm:w-auto text-center">
                         Kembali
                     </a>
@@ -33,7 +33,7 @@
                     </div>
                 @endif
 
-                <form method="POST" action="{{ route('assessments.store') }}" @submit.prevent="submitForm">
+                <form method="POST" action="{{ route('psychological-assessments.store') }}" @submit.prevent="submitForm">
                     @csrf
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
@@ -69,9 +69,10 @@
                                 </div>
                                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                     <div>
-                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Usia</label>
-                                        <input type="number" name="new_subject_age" x-model="form.new_subject_age" min="0" max="120"
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tanggal Lahir</label>
+                                        <input type="date" name="new_subject_dob" x-model="form.new_subject_dob" @change="calculateAge()"
                                                class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+                                        <p class="text-sm text-gray-500 mt-1" x-show="form.calculated_age" x-text="form.calculated_age"></p>
                                     </div>
                                     <div>
                                         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Jenis Kelamin</label>
@@ -103,6 +104,87 @@
                                     <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Psikolog</label>
                                     <input type="text" name="psychologist_name" x-model="form.psychologist_name"
                                            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Asesmen Psikologis Inputs -->
+                    <div class="mb-10 border-t pt-6">
+                        <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">Data Asesmen Psikologis</h3>
+                        
+                        <!-- Aspek Kognitif -->
+                        <h4 class="text-md font-medium text-gray-700 dark:text-gray-300 mb-3">1. Aspek Kognitif</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                            @foreach(['Verbal', 'Numerical', 'Logical', 'Spatial'] as $aspect)
+                                <div class="p-4 border rounded-lg bg-gray-50 dark:bg-gray-700/50">
+                                    <div class="text-sm font-medium mb-3">{{ $aspect }}</div>
+                                    <div class="space-y-3">
+                                        <div>
+                                            <label class="text-xs text-gray-500">Score</label>
+                                            <input type="number" name="psychological[cognitive_{{ strtolower($aspect) }}_score]" 
+                                                   class="w-full px-2 py-1 text-sm border rounded">
+                                        </div>
+                                        <div>
+                                            <label class="text-xs text-gray-500">Scale</label>
+                                            <input type="number" name="psychological[cognitive_{{ strtolower($aspect) }}_scale]" 
+                                                   class="w-full px-2 py-1 text-sm border rounded">
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+
+                        <!-- Aspek Potensi -->
+                        <h4 class="text-md font-medium text-gray-700 dark:text-gray-300 mb-3">2. Aspek Potensi</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                             @foreach(['Intellectual', 'Social', 'Emotional'] as $aspect)
+                                <div class="p-4 border rounded-lg bg-gray-50 dark:bg-gray-700/50">
+                                    <div class="text-sm font-medium mb-3">{{ $aspect }}</div>
+                                    <div>
+                                        <label class="text-xs text-gray-500">Score</label>
+                                        <input type="number" name="psychological[potential_{{ strtolower($aspect) }}_score]" 
+                                               class="w-full px-2 py-1 text-sm border rounded">
+                                    </div>
+                                </div>
+                             @endforeach
+                        </div>
+
+                        <!-- IQ & Maturity -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <h4 class="text-md font-medium text-gray-700 dark:text-gray-300 mb-3">Taraf Kecerdasan (Full Scale)</h4>
+                                <div class="space-y-3">
+                                    <div>
+                                        <label class="block text-sm text-gray-700 mb-1">IQ Score</label>
+                                        <input type="text" name="psychological[iq_full_scale]" placeholder="e.g. 110"
+                                               class="w-full px-3 py-2 border rounded-lg">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm text-gray-700 mb-1">Category</label>
+                                        <select name="psychological[iq_category]" class="w-full px-3 py-2 border rounded-lg">
+                                            <option value="">Select Category</option>
+                                            <option value="Very Superior">Very Superior</option>
+                                            <option value="Superior">Superior</option>
+                                            <option value="High Average">High Average</option>
+                                            <option value="Average">Average</option>
+                                            <option value="Low Average">Low Average</option>
+                                            <option value="Borderline">Borderline</option>
+                                            <option value="Intellectually Deficient">Intellectually Deficient</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="text-md font-medium text-gray-700 dark:text-gray-300 mb-3">Taraf Kematangan</h4>
+                                <div>
+                                    <label class="block text-sm text-gray-700 mb-1">Recommendation</label>
+                                    <select name="psychological[maturity_recommendation]" class="w-full px-3 py-2 border rounded-lg">
+                                        <option value="">Select Recommendation</option>
+                                        <option value="Disarankan">Disarankan</option>
+                                        <option value="Dipertimbangkan">Dipertimbangkan</option>
+                                        <option value="Tidak Disarankan">Tidak Disarankan</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -287,4 +369,50 @@ function assessmentForm() {
 }
 </script>
 @endpush
+    <script>
+        function assessmentForm() {
+            return {
+                form: {
+                    subject_id: '',
+                    new_subject_name: '',
+                    new_subject_dob: '',
+                    new_subject_gender: '',
+                    new_subject_phone: '',
+                    test_date: new Date().toISOString().split('T')[0],
+                    psychologist_name: 'Anggia Chrisanti, S.Psi, M.Psi, Psikolog',
+                    calculated_age: '',
+                },
+                mi: {},
+                submitForm(e) {
+                    e.target.submit();
+                },
+                calculateAge() {
+                    if (!this.form.new_subject_dob) {
+                        this.form.calculated_age = '';
+                        return;
+                    }
+                    const dob = new Date(this.form.new_subject_dob);
+                    const now = new Date();
+                    
+                    let years = now.getFullYear() - dob.getFullYear();
+                    let months = now.getMonth() - dob.getMonth();
+                    let days = now.getDate() - dob.getDate();
+
+                    if (days < 0) {
+                        months--;
+                        // Get days in previous month
+                        const prevMonth = new Date(now.getFullYear(), now.getMonth(), 0);
+                        days += prevMonth.getDate();
+                    }
+
+                    if (months < 0) {
+                        years--;
+                        months += 12;
+                    }
+
+                    this.form.calculated_age = `${years} thn ${months} bln ${days} hari`;
+                }
+            }
+        }
+    </script>
 @endsection

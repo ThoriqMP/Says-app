@@ -71,6 +71,18 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/assessments/{assessment}/pdf', [AssessmentController::class, 'pdf'])->name('assessments.pdf');
     Route::get('/assessments/{assessment}/pdf/view', [AssessmentController::class, 'pdfView'])->name('assessments.pdf.view');
 
+    // New Psychological Assessment Module
+    Route::prefix('/psychological-assessments')->name('psychological-assessments.')->group(function () {
+        Route::get('/', [\App\Http\Controllers\PsychologicalAssessment\PsychologicalAssessmentController::class, 'index'])->name('index');
+        Route::get('/create', [\App\Http\Controllers\PsychologicalAssessment\PsychologicalAssessmentController::class, 'create'])->name('create');
+        Route::post('/', [\App\Http\Controllers\PsychologicalAssessment\PsychologicalAssessmentController::class, 'store'])->name('store');
+        Route::get('/{assessment}/edit', [\App\Http\Controllers\PsychologicalAssessment\PsychologicalAssessmentController::class, 'edit'])->name('edit');
+        Route::put('/{assessment}', [\App\Http\Controllers\PsychologicalAssessment\PsychologicalAssessmentController::class, 'update'])->name('update');
+        Route::get('/{assessment}', [\App\Http\Controllers\PsychologicalAssessment\PsychologicalAssessmentController::class, 'show'])->name('show');
+        Route::get('/{assessment}/pdf', [\App\Http\Controllers\PsychologicalAssessment\PsychologicalAssessmentController::class, 'pdf'])->name('pdf');
+        Route::get('/{assessment}/docx', [\App\Http\Controllers\PsychologicalAssessment\PsychologicalAssessmentController::class, 'docx'])->name('docx');
+    });
+
     // Family Mapping Routes
     Route::get('/family-mapping', [FamilyMappingController::class, 'index'])->name('family-mapping.index');
     Route::get('/family-mapping/pdf', [FamilyMappingController::class, 'pdf'])->name('family-mapping.pdf');
