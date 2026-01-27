@@ -25,6 +25,18 @@ class Invoice extends Model
     ];
 
     /**
+     * The "booted" method of the model.
+     */
+    protected static function booted(): void
+    {
+        static::creating(function (Invoice $invoice) {
+            if (empty($invoice->no_invoice)) {
+                $invoice->no_invoice = self::generateInvoiceNumber($invoice->tanggal_invoice);
+            }
+        });
+    }
+
+    /**
      * Relasi ke siswa
      */
     public function siswa()

@@ -22,6 +22,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // Invoice Routes
+    Route::get('/students/search', [InvoiceController::class, 'searchStudents'])->name('students.search');
     Route::get('/invoices', [InvoiceController::class, 'index'])->name('invoices.index');
     Route::get('/invoices/create', [InvoiceController::class, 'create'])->name('invoices.create');
     Route::post('/invoices', [InvoiceController::class, 'store'])->name('invoices.store');

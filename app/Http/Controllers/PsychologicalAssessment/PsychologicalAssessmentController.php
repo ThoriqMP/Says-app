@@ -456,7 +456,7 @@ class PsychologicalAssessmentController extends Controller
         }
         
         // Personal Mapping Section
-        $section->addPageBreak();
+        // $section->addPageBreak(); // Removed to keep in one page if possible
         $section->addText('(PERSONAL MAPPING)', ['bold' => true, 'size' => 14, 'color' => '4338CA', 'underline' => 'single']);
         $section->addTextBreak(1);
 

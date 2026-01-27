@@ -9,9 +9,11 @@ use App\Models\Layanan;
 use App\Models\ProfilSekolah;
 use App\Models\Siswa;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class InvoiceController extends Controller
 {
@@ -25,6 +27,21 @@ class InvoiceController extends Controller
             ->paginate(10);
 
         return view('invoices.index', compact('invoices'));
+    }
+
+    /**
+     * Search students for autocomplete
+     */
+    public function searchStudents(Request $request)
+    {
+        $query = $request->get('query');
+        
+        $students = Siswa::where('nama_siswa', 'like', "%{$query}%")
+            ->orWhere('nama_orang_tua', 'like', "%{$query}%")
+            ->limit(20)
+            ->get(['id', 'nama_siswa', 'nama_orang_tua']);
+
+        return response()->json($students);
     }
 
     /**
@@ -47,7 +64,6 @@ class InvoiceController extends Controller
         $validator = Validator::make($request->all(), [
             'id_siswa' => 'required|exists:siswa,id',
             'tanggal_invoice' => 'required|date',
-            'jatuh_tempo' => 'required|date|after_or_equal:tanggal_invoice',
             'items' => 'required|array|min:1',
             'items.*.id_layanan' => 'required|exists:layanan,id',
             'items.*.kuantitas' => 'required|integer|min:1',
@@ -63,10 +79,20 @@ class InvoiceController extends Controller
         try {
             $schoolProfile = ProfilSekolah::first();
 
+            $invoiceDate = Carbon::parse($request->tanggal_invoice);
+            $dueDate = $invoiceDate->copy()->addMonth();
+            $dueDate->day = 10;
+
+            $dueMonthName = $this->getIndonesianMonthName($dueDate->month);
+            $dueYear = $dueDate->year;
+
+            $itemsData = $request->items;
+            $serviceIds = collect($itemsData)->pluck('id_layanan')->all();
+            $services = Layanan::whereIn('id', $serviceIds)->get()->keyBy('id');
+
             $invoice = Invoice::create([
-                'no_invoice' => Invoice::generateInvoiceNumber($request->tanggal_invoice),
                 'tanggal_invoice' => $request->tanggal_invoice,
-                'jatuh_tempo' => $request->jatuh_tempo,
+                'jatuh_tempo' => $dueDate->toDateString(),
                 'id_siswa' => $request->id_siswa,
                 'id_sekolah' => $schoolProfile->id,
                 'status' => 'draft',
@@ -75,14 +101,21 @@ class InvoiceController extends Controller
 
             $grandTotal = 0;
 
-            foreach ($request->items as $item) {
+            foreach ($itemsData as $item) {
                 $totalBiaya = $item['kuantitas'] * $item['harga_satuan'];
                 $grandTotal += $totalBiaya;
+
+                $service = $services->get($item['id_layanan']);
+                $deskripsiTambahan = $item['deskripsi_tambahan'] ?? null;
+
+                if ($service && stripos($service->nama_layanan, 'SPP') !== false) {
+                    $deskripsiTambahan = 'SPP ('.$dueMonthName.' '.$dueYear.')';
+                }
 
                 InvoiceDetail::create([
                     'id_invoice' => $invoice->id,
                     'id_layanan' => $item['id_layanan'],
-                    'deskripsi_tambahan' => $item['deskripsi_tambahan'] ?? null,
+                    'deskripsi_tambahan' => $deskripsiTambahan,
                     'kuantitas' => $item['kuantitas'],
                     'harga_satuan' => $item['harga_satuan'],
                     'total_biaya' => $totalBiaya,
@@ -136,7 +169,7 @@ class InvoiceController extends Controller
             'id_siswa' => 'required|exists:siswa,id',
             'tanggal_invoice' => 'required|date',
             'jatuh_tempo' => 'required|date|after_or_equal:tanggal_invoice',
-            'status' => 'required|in:draft,sent,paid,overdue',
+            'status' => 'required|string',
             'items' => 'required|array|min:1',
             'items.*.id_layanan' => 'required|exists:layanan,id',
             'items.*.kuantitas' => 'required|integer|min:1',
@@ -157,19 +190,34 @@ class InvoiceController extends Controller
                 'status' => $request->status,
             ]);
 
+            $dueDate = Carbon::parse($request->jatuh_tempo);
+            $dueMonthName = $this->getIndonesianMonthName($dueDate->month);
+            $dueYear = $dueDate->year;
+
+            $itemsData = $request->items;
+            $serviceIds = collect($itemsData)->pluck('id_layanan')->all();
+            $services = Layanan::whereIn('id', $serviceIds)->get()->keyBy('id');
+
             // Hapus detail lama
             $invoice->invoiceDetails()->delete();
 
             $grandTotal = 0;
 
-            foreach ($request->items as $item) {
+            foreach ($itemsData as $item) {
                 $totalBiaya = $item['kuantitas'] * $item['harga_satuan'];
                 $grandTotal += $totalBiaya;
+
+                $service = $services->get($item['id_layanan']);
+                $deskripsiTambahan = $item['deskripsi_tambahan'] ?? null;
+
+                if ($service && stripos($service->nama_layanan, 'SPP') !== false) {
+                    $deskripsiTambahan = 'SPP ('.$dueMonthName.' '.$dueYear.')';
+                }
 
                 InvoiceDetail::create([
                     'id_invoice' => $invoice->id,
                     'id_layanan' => $item['id_layanan'],
-                    'deskripsi_tambahan' => $item['deskripsi_tambahan'] ?? null,
+                    'deskripsi_tambahan' => $deskripsiTambahan,
                     'kuantitas' => $item['kuantitas'],
                     'harga_satuan' => $item['harga_satuan'],
                     'total_biaya' => $totalBiaya,
@@ -226,8 +274,9 @@ class InvoiceController extends Controller
         // Set paper size to A4 Landscape
         $pdf->setPaper('a4', 'landscape');
 
-        // Tampilkan di browser (inline) tanpa download
-        return $pdf->stream('invoice-'.$invoice->no_invoice.'.pdf');
+        $filename = $this->buildInvoiceFilename($invoice);
+
+        return $pdf->stream($filename);
     }
 
     /**
@@ -239,20 +288,44 @@ class InvoiceController extends Controller
         $terbilang = TerbilangHelper::rupiah($invoice->grand_total);
 
         $invoice->update([
-            'status' => 'sent',
+            'status' => 'Telah dicetak pada ' . now()->format('d/m/Y'),
         ]);
 
-        // Generate filename dinamis
-        $bulan = now()->format('m');
-        $namaSiswa = \Illuminate\Support\Str::slug($invoice->siswa->nama_siswa, '_');
-        $nomorAkhir = substr($invoice->no_invoice, -4);
-        $filename = 'invoice-'.$bulan.'_'.$namaSiswa.'_'.$nomorAkhir.'.pdf';
+        $filename = $this->buildInvoiceFilename($invoice);
 
         $pdf = Pdf::loadView('invoices.pdf', compact('invoice', 'terbilang'));
 
-        // Set paper size to A4 Landscape to ensure everything fits
         $pdf->setPaper('a4', 'landscape');
 
         return $pdf->download($filename);
+    }
+
+    protected function buildInvoiceFilename(Invoice $invoice): string
+    {
+        $dueDate = $invoice->jatuh_tempo ?? now();
+        $monthAbbr = $dueDate->format('M');
+        $studentName = Str::slug($invoice->siswa->nama_siswa ?? 'TanpaNama', '_');
+
+        return 'Invoice-'.$monthAbbr.'_'.$studentName.'.pdf';
+    }
+
+    protected function getIndonesianMonthName(int $month): string
+    {
+        $months = [
+            1 => 'Januari',
+            2 => 'Februari',
+            3 => 'Maret',
+            4 => 'April',
+            5 => 'Mei',
+            6 => 'Juni',
+            7 => 'Juli',
+            8 => 'Agustus',
+            9 => 'September',
+            10 => 'Oktober',
+            11 => 'November',
+            12 => 'Desember',
+        ];
+
+        return $months[$month] ?? '';
     }
 }

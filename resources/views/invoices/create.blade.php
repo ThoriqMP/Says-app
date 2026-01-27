@@ -35,20 +35,66 @@
                     </div>
                 @endif
 
-                <form method="POST" action="{{ route('invoices.store') }}" x-data="invoiceForm({{ json_encode($services) }})" data-old-items="{{ e(json_encode(old('items', []))) }}" @submit.prevent="submitForm">
+                @php
+                    $oldStudentName = '';
+                    if(old('id_siswa')) {
+                        $oldStudent = \App\Models\Siswa::find(old('id_siswa'));
+                        if($oldStudent) {
+                            $oldStudentName = $oldStudent->nama_siswa . ' - ' . $oldStudent->nama_orang_tua;
+                        }
+                    }
+                @endphp
+
+                <form method="POST" action="{{ route('invoices.store') }}" 
+                      x-data="invoiceForm({{ json_encode($services) }})" 
+                      data-old-items="{{ e(json_encode(old('items', []))) }}" 
+                      data-old-student-name="{{ $oldStudentName }}"
+                      @submit.prevent="submitForm">
                     @csrf
                     
                     <!-- Informasi Utama -->
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                         <div>
                             <label for="id_siswa" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Siswa</label>
-                            <select id="id_siswa" name="id_siswa" x-model="form.id_siswa" required
-                                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
-                                <option value="" class="text-gray-900 dark:text-gray-100">Pilih Siswa</option>
-                                @foreach($students as $student)
-                                    <option value="{{ $student->id }}" class="text-gray-900 dark:text-gray-100">{{ $student->nama_siswa }} - {{ $student->nama_orang_tua }}</option>
-                                @endforeach
-                            </select>
+                            
+                            <div class="relative" @click.outside="showResults = false">
+                                <input type="text" 
+                                       x-model.debounce.300ms="searchQuery"
+                                       @focus="if(searchQuery.length >= 2) showResults = true"
+                                       placeholder="Cari nama siswa atau orang tua..."
+                                       class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                                       autocomplete="off">
+                                <input type="hidden" name="id_siswa" x-model="form.id_siswa">
+                                
+                                <!-- Loading Indicator -->
+                                <div x-show="isSearching" class="absolute right-3 top-2.5" style="display: none;">
+                                    <svg class="animate-spin h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+                                </div>
+
+                                <!-- Results Dropdown -->
+                                <div x-show="showResults && searchResults.length > 0" 
+                                     class="absolute z-10 w-full mt-1 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg max-h-60 overflow-y-auto"
+                                     style="display: none;">
+                                    <ul>
+                                        <template x-for="student in searchResults" :key="student.id">
+                                            <li @click="selectStudent(student)"
+                                                class="px-4 py-2 hover:bg-blue-50 dark:hover:bg-gray-600 cursor-pointer text-gray-900 dark:text-gray-100 border-b border-gray-100 dark:border-gray-600 last:border-0">
+                                                <div class="font-medium" x-text="student.nama_siswa"></div>
+                                                <div class="text-sm text-gray-500 dark:text-gray-400" x-text="student.nama_orang_tua"></div>
+                                            </li>
+                                        </template>
+                                    </ul>
+                                </div>
+                                
+                                <div x-show="showResults && searchQuery.length >= 2 && searchResults.length === 0 && !isSearching" 
+                                     class="absolute z-10 w-full mt-1 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg px-4 py-2 text-gray-500 dark:text-gray-400"
+                                     style="display: none;">
+                                    Tidak ada data ditemukan
+                                </div>
+                            </div>
                         </div>
                         
                         <div>
@@ -175,13 +221,30 @@ function invoiceForm(servicesData) {
         form: {
             id_siswa: '{{ old("id_siswa") }}',
             tanggal_invoice: '{{ old("tanggal_invoice", date("Y-m-d")) }}',
-            jatuh_tempo: '{{ old("jatuh_tempo", date("Y-m-d", strtotime("+30 days"))) }}',
+            jatuh_tempo: '{{ old("jatuh_tempo") }}',
         },
         items: [],
         grandTotal: 0,
         terbilang: '',
         
+        // Search functionality
+        searchQuery: '',
+        searchResults: [],
+        isSearching: false,
+        showResults: false,
+        
         init() {
+            // Watch for search query changes
+            this.$watch('searchQuery', (value) => {
+                if (value && value.length >= 2) {
+                    this.performSearch();
+                } else {
+                    this.searchResults = [];
+                    this.showResults = false;
+                }
+            });
+
+            // Initialize old items if any
             const oldItems = JSON.parse(this.$el.dataset.oldItems || '[]');
             if (oldItems.length > 0) {
                 this.items = oldItems.map(item => ({
@@ -195,6 +258,44 @@ function invoiceForm(servicesData) {
                 this.addItem();
             }
             this.calculateGrandTotal();
+
+            if (!this.form.jatuh_tempo && this.form.tanggal_invoice) {
+                this.form.jatuh_tempo = this.calculateDueDate(this.form.tanggal_invoice);
+            }
+
+            // Handle pre-filled student if old input exists
+            const oldStudentName = this.$el.dataset.oldStudentName;
+            if (oldStudentName) {
+                this.searchQuery = oldStudentName;
+            }
+
+            this.$watch('form.tanggal_invoice', (value) => {
+                if (value) {
+                    this.form.jatuh_tempo = this.calculateDueDate(value);
+                }
+            });
+        },
+
+        performSearch() {
+            this.isSearching = true;
+            fetch(`{{ route('students.search') }}?query=${encodeURIComponent(this.searchQuery)}`)
+                .then(res => res.json())
+                .then(data => {
+                    this.searchResults = data;
+                    this.showResults = true;
+                })
+                .catch(err => {
+                    console.error('Search error:', err);
+                })
+                .finally(() => {
+                    this.isSearching = false;
+                });
+        },
+
+        selectStudent(student) {
+            this.form.id_siswa = student.id;
+            this.searchQuery = `${student.nama_siswa} - ${student.nama_orang_tua}`;
+            this.showResults = false;
         },
         
         addItem() {
@@ -239,6 +340,24 @@ function invoiceForm(servicesData) {
         
         formatRupiah(angka) {
             return 'Rp ' + (parseFloat(angka) || 0).toLocaleString('id-ID', {minimumFractionDigits: 0, maximumFractionDigits: 0});
+        },
+        
+        calculateDueDate(dateStr) {
+            const date = new Date(dateStr);
+            if (isNaN(date)) {
+                return this.form.jatuh_tempo;
+            }
+            let year = date.getFullYear();
+            let month = date.getMonth() + 1;
+            month += 1;
+            if (month > 12) {
+                month = 1;
+                year += 1;
+            }
+            const day = 10;
+            const mm = String(month).padStart(2, '0');
+            const dd = String(day).padStart(2, '0');
+            return `${year}-${mm}-${dd}`;
         },
         
         submitForm(event) {
