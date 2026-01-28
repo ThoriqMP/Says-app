@@ -117,22 +117,22 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                             @foreach(['Verbal', 'Numerical', 'Logical', 'Spatial'] as $aspect)
                                 <div class="p-4 border rounded-lg bg-gray-50 dark:bg-gray-700/50">
-                                    <div class="text-sm font-medium mb-3">{{ $aspect }}</div>
+                                    <div class="text-[13px] font-medium mb-3 text-gray-900 dark:text-gray-100">{{ $aspect }}</div>
                                     <div class="space-y-3">
                                         <div>
-                                            <label class="text-xs text-gray-500">Score</label>
+                                            <label class="text-[11px] text-gray-700 dark:text-gray-300">Score</label>
                                             <input type="number" name="psychological[cognitive_{{ strtolower($aspect) }}_score]" 
                                                    value="{{ old('psychological.cognitive_'.strtolower($aspect).'_score', $assessment->psychologicalAssessment->{'cognitive_'.strtolower($aspect).'_score'} ?? '') }}"
-                                                   class="w-full px-2 py-1 text-sm border rounded">
+                                                   class="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
                                         </div>
                                         <div>
-                                            <label class="text-xs text-gray-500">Scale</label>
+                                            <label class="text-[11px] text-gray-700 dark:text-gray-300">Scale</label>
                                             @php
                                                 $scaleField = 'cognitive_'.strtolower($aspect).'_scale';
                                                 $currentScale = old('psychological.'.$scaleField, $assessment->psychologicalAssessment->{$scaleField} ?? null);
                                             @endphp
                                             <select name="psychological[{{ $scaleField }}]" 
-                                                    class="w-full px-2 py-1 text-sm border rounded bg-white dark:bg-gray-700">
+                                                    class="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
                                                 <option value="">Pilih Skala</option>
                                                 @foreach($cognitiveScaleOptions as $val => $label)
                                                     <option value="{{ $val }}" {{ (string) $currentScale === (string) $val ? 'selected' : '' }}>
@@ -151,13 +151,13 @@
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                              @foreach(['Intellectual', 'Social', 'Emotional'] as $aspect)
                                 <div class="p-4 border rounded-lg bg-gray-50 dark:bg-gray-700/50">
-                                    <div class="text-sm font-medium mb-3">{{ $aspect }}</div>
+                                    <div class="text-[13px] font-medium mb-3 text-gray-900 dark:text-gray-100">{{ $aspect }}</div>
                                     <div>
-                                        <label class="text-xs text-gray-500">Score</label>
+                                        <label class="text-[11px] text-gray-700 dark:text-gray-300">Score</label>
                                         <input type="text" name="psychological[potential_{{ strtolower($aspect) }}_score]" 
                                                value="{{ old('psychological.potential_'.strtolower($aspect).'_score', $assessment->psychologicalAssessment->{'potential_'.strtolower($aspect).'_score'} ?? '') }}"
                                                placeholder="contoh: 2 atau (-) 3"
-                                               class="w-full px-2 py-1 text-sm border rounded">
+                                               class="w-full px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
                                     </div>
                                 </div>
                              @endforeach
@@ -169,13 +169,13 @@
                                 <h4 class="text-md font-medium text-gray-700 dark:text-gray-300 mb-3">Taraf Kecerdasan (Full Scale)</h4>
                                 <div class="space-y-3">
                                     <div>
-                                        <label class="block text-sm text-gray-700 mb-1">IQ Score</label>
+                                        <label class="block text-sm text-gray-700 dark:text-gray-300 mb-1">IQ Score</label>
                                         <input type="text" name="psychological[iq_full_scale]" placeholder="e.g. 110"
                                                value="{{ old('psychological.iq_full_scale', $assessment->psychologicalAssessment->iq_full_scale ?? '') }}"
                                                class="w-full px-3 py-2 border rounded-lg">
                                     </div>
                                     <div>
-                                        <label class="block text-sm text-gray-700 mb-1">Category</label>
+                                        <label class="block text-sm text-gray-700 dark:text-gray-300 mb-1">Category</label>
                                         @php
                                             $iqCurrent = old('psychological.iq_category', $assessment->psychologicalAssessment->iq_category ?? '');
                                             $iqOptions = [
@@ -186,7 +186,7 @@
                                                 'Rendah' => 'Rendah (81 - 94)',
                                             ];
                                         @endphp
-                                        <select name="psychological[iq_category]" class="w-full px-3 py-2 border rounded-lg">
+                                        <select name="psychological[iq_category]" class="w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
                                             <option value="">Pilih Kategori IQ</option>
                                             @foreach($iqOptions as $value => $label)
                                                 <option value="{{ $value }}" {{ (string) $iqCurrent === (string) $value ? 'selected' : '' }}>
@@ -200,8 +200,8 @@
                             <div>
                                 <h4 class="text-md font-medium text-gray-700 dark:text-gray-300 mb-3">Taraf Kematangan</h4>
                                 <div>
-                                    <label class="block text-sm text-gray-700 mb-1">Recommendation</label>
-                                    <select name="psychological[maturity_recommendation]" class="w-full px-3 py-2 border rounded-lg">
+                                    <label class="block text-sm text-gray-700 dark:text-gray-300 mb-1">Recommendation</label>
+                                    <select name="psychological[maturity_recommendation]" class="w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
                                         <option value="">Select Recommendation</option>
                                         @foreach(['Disarankan', 'Dipertimbangkan', 'Tidak Disarankan'] as $rec)
                                             <option value="{{ $rec }}" {{ (old('psychological.maturity_recommendation', $assessment->psychologicalAssessment->maturity_recommendation ?? '') == $rec) ? 'selected' : '' }}>

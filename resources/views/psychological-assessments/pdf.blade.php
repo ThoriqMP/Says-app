@@ -98,7 +98,7 @@
 
         .watermark img {
             width: 100%;
-            height: 100%;
+            height: auto;
             object-fit: contain;
         }
 
@@ -473,55 +473,63 @@
                             <td style="width: 60%; padding-right: 8px; vertical-align: top;">
                                 <table style="width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 7.5pt; margin-bottom: 6px;">
                                     <tr>
-                                        <th colspan="3" style="background-color: #bfdbfe; border: 1px solid #9ca3af; padding: 4px; text-align: center; font-weight: bold;">
+                                        <th colspan="4" style="background-color: #5b21b6; color: #ffffff; border: 1px solid #4c1d95; padding: 4px; text-align: center; font-weight: bold;">
                                             ASPEK KOGNITIF
                                         </th>
-                                    </tr>
-                                    <tr>
-                                        <th style="width: 35%; border: 1px solid #9ca3af; padding: 4px; text-align: center;">ASPEK</th>
-                                        <th style="width: 45%; border: 1px solid #9ca3af; padding: 4px; text-align: center;">KETERANGAN ASPEK</th>
-                                        <th style="width: 20%; border: 1px solid #9ca3af; padding: 4px; text-align: center;">SKALA</th>
                                     </tr>
                                     @php
                                         $cognitiveRows = [
                                             [
-                                                'label' => 'Kemampuan Verbal',
-                                                'desc' => 'Kemampuan berkomunikasi dan memahami bahasa',
+                                                'label' => 'Verbal',
                                                 'score' => $psych->cognitive_verbal_score ?? null,
                                                 'scale' => $psych->cognitive_verbal_scale ?? null,
                                             ],
                                             [
-                                                'label' => 'Kemampuan Numerikal',
-                                                'desc' => 'Kemampuan berpikir praktis matematis dan berhitung',
+                                                'label' => 'Numerikal',
                                                 'score' => $psych->cognitive_numerical_score ?? null,
                                                 'scale' => $psych->cognitive_numerical_scale ?? null,
                                             ],
                                             [
-                                                'label' => 'Kemampuan Berpikir Logis',
-                                                'desc' => 'Kemampuan untuk memahami masalah secara hubungan sebab akibat dan menemukan solusi',
+                                                'label' => 'Logis',
                                                 'score' => $psych->cognitive_logical_score ?? null,
                                                 'scale' => $psych->cognitive_logical_scale ?? null,
                                             ],
                                             [
-                                                'label' => 'Kemampuan Visual Spasial',
-                                                'desc' => 'Kemampuan untuk berlaku cermat dalam menyelesaikan suatu pekerjaan atau tugas',
+                                                'label' => 'Visual Spasial',
                                                 'score' => $psych->cognitive_spatial_score ?? null,
                                                 'scale' => $psych->cognitive_spatial_scale ?? null,
                                             ],
                                         ];
                                     @endphp
-                                    @foreach($cognitiveRows as $row)
                                     <tr>
-                                        <td style="border: 1px solid #9ca3af; padding: 4px;">{{ $row['label'] }}</td>
-                                        <td style="border: 1px solid #9ca3af; padding: 4px;">{{ $row['desc'] }}</td>
-                                        <td style="border: 1px solid #9ca3af; padding: 4px; text-align: center;">
-                                            @if($row['score'] !== null)
-                                                {{ $row['score'] }} /
-                                            @endif
-                                            {{ $formatScale($row['scale']) }}
+                                        @foreach($cognitiveRows as $row)
+                                        @php
+                                            $scaleLetter = $formatScale($row['scale'] ?? null);
+                                            $scoreValue = $row['score'];
+                                        @endphp
+                                        <td style="border: 1px solid #e5e7eb; padding: 6px 4px; background-color: #F5F3FF; text-align: center;">
+                                            <div style="font-size: 7pt; font-weight: bold; color: #4c1d95; margin-bottom: 3px;">
+                                                {{ $row['label'] }}
+                                            </div>
+                                            <div style="font-size: 10pt; font-weight: bold; color: #111827; margin-bottom: 3px;">
+                                                @if($scoreValue !== null)
+                                                    {{ $scoreValue }}
+                                                @else
+                                                    -
+                                                @endif
+                                            </div>
+                                            <div>
+                                                @if($scaleLetter !== '')
+                                                    <span style="display: inline-block; min-width: 18px; padding: 2px 8px; border-radius: 9999px; background-color: #5b21b6; color: #ffffff; font-size: 8pt; font-weight: bold;">
+                                                        {{ $scaleLetter }}
+                                                    </span>
+                                                @else
+                                                    -
+                                                @endif
+                                            </div>
                                         </td>
+                                        @endforeach
                                     </tr>
-                                    @endforeach
                                 </table>
 
                                 <table style="width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 7.5pt;">
@@ -599,11 +607,12 @@
                                                     <td style="width: 30%; border-bottom: 1px solid #e5e7eb; padding: 3px 4px;">
                                                         {{ $range }}
                                                     </td>
-                                                    <td style="width: 15%; border-bottom: 1px solid #e5e7eb; padding: 3px 4px; text-align: center;">
-                                                        @if(strcasecmp($iqCategory, $label) === 0)
-                                                            √
-                                                        @endif
-                                                    </td>
+                                        @php $isActiveIq = strcasecmp($iqCategory, $label) === 0; @endphp
+                                        <td style="width: 15%; border-bottom: 1px solid #e5e7eb; padding: 3px 4px; text-align: center; {{ $isActiveIq ? 'background-color:#F5F3FF; font-weight:bold;' : '' }}">
+                                            @if($isActiveIq)
+                                                √
+                                            @endif
+                                        </td>
                                                 </tr>
                                                 @endforeach
                                             </table>
@@ -632,10 +641,11 @@
                                     @endphp
                                     @foreach($maturityRows as $row)
                                     <tr>
-                                        <td style="border: 1px solid #9ca3af; padding: 4px;">
+                                        @php $isActiveMaturity = strcasecmp($maturity, $row) === 0; @endphp
+                                        <td style="border: 1px solid #9ca3af; padding: 4px; {{ $isActiveMaturity ? 'background-color:#F5F3FF; font-weight:bold;' : '' }}">
                                             <span style="display: inline-block; width: 65%;">{{ $row }}</span>
                                             <span style="display: inline-block; width: 20%; text-align: center;">
-                                                @if(strcasecmp($maturity, $row) === 0)
+                                                @if($isActiveMaturity)
                                                     √
                                                 @endif
                                             </span>
@@ -656,7 +666,7 @@
                     <td class="align-top" style="width: 55%; padding-right: 10px;">
                         
                         <!-- Personality Card -->
-                        <div class="card">
+                        <div class="card" style="background-color:#F5F3FF; border-color:#e0e7ff;">
                             <div class="card-header">PERSONALITY</div>
                             <div class="card-body">
                                 @php
@@ -684,7 +694,7 @@
                         </div>
 
                         <!-- Love Language Card -->
-                        <div class="card">
+                        <div class="card" style="background-color:#F5F3FF; border-color:#e0e7ff;">
                             <div class="card-header">LOVE LANGUAGE</div>
                             <div class="card-body">
                                 @php
@@ -717,7 +727,7 @@
                     <td class="align-top" style="width: 45%;">
                         
                         <!-- MI Card -->
-                        <div class="card">
+                        <div class="card" style="background-color:#F5F3FF; border-color:#e0e7ff;">
                             <div class="card-header">MULTIPLE INTELLIGENCE</div>
                             <div class="card-body">
                                 @php
@@ -806,7 +816,7 @@
             </table>
 
             <!-- Talents Mapping Card -->
-            <div class="card">
+            <div class="card" style="background-color:#F5F3FF; border-color:#e0e7ff;">
                 <div class="card-header">TALENTS MAPPING ANALYSIS</div>
                 <div class="card-body">
                     <table class="table tm-table" style="font-size: 8.5pt;">
