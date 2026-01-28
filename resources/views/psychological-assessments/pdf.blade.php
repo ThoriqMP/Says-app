@@ -463,203 +463,185 @@
             @endphp
 
             @if($psych)
-            <div class="card" style="background-color: #F5F3FF; border-color: #e0e7ff; margin-bottom: 12px;">
-                <div class="card-header" style="background-color: #5b21b6; display: flex; align-items: center; gap: 4px;">
-                    <span style="display: inline-block; width: 10px; height: 10px; border-radius: 9999px; background-color: #F5F3FF; margin-right: 2px;"></span>
-                    <span>ASPEK KOGNITIF & KLINIS</span>
-                </div>
-                <div class="card-body">
-                    <table style="width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 8pt;">
+            <!-- SCOREBOARD LAYOUT -->
+            <div style="margin-bottom: 20px; font-family: 'Helvetica', 'Arial', sans-serif;">
+                
+                <!-- ASPEK KOGNITIF SECTION -->
+                <div style="margin-bottom: 15px;">
+                    <!-- Header -->
+                    <div style="background-color: #8B5CF6; color: white; padding: 8px; border-radius: 10px; text-align: center; font-weight: bold; font-size: 10pt; margin-bottom: 10px; box-shadow: 0 2px 4px rgba(139, 92, 246, 0.3);">
+                        Aspek Kognitif
+                    </div>
+
+                    @php
+                        $cognitiveRows = [
+                            ['label' => 'Kemampuan Verbal', 'sub' => 'Kemampuan berkomunikasi dan memahami bahasa', 'icon' => 'V', 'score' => $psych->cognitive_verbal_score, 'scale' => $psych->cognitive_verbal_scale],
+                            ['label' => 'Kemampuan Numerikal', 'sub' => 'Kemampuan berpikir praktis matematis dan berhitung', 'icon' => 'N', 'score' => $psych->cognitive_numerical_score, 'scale' => $psych->cognitive_numerical_scale],
+                            ['label' => 'Kemampuan Berpikir Logis', 'sub' => 'Kemampuan untuk memahami masalah secara hubungan sebab akibat', 'icon' => 'L', 'score' => $psych->cognitive_logical_score, 'scale' => $psych->cognitive_logical_scale],
+                            ['label' => 'Kemampuan Visual Spasial', 'sub' => 'Kemampuan untuk memahami masalah secara hubungan ruang dan bentuk', 'icon' => 'S', 'score' => $psych->cognitive_spatial_score, 'scale' => $psych->cognitive_spatial_scale],
+                        ];
+                    @endphp
+
+                    <!-- 4 Cards Row -->
+                    <table style="width: 100%; border-collapse: separate; border-spacing: 8px 0; table-layout: fixed;">
                         <tr>
-                            <td style="width: 60%; padding-right: 8px; vertical-align: top;">
-                                <table style="width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 7.5pt; margin-bottom: 6px;">
-                                    <tr>
-                                        <th colspan="4" style="background-color: #5b21b6; color: #ffffff; border: 1px solid #4c1d95; padding: 4px; text-align: center; font-weight: bold;">
-                                            ASPEK KOGNITIF
-                                        </th>
-                                    </tr>
-                                    @php
-                                        $cognitiveRows = [
-                                            [
-                                                'label' => 'Verbal',
-                                                'score' => $psych->cognitive_verbal_score ?? null,
-                                                'scale' => $psych->cognitive_verbal_scale ?? null,
-                                            ],
-                                            [
-                                                'label' => 'Numerikal',
-                                                'score' => $psych->cognitive_numerical_score ?? null,
-                                                'scale' => $psych->cognitive_numerical_scale ?? null,
-                                            ],
-                                            [
-                                                'label' => 'Logis',
-                                                'score' => $psych->cognitive_logical_score ?? null,
-                                                'scale' => $psych->cognitive_logical_scale ?? null,
-                                            ],
-                                            [
-                                                'label' => 'Visual Spasial',
-                                                'score' => $psych->cognitive_spatial_score ?? null,
-                                                'scale' => $psych->cognitive_spatial_scale ?? null,
-                                            ],
-                                        ];
-                                    @endphp
-                                    <tr>
-                                        @foreach($cognitiveRows as $row)
-                                        @php
-                                            $scaleLetter = $formatScale($row['scale'] ?? null);
-                                            $scoreValue = $row['score'];
-                                        @endphp
-                                        <td style="border: 1px solid #e5e7eb; padding: 6px 4px; background-color: #F5F3FF; text-align: center;">
-                                            <div style="font-size: 7pt; font-weight: bold; color: #4c1d95; margin-bottom: 3px;">
-                                                {{ $row['label'] }}
-                                            </div>
-                                            <div style="font-size: 10pt; font-weight: bold; color: #111827; margin-bottom: 3px;">
-                                                @if($scoreValue !== null)
-                                                    {{ $scoreValue }}
-                                                @else
-                                                    -
-                                                @endif
-                                            </div>
-                                            <div>
-                                                @if($scaleLetter !== '')
-                                                    <span style="display: inline-block; min-width: 18px; padding: 2px 8px; border-radius: 9999px; background-color: #5b21b6; color: #ffffff; font-size: 8pt; font-weight: bold;">
-                                                        {{ $scaleLetter }}
-                                                    </span>
-                                                @else
-                                                    -
-                                                @endif
-                                            </div>
-                                        </td>
-                                        @endforeach
-                                    </tr>
-                                </table>
-
-                                <table style="width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 7.5pt;">
-                                    <tr>
-                                        <th colspan="2" style="width: 40%; background-color: #EDE9FE; border: 1px solid #c4b5fd; padding: 4px; text-align: center; font-weight: bold;">
-                                            ASPEK POTENSI
-                                        </th>
-                                        <th colspan="2" style="width: 60%; background-color: #EDE9FE; border: 1px solid #c4b5fd; padding: 4px; text-align: center; font-weight: bold;">
-                                            SKALA ASSESSMENT GRAFIS
-                                        </th>
-                                    </tr>
-                                    <tr>
-                                        <th style="width: 30%; border: 1px solid #c4b5fd; padding: 4px; text-align: left;">ASPEK</th>
-                                        <th style="width: 10%; border: 1px solid #c4b5fd; padding: 4px; text-align: center;">SKOR</th>
-                                        <th style="width: 10%; border: 1px solid #c4b5fd; padding: 4px; text-align: center;">KET</th>
-                                        <th style="width: 50%; border: 1px solid #c4b5fd; padding: 4px; text-align: left;">KETERANGAN</th>
-                                    </tr>
-                                    <tr>
-                                        <td style="border: 1px solid #c4b5fd; padding: 4px;">Intelektual (Original Scale)</td>
-                                        <td style="border: 1px solid #c4b5fd; padding: 4px; text-align: center;">
-                                            {{ $formatPotential($psych->potential_intellectual_score ?? null) }}
-                                        </td>
-                                        <td rowspan="3" style="border: 1px solid #c4b5fd; padding: 4px; vertical-align: top; font-size: 7pt;">
-                                            <div>3</div>
-                                            <div>2</div>
-                                            <div>1</div>
-                                            <div>(-)</div>
-                                        </td>
-                                        <td rowspan="3" style="border: 1px solid #c4b5fd; padding: 4px; vertical-align: top; font-size: 7pt;">
-                                            <div>= Berkembang Baik / Optimal</div>
-                                            <div>= Cukup Berkembang</div>
-                                            <div>= Kurang Berkembang</div>
-                                            <div>= Berkembang namun Ada Hambatan</div>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td style="border: 1px solid #c4b5fd; padding: 4px;">Sosial</td>
-                                        <td style="border: 1px solid #c4b5fd; padding: 4px; text-align: center;">
-                                            {{ $formatPotential($psych->potential_social_score ?? null) }}
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td style="border: 1px solid #c4b5fd; padding: 4px;">Emosional</td>
-                                        <td style="border: 1px solid #c4b5fd; padding: 4px; text-align: center;">
-                                            {{ $formatPotential($psych->potential_emotional_score ?? null) }}
-                                        </td>
-                                    </tr>
-                                </table>
+                            @foreach($cognitiveRows as $row)
+                            @php
+                                $scaleLetter = $formatScale($row['scale'] ?? null);
+                                $scoreValue = $row['score'] ?? '-';
+                                $displayScore = $scoreValue . ($scaleLetter ? "-$scaleLetter" : '');
+                            @endphp
+                            <td style="width: 25%; background-color: white; border: 1px solid #e5e7eb; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); padding: 12px 8px; vertical-align: top; height: 100px;">
+                                <div style="display: table; width: 100%;">
+                                    <div style="display: table-cell; width: 35px; vertical-align: top;">
+                                        <div style="width: 32px; height: 32px; background-color: #8B5CF6; border-radius: 6px; color: white; text-align: center; line-height: 32px; font-weight: bold; font-size: 12pt;">
+                                            {{ $row['icon'] }}
+                                        </div>
+                                    </div>
+                                    <div style="display: table-cell; vertical-align: top; padding-left: 6px;">
+                                        <div style="font-size: 8pt; font-weight: bold; color: #111827; line-height: 1.2; margin-bottom: 4px; min-height: 20px;">
+                                            {{ $row['label'] }}
+                                        </div>
+                                        <div style="font-size: 14pt; font-weight: bold; color: #4c1d95; margin-bottom: 4px;">
+                                            {{ $displayScore }}
+                                        </div>
+                                        <div style="font-size: 6pt; color: #6b7280; line-height: 1.2;">
+                                            {{ $row['sub'] }}
+                                        </div>
+                                    </div>
+                                </div>
                             </td>
-                            <td style="width: 40%; vertical-align: top;">
-                                <table style="width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 7.5pt; margin-bottom: 6px;">
-                                    <tr>
-                                        <th style="background-color: #EDE9FE; border: 1px solid #c4b5fd; padding: 4px; text-align: center; font-weight: bold;">
-                                            TARAF KECERDASAN (FULL SCALE)
-                                        </th>
-                                    </tr>
-                                    <tr>
-                                        <td style="border: 1px solid #c4b5fd; padding: 0;">
-                                            <table style="width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 7.2pt;">
-                                                @php
-                                                    $iqCategory = trim((string) ($psych->iq_category ?? ''));
-                                                    $iqRows = [
-                                                        'Very Superior' => '119 – Ke atas',
-                                                        'Tinggi' => '105 - 118',
-                                                        'Cukup' => '100 - 104',
-                                                        'Sedang' => '95 - 99',
-                                                        'Rendah' => '81 - 94',
-                                                    ];
-                                                @endphp
-                                                @foreach($iqRows as $label => $range)
-                                                <tr>
-                                                    <td style="width: 55%; border-bottom: 1px solid #e5e7eb; padding: 3px 4px;">
-                                                        {{ $label }}
-                                                    </td>
-                                                    <td style="width: 30%; border-bottom: 1px solid #e5e7eb; padding: 3px 4px;">
-                                                        {{ $range }}
-                                                    </td>
-                                        @php $isActiveIq = strcasecmp($iqCategory, $label) === 0; @endphp
-                                        <td style="width: 15%; border-bottom: 1px solid #e5e7eb; padding: 3px 4px; text-align: center; {{ $isActiveIq ? 'background-color:#F5F3FF; font-weight:bold;' : '' }}">
-                                            @if($isActiveIq)
-                                                √
-                                            @endif
-                                        </td>
-                                                </tr>
-                                                @endforeach
-                                            </table>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td style="border: 1px solid #c4b5fd; padding: 4px; font-size: 7.2pt;">
-                                            Skor IQ: <strong>{{ $psych->iq_full_scale ?? '-' }}</strong>
-                                        </td>
-                                    </tr>
-                                </table>
-
-                                <table style="width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 7.5pt;">
-                                    <tr>
-                                        <th style="background-color: #EDE9FE; border: 1px solid #c4b5fd; padding: 4px; text-align: center; font-weight: bold;">
-                                            TARAF KEMATANGAN PERKEMBANGAN<br>SESUAI TINGKAT USIA
-                                        </th>
-                                    </tr>
-                                    @php
-                                        $maturity = trim((string) ($psych->maturity_recommendation ?? ''));
-                                        $maturityRows = [
-                                            'Disarankan',
-                                            'Dipertimbangkan',
-                                            'Tidak Disarankan',
-                                        ];
-                                    @endphp
-                                    @foreach($maturityRows as $row)
-                                    <tr>
-                                        @php $isActiveMaturity = strcasecmp($maturity, $row) === 0; @endphp
-                                        <td style="border: 1px solid #c4b5fd; padding: 4px; {{ $isActiveMaturity ? 'background-color:#F5F3FF; font-weight:bold;' : '' }}">
-                                            <span style="display: inline-block; width: 65%;">{{ $row }}</span>
-                                            <span style="display: inline-block; width: 20%; text-align: center;">
-                                                @if($isActiveMaturity)
-                                                    √
-                                                @endif
-                                            </span>
-                                        </td>
-                                    </tr>
-                                    @endforeach
-                                </table>
-                            </td>
+                            @endforeach
                         </tr>
                     </table>
                 </div>
+
+                <!-- GRID SECTION: POTENSI (LEFT) vs IQ/MATURITY (RIGHT) -->
+                <table style="width: 100%; border-collapse: separate; border-spacing: 0; table-layout: fixed;">
+                    <tr>
+                        <!-- LEFT COLUMN -->
+                        <td style="width: 50%; vertical-align: top; padding-right: 8px;">
+                            
+                            <!-- Aspek Potensi Header -->
+                            <table style="width: 100%; border-collapse: collapse; margin-bottom: 10px;">
+                                <tr>
+                                    <td style="background-color: #8B5CF6; color: white; padding: 8px; border-top-left-radius: 10px; border-bottom-left-radius: 10px; text-align: center; font-weight: bold; font-size: 10pt;">
+                                        Aspek Potensi
+                                    </td>
+                                    <td style="width: 50px; background-color: #7C3AED; color: white; padding: 8px; border-top-right-radius: 10px; border-bottom-right-radius: 10px; text-align: center; font-weight: bold; font-size: 10pt; border-left: 1px solid rgba(255,255,255,0.2);">
+                                        Skor
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <!-- Potensi Items (Pill Style) -->
+                            <div style="margin-bottom: 15px;">
+                                @php
+                                    $potensiRows = [
+                                        ['label' => 'Intelektual (Original Scale)', 'score' => $psych->potential_intellectual_score],
+                                        ['label' => 'Sosial', 'score' => $psych->potential_social_score],
+                                        ['label' => 'Emosional', 'score' => $psych->potential_emotional_score],
+                                    ];
+                                @endphp
+                                @foreach($potensiRows as $row)
+                                <div style="background-color: white; border: 1px solid #e5e7eb; border-radius: 50px; padding: 8px 15px; margin-bottom: 8px; display: table; width: 100%; box-shadow: 0 1px 2px rgba(0,0,0,0.05);">
+                                    <div style="display: table-cell; font-weight: bold; font-size: 9pt; color: #374151;">
+                                        {{ $row['label'] }}
+                                    </div>
+                                    <div style="display: table-cell; text-align: right; width: 40px;">
+                                        <div style="font-weight: bold; font-size: 10pt; color: #4b5563;">
+                                            {{ $formatPotential($row['score']) ?: '-' }}
+                                        </div>
+                                    </div>
+                                </div>
+                                @endforeach
+                            </div>
+
+                            <!-- Skala Assessment Grafis Header -->
+                            <div style="background-color: #8B5CF6; color: white; padding: 8px; border-radius: 10px; text-align: center; font-weight: bold; font-size: 10pt; margin-bottom: 10px; box-shadow: 0 2px 4px rgba(139, 92, 246, 0.3);">
+                                Skala Assessment Grafis
+                            </div>
+
+                            <!-- Legend Box -->
+                            <div style="background-color: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+                                <table style="width: 100%; font-size: 8pt; color: #374151;">
+                                    <tr>
+                                        <td style="font-weight: bold; padding-bottom: 6px;">Keterangan</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 2px 0;"><span style="font-weight: bold; display: inline-block; width: 20px;">3</span> = Berkembang Baik / Optimal</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 2px 0;"><span style="font-weight: bold; display: inline-block; width: 20px;">2</span> = Cukup Berkembang</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 2px 0;"><span style="font-weight: bold; display: inline-block; width: 20px;">1</span> = Kurang Berkembang</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 2px 0;"><span style="font-weight: bold; display: inline-block; width: 20px;">(-)</span> = Berkembang namun Ada Hambatan</td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                        </td>
+
+                        <!-- RIGHT COLUMN -->
+                        <td style="width: 50%; vertical-align: top; padding-left: 8px;">
+                            
+                            <!-- Taraf Kecerdasan Header -->
+                            <div style="background-color: #8B5CF6; color: white; padding: 8px; border-radius: 10px; text-align: center; font-weight: bold; font-size: 10pt; margin-bottom: 10px; box-shadow: 0 2px 4px rgba(139, 92, 246, 0.3);">
+                                Taraf Kecerdasan
+                            </div>
+
+                            <!-- IQ Badge -->
+                            <div style="background-color: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px 10px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); margin-bottom: 15px;">
+                                <div style="font-size: 10pt; font-weight: bold; color: #6b7280; text-transform: uppercase; margin-bottom: 5px;">IQ</div>
+                                <div style="font-size: 32pt; font-weight: 800; color: #111827; line-height: 1; margin-bottom: 5px;">
+                                    {{ $psych->iq_full_scale ?? '-' }}
+                                </div>
+                                <div style="font-size: 11pt; font-weight: bold; color: #111827;">
+                                    {{ $psych->iq_category ?? '-' }}
+                                </div>
+                            </div>
+
+                            <!-- Taraf Kematangan Header -->
+                            <div style="background-color: #8B5CF6; color: white; padding: 8px; border-radius: 10px; text-align: center; font-weight: bold; font-size: 10pt; margin-bottom: 10px; box-shadow: 0 2px 4px rgba(139, 92, 246, 0.3);">
+                                Taraf Kematangan
+                            </div>
+
+                            <!-- Buttons List -->
+                            <div>
+                                @php
+                                    $maturity = trim((string) ($psych->maturity_recommendation ?? ''));
+                                    $maturityOptions = ['Disarankan', 'Dipertimbangkan', 'Tidak Disarankan'];
+                                @endphp
+                                @foreach($maturityOptions as $opt)
+                                    @php 
+                                        $isActive = strcasecmp($maturity, $opt) === 0; 
+                                        $bgColor = $isActive ? '#EAB308' : '#ffffff'; // Gold if active, white if not
+                                        $textColor = $isActive ? '#000000' : '#374151';
+                                        $borderColor = $isActive ? '#CA8A04' : '#d1d5db';
+                                        $fontWeight = $isActive ? 'bold' : 'normal';
+                                    @endphp
+                                    <div style="background-color: {{ $bgColor }}; border: 1px solid {{ $borderColor }}; border-radius: 50px; padding: 10px; text-align: center; margin-bottom: 8px; font-size: 9pt; font-weight: {{ $fontWeight }}; color: {{ $textColor }}; box-shadow: 0 1px 2px rgba(0,0,0,0.05);">
+                                        {{ $opt }}
+                                    </div>
+                                @endforeach
+                            </div>
+
+                        </td>
+                    </tr>
+                </table>
+
             </div>
             @endif
+            </div>
+        </div>
+    </div>
+
+    <div class="page page-break">
+        <div class="content-wrapper">
+            <div style="page-break-inside: avoid;">
 
             <table class="table" style="margin-bottom: 8px;">
                 <tr>
