@@ -81,40 +81,67 @@
         </div>
 
         <nav class="flex-1 px-4 py-4 space-y-1 overflow-y-auto">
+            @if(auth()->user()->hasPermission('dashboard'))
             <a href="{{ route('dashboard') }}" class="{{ $navLink(route('dashboard'), request()->routeIs('dashboard')) }}">
                 <span>Dashboard</span>
             </a>
+            @endif
+
+            @if(auth()->user()->hasPermission('invoices.index'))
             <a href="{{ route('invoices.index') }}" class="{{ $navLink(route('invoices.index'), request()->routeIs('invoices.*')) }}">
                 <span>Invoice</span>
             </a>
+            @endif
+
+            @if(auth()->user()->hasPermission('assessments.index'))
             <a href="{{ route('assessments.index') }}" class="{{ $navLink(route('assessments.index'), request()->routeIs('assessments.*')) }}">
                 <span>Personal Mapping</span>
             </a>
+            @endif
 
+            @if(auth()->user()->hasPermission('psychological-assessments.index'))
             <a href="{{ route('psychological-assessments.index') }}" class="{{ $navLink(route('psychological-assessments.index'), request()->routeIs('psychological-assessments.*')) }}">
                 <span>Asesmen Psikologis</span>
             </a>
+            @endif
 
-            @if(auth()->user()->isPimpinan() || auth()->user()->isAdmin())
+            @if(auth()->user()->hasPermission('family-mapping.index'))
                 <a href="{{ route('family-mapping.index') }}" class="{{ $navLink(route('family-mapping.index'), request()->routeIs('family-mapping.*')) }}">
                     <span>Family Mapping</span>
                 </a>
             @endif
 
+            @if(auth()->user()->hasPermission('subjects.index'))
             <a href="{{ route('subjects.index') }}" class="{{ $navLink(route('subjects.index'), request()->routeIs('subjects.*')) }}">
                 <span>Subjek</span>
             </a>
+            @endif
+
+            @if(auth()->user()->hasPermission('students.index'))
             <a href="{{ route('students.index') }}" class="{{ $navLink(route('students.index'), request()->routeIs('students.*')) }}">
                 <span>Siswa</span>
             </a>
+            @endif
+
+            @if(auth()->user()->hasPermission('services.index'))
             <a href="{{ route('services.index') }}" class="{{ $navLink(route('services.index'), request()->routeIs('services.*')) }}">
                 <span>Layanan</span>
             </a>
+            @endif
+
+            @if(auth()->user()->hasPermission('school-profile.edit'))
+            <a href="{{ route('school-profile.edit') }}" class="{{ $navLink(route('school-profile.edit'), request()->routeIs('school-profile.*')) }}">
+                <span>Profil Sekolah</span>
+            </a>
+            @endif
 
             @if(auth()->user()->isPimpinan())
-                <a href="{{ route('school-profile.edit') }}" class="{{ $navLink(route('school-profile.edit'), request()->routeIs('school-profile.*')) }}">
-                    <span>Profil Sekolah</span>
-                </a>
+                <div class="pt-4 pb-2">
+                    <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Manajemen</div>
+                    <a href="{{ route('admin-management.index') }}" class="{{ $navLink(route('admin-management.index'), request()->routeIs('admin-management.*')) }}">
+                        <span>Kelola Admin</span>
+                    </a>
+                </div>
             @endif
         </nav>
 
@@ -168,40 +195,67 @@
             </div>
 
             <nav class="flex-1 px-4 py-4 space-y-1 overflow-y-auto">
+                @if(auth()->user()->hasPermission('dashboard'))
                 <a href="{{ route('dashboard') }}" class="{{ $navLink(route('dashboard'), request()->routeIs('dashboard')) }}" @click="mobileOpen = false">
                     <span>Dashboard</span>
                 </a>
+                @endif
+
+                @if(auth()->user()->hasPermission('invoices.index'))
                 <a href="{{ route('invoices.index') }}" class="{{ $navLink(route('invoices.index'), request()->routeIs('invoices.*')) }}" @click="mobileOpen = false">
                     <span>Invoice</span>
                 </a>
+                @endif
+
+                @if(auth()->user()->hasPermission('assessments.index'))
                 <a href="{{ route('assessments.index') }}" class="{{ $navLink(route('assessments.index'), request()->routeIs('assessments.*')) }}" @click="mobileOpen = false">
                     <span>Personal Mapping</span>
                 </a>
+                @endif
 
+                @if(auth()->user()->hasPermission('psychological-assessments.index'))
                 <a href="{{ route('psychological-assessments.index') }}" class="{{ $navLink(route('psychological-assessments.index'), request()->routeIs('psychological-assessments.*')) }}" @click="mobileOpen = false">
                     <span>Asesmen Psikologis</span>
                 </a>
-
-                @if(auth()->user()->isPimpinan() || auth()->user()->isAdmin())
-                    <a href="{{ route('family-mapping.index') }}" class="{{ $navLink(route('family-mapping.index'), request()->routeIs('family-mapping.*')) }}" @click="mobileOpen = false">
-                        <span>Family Mapping</span>
-                    </a>
                 @endif
 
+                @if(auth()->user()->hasPermission('family-mapping.index'))
+                <a href="{{ route('family-mapping.index') }}" class="{{ $navLink(route('family-mapping.index'), request()->routeIs('family-mapping.*')) }}" @click="mobileOpen = false">
+                    <span>Family Mapping</span>
+                </a>
+                @endif
+
+                @if(auth()->user()->hasPermission('subjects.index'))
                 <a href="{{ route('subjects.index') }}" class="{{ $navLink(route('subjects.index'), request()->routeIs('subjects.*')) }}" @click="mobileOpen = false">
                     <span>Subjek</span>
                 </a>
+                @endif
+
+                @if(auth()->user()->hasPermission('students.index'))
                 <a href="{{ route('students.index') }}" class="{{ $navLink(route('students.index'), request()->routeIs('students.*')) }}" @click="mobileOpen = false">
                     <span>Siswa</span>
                 </a>
+                @endif
+
+                @if(auth()->user()->hasPermission('services.index'))
                 <a href="{{ route('services.index') }}" class="{{ $navLink(route('services.index'), request()->routeIs('services.*')) }}" @click="mobileOpen = false">
                     <span>Layanan</span>
                 </a>
+                @endif
+
+                @if(auth()->user()->hasPermission('school-profile.edit'))
+                <a href="{{ route('school-profile.edit') }}" class="{{ $navLink(route('school-profile.edit'), request()->routeIs('school-profile.*')) }}" @click="mobileOpen = false">
+                    <span>Profil Sekolah</span>
+                </a>
+                @endif
 
                 @if(auth()->user()->isPimpinan())
-                    <a href="{{ route('school-profile.edit') }}" class="{{ $navLink(route('school-profile.edit'), request()->routeIs('school-profile.*')) }}" @click="mobileOpen = false">
-                        <span>Profil Sekolah</span>
-                    </a>
+                    <div class="pt-4 pb-2">
+                        <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Manajemen</div>
+                        <a href="{{ route('admin-management.index') }}" class="{{ $navLink(route('admin-management.index'), request()->routeIs('admin-management.*')) }}" @click="mobileOpen = false">
+                            <span>Kelola Admin</span>
+                        </a>
+                    </div>
                 @endif
             </nav>
 

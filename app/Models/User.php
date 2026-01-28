@@ -22,6 +22,7 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
+        'permissions',
     ];
 
     /**
@@ -44,6 +45,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'permissions' => 'array',
         ];
     }
 
@@ -69,5 +71,22 @@ class User extends Authenticatable
     public function isPimpinan()
     {
         return $this->role === 'pimpinan';
+    }
+
+    /**
+     * Cek apakah user memiliki akses ke permission tertentu
+     */
+    public function hasPermission($permission)
+    {
+        if ($this->isPimpinan()) {
+            return true;
+        }
+
+        if ($this->role !== 'admin') {
+            return false;
+        }
+
+        $permissions = $this->permissions ?? [];
+        return in_array($permission, $permissions);
     }
 }
