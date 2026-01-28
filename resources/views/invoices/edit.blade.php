@@ -45,9 +45,13 @@
                             'total' => $detail->total_biaya
                         ];
                     })->toArray();
+
+                    $currentStudentName = $invoice->siswa ? $invoice->siswa->nama_siswa . ' - ' . $invoice->siswa->nama_orang_tua : '';
                 @endphp
 
-                <form method="POST" action="{{ route('invoices.update', $invoice) }}" x-data="invoiceEditForm()" data-existing-items="{{ e(json_encode($existingItems)) }}" @submit.prevent="submitForm">
+                <form method="POST" action="{{ route('invoices.update', $invoice) }}" 
+                      x-data="invoiceEditForm({{ json_encode($services) }}, {{ json_encode($existingItems) }}, '{{ $currentStudentName }}')" 
+                      @submit.prevent="submitForm">
                     @csrf
                     @method('PUT')
                     
@@ -55,15 +59,45 @@
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                         <div>
                             <label for="id_siswa" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Siswa</label>
-                            <select id="id_siswa" name="id_siswa" x-model="form.id_siswa" required
-                                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
-                                <option value="" class="text-gray-900 dark:text-gray-100">Pilih Siswa</option>
-                                @foreach($students as $student)
-                                    <option value="{{ $student->id }}" {{ $invoice->id_siswa == $student->id ? 'selected' : '' }} class="text-gray-900 dark:text-gray-100">
-                                        {{ $student->nama_siswa }} - {{ $student->nama_orang_tua }}
-                                    </option>
-                                @endforeach
-                            </select>
+                            
+                            <div class="relative" @click.outside="showResults = false">
+                                <input type="text" 
+                                       x-model.debounce.300ms="searchQuery"
+                                       @focus="if(searchQuery.length >= 2) showResults = true"
+                                       placeholder="Cari nama siswa atau orang tua..."
+                                       class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                                       autocomplete="off">
+                                <input type="hidden" name="id_siswa" x-model="form.id_siswa">
+                                
+                                <!-- Loading Indicator -->
+                                <div x-show="isSearching" class="absolute right-3 top-2.5" style="display: none;">
+                                    <svg class="animate-spin h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+                                </div>
+
+                                <!-- Results Dropdown -->
+                                <div x-show="showResults && searchResults.length > 0" 
+                                     class="absolute z-10 w-full mt-1 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg max-h-60 overflow-y-auto"
+                                     style="display: none;">
+                                    <ul>
+                                        <template x-for="student in searchResults" :key="student.id">
+                                            <li @click="selectStudent(student)"
+                                                class="px-4 py-2 hover:bg-blue-50 dark:hover:bg-gray-600 cursor-pointer text-gray-900 dark:text-gray-100 border-b border-gray-100 dark:border-gray-600 last:border-0">
+                                                <div class="font-medium" x-text="student.nama_siswa"></div>
+                                                <div class="text-sm text-gray-500 dark:text-gray-400" x-text="student.nama_orang_tua"></div>
+                                            </li>
+                                        </template>
+                                    </ul>
+                                </div>
+                                
+                                <div x-show="showResults && searchQuery.length >= 2 && searchResults.length === 0 && !isSearching" 
+                                     class="absolute z-10 w-full mt-1 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg px-4 py-2 text-gray-500 dark:text-gray-400"
+                                     style="display: none;">
+                                    Tidak ada data ditemukan
+                                </div>
+                            </div>
                         </div>
                         
                         <div>
@@ -134,7 +168,7 @@
                                                     <option value="" class="text-gray-900 dark:text-gray-100">Pilih Layanan</option>
                                                     @foreach($services as $service)
                                                         <option value="{{ $service->id }}" data-harga="{{ $service->harga_standar }}"
-                                                                x-bind:selected="item.id_layanan == {{ $service->id }}" class="text-gray-900 dark:text-gray-100">
+                                                                class="text-gray-900 dark:text-gray-100">
                                                             {{ $service->nama_layanan }}
                                                         </option>
                                                     @endforeach
@@ -205,24 +239,96 @@
 
 @push('scripts')
 <script>
-function invoiceEditForm() {
+function invoiceEditForm(services, existingItems = [], currentStudentName = '') {
     return {
+        services: services,
         form: {
             id_siswa: '{{ old("id_siswa", $invoice->id_siswa) }}',
             tanggal_invoice: '{{ old("tanggal_invoice", $invoice->tanggal_invoice->format("Y-m-d")) }}',
             jatuh_tempo: '{{ old("jatuh_tempo", $invoice->jatuh_tempo->format("Y-m-d")) }}',
             status: '{{ old("status", $invoice->status) }}',
         },
-        items: [],
+        items: existingItems.length > 0 ? existingItems : [],
         grandTotal: 0,
         terbilang: '',
+
+        // Search functionality
+        searchQuery: currentStudentName,
+        searchResults: [],
+        isSearching: false,
+        showResults: false,
         
         init() {
-            // Load existing items
-            const existingItems = JSON.parse(this.$el.dataset.existingItems || '[]');
-            
-            this.items = existingItems.length > 0 ? existingItems : [this.createEmptyItem()];
+            if (this.items.length === 0) {
+                this.addItem();
+            }
+
             this.calculateGrandTotal();
+
+            // Watch for search query changes
+            this.$watch('searchQuery', (value) => {
+                if (value && value.length >= 2) {
+                    this.performSearch();
+                } else {
+                    this.searchResults = [];
+                    this.showResults = false;
+                }
+            });
+
+            this.$watch('form.tanggal_invoice', (value) => {
+                if (value) {
+                    this.form.jatuh_tempo = this.calculateDueDate(value);
+                }
+            });
+
+            this.$watch('form.jatuh_tempo', (value) => {
+                this.items.forEach((item, index) => {
+                    const service = this.services.find(s => s.id == item.id_layanan);
+                    if (service && service.nama_layanan.toUpperCase().includes('SPP')) {
+                        this.updateItemSPPDescription(index);
+                    }
+                });
+            });
+        },
+
+        performSearch() {
+            this.isSearching = true;
+            fetch(`{{ route('students.search') }}?query=${encodeURIComponent(this.searchQuery)}`)
+                .then(res => res.json())
+                .then(data => {
+                    this.searchResults = data;
+                    this.showResults = true;
+                })
+                .catch(err => {
+                    console.error('Search error:', err);
+                })
+                .finally(() => {
+                    this.isSearching = false;
+                });
+        },
+
+        selectStudent(student) {
+            this.form.id_siswa = student.id;
+            this.searchQuery = `${student.nama_siswa} - ${student.nama_orang_tua}`;
+            this.showResults = false;
+        },
+
+        calculateDueDate(dateStr) {
+            const date = new Date(dateStr);
+            if (isNaN(date)) {
+                return this.form.jatuh_tempo;
+            }
+            let year = date.getFullYear();
+            let month = date.getMonth() + 1;
+            month += 1; // Next month
+            if (month > 12) {
+                month = 1;
+                year += 1;
+            }
+            const day = 10;
+            const mm = String(month).padStart(2, '0');
+            const dd = String(day).padStart(2, '0');
+            return `${year}-${mm}-${dd}`;
         },
         
         createEmptyItem() {
@@ -255,25 +361,44 @@ function invoiceEditForm() {
                 this.items[index].harga_satuan = parseFloat(harga);
                 this.calculateTotal(index);
             }
+
+            // Auto Description for SPP
+            const serviceName = selectedOption.text.trim();
+            if (serviceName.toUpperCase().includes('SPP')) {
+                this.updateItemSPPDescription(index);
+            }
+        },
+
+        updateItemSPPDescription(index) {
+            const jatuhTempo = new Date(this.form.jatuh_tempo);
+            if (!isNaN(jatuhTempo.getTime())) {
+                const months = [
+                    'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+                    'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+                ];
+                const monthName = months[jatuhTempo.getMonth()];
+                const year = jatuhTempo.getFullYear();
+                this.items[index].deskripsi_tambahan = `SPP ${monthName} ${year}`;
+            }
         },
         
         calculateTotal(index) {
             const item = this.items[index];
-            item.total = (item.kuantitas || 0) * (item.harga_satuan || 0);
+            item.total = (parseFloat(item.kuantitas) || 0) * (parseFloat(item.harga_satuan) || 0);
             this.calculateGrandTotal();
         },
         
         calculateGrandTotal() {
-            this.grandTotal = this.items.reduce((sum, item) => sum + item.total, 0);
+            this.grandTotal = this.items.reduce((sum, item) => sum + (parseFloat(item.total) || 0), 0);
             this.terbilang = this.generateTerbilang(this.grandTotal);
         },
         
         formatRupiah(angka) {
-            return 'Rp ' + angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            return 'Rp ' + (parseFloat(angka) || 0).toLocaleString('id-ID', {minimumFractionDigits: 0, maximumFractionDigits: 0});
         },
         
         generateTerbilang(angka) {
-            return 'Terbilang: Rupiah ' + angka.toLocaleString('id-ID') + ',-';
+            return 'Terbilang: Rupiah ' + (parseFloat(angka) || 0).toLocaleString('id-ID') + ',-';
         },
         
         getStatusLabel(status) {

@@ -70,6 +70,7 @@ class Invoice extends Model
 
     /**
      * Generate nomor invoice otomatis dengan format INV-SAYYIDAH-[BulanRomawi]-[NomorUrut]
+     * Logika: Reset nomor urut kembali ke 0001 setiap berganti bulan.
      */
     public static function generateInvoiceNumber($tanggalInvoice = null)
     {
@@ -77,7 +78,7 @@ class Invoice extends Model
         $date = $tanggalInvoice ? \Carbon\Carbon::parse($tanggalInvoice) : now();
         $bulanRomawi = \App\Helpers\TerbilangHelper::toRoman($date->month);
 
-        // Cari invoice terakhir di bulan yang sama
+        // Cari invoice terakhir di bulan dan tahun yang sama untuk logika reset per bulan
         $lastInvoice = self::whereYear('tanggal_invoice', $date->year)
             ->whereMonth('tanggal_invoice', $date->month)
             ->orderBy('id', 'desc')
@@ -88,7 +89,7 @@ class Invoice extends Model
             $lastNumber = intval(substr($lastInvoice->no_invoice, -4));
             $newNumber = str_pad($lastNumber + 1, 4, '0', STR_PAD_LEFT);
         } else {
-            // Jika belum ada invoice di bulan ini, mulai dari 0001
+            // Jika belum ada invoice di bulan ini, reset menjadi 0001
             $newNumber = '0001';
         }
 

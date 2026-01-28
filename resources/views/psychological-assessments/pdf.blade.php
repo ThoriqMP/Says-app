@@ -1,13 +1,11 @@
 @php
     $labels = ['TD', 'KD', 'AD', 'D', 'SD'];
-    $psych = $assessment->psychologicalAssessment;
-    $tm = $assessment->talentsMapping;
 @endphp
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Laporan Asesmen Psikologis - {{ $assessment->subject->name }}</title>
+    <title>Laporan Asesmen - {{ $assessment->subject->name }}</title>
     <style>
         @page {
             size: A4;
@@ -212,19 +210,19 @@
 
         /* Dashboard Styles */
         .card {
-            background: transparent;
-            border: 1px solid #e5e7eb;
-            border-radius: 8px;
+            background: #ffffff;
+            border: 0.8px solid #e5e7eb;
+            border-radius: 10px;
             margin-bottom: 10px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+            box-shadow: 0 1px 2px rgba(15,23,42,0.04);
             overflow: hidden;
-            page-break-inside: avoid; /* Prevent card from splitting */
+            page-break-inside: avoid;
         }
 
         .card-header {
             background-color: #5b21b6;
             color: white;
-            padding: 5px 10px;
+            padding: 6px 10px;
             font-size: 8.5pt;
             font-weight: bold;
             text-transform: uppercase;
@@ -232,7 +230,7 @@
         }
 
         .card-body {
-            padding: 8px;
+            padding: 9px 10px;
         }
 
         .score-table {
@@ -319,51 +317,51 @@
 
         /* Kamus */
       
-        .kamus-section-title {
-            margin-top: 18px;
-            margin-bottom: 8px;
-            font-weight: bold;
-            font-size: 10pt;
-            color: #4c1d95;
-            border-bottom: 1px solid #c4b5fd;
-            padding-bottom: 2px;
-        }
+.kamus-section-title {
+    margin-top: 18px;
+    margin-bottom: 8px;
+    font-weight: bold;
+    font-size: 10pt;
+    color: #4c1d95;
+    border-bottom: 1px solid #c4b5fd;
+    padding-bottom: 2px;
+}
 
-        .kamus-table {
-            width: 100%;
-            border-collapse: collapse;
-            table-layout: fixed;
-        }
+.kamus-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
 
-        .kamus-table td {
-            width: 50%;
-            vertical-align: top;
-            padding: 0 10px;
-            font-size: 8.5pt;
-            line-height: 1.4;
-            text-align: left;
-        }
+.kamus-table td {
+    width: 50%;
+    vertical-align: top;
+    padding: 0 10px;
+    font-size: 8.5pt;
+    line-height: 1.4;
+    text-align: left;          /* 🔥 FIX UTAMA */
+}
 
-        .kamus-table tr {
-            page-break-inside: avoid;
-        }
+.kamus-table tr {
+    page-break-inside: avoid;
+}
 
-        .kamus-table p {
-            margin: 0 0 7px 0;
-        }
+.kamus-table p {
+    margin: 0 0 7px 0;
+}
 
-        .kamus-table strong {
-            font-size: 8.8pt;
-            color: #111827;
-        }
+.kamus-table strong {
+    font-size: 8.8pt;
+    color: #111827;
+}
 
-        /* Untuk section non-table */
-        .kamus-paragraph p {
-            font-size: 8.5pt;
-            line-height: 1.45;
-            margin: 0 0 6px 0;
-            text-align: left;
-        }
+/* Untuk section non-table */
+.kamus-paragraph p {
+    font-size: 8.5pt;
+    line-height: 1.45;
+    margin: 0 0 6px 0;
+    text-align: left;
+}
 
     </style>
 </head>
@@ -385,7 +383,7 @@
                 <table class="cover-header-table">
                     <tr>
                         <td class="align-top" style="width: 60%">
-                            <div class="cover-headline">LAPORAN<br>ASESMEN PSIKOLOGIS</div>
+                            <div class="cover-headline">LAPORAN<br>HASIL ASESMEN<br>PERSONAL MAPPING</div>
                             <div class="cover-subheadline">DOKUMEN RAHASIA</div>
                         </td>
                         <td class="align-top text-right" style="width: 40%">
@@ -431,181 +429,230 @@
     <!-- DASHBOARD PAGE -->
     <div class="page page-break">
         <div class="content-wrapper">
-            <h2 style="color: #4c1d95; margin-bottom: 12px; font-size: 14pt; border-bottom: 2px solid #4c1d95; padding-bottom: 4px; display: inline-block;">HASIL PEMERIKSAAN</h2>
+            <h2 style="color: #4c1d95; margin-bottom: 8px; font-size: 14pt; border-bottom: 2px solid #4c1d95; padding-bottom: 4px; display: inline-block;">HASIL PEMERIKSAAN</h2>
+
+            @php
+                $psych = $assessment->psychologicalAssessment;
+                $scaleLetters = [
+                    5 => 'A',
+                    4 => 'B',
+                    3 => 'C',
+                    2 => 'D',
+                    1 => 'E',
+                ];
+                $formatScale = function (?int $value) use ($scaleLetters): string {
+                    if ($value === null) {
+                        return '';
+                    }
+                    return $scaleLetters[$value] ?? (string) $value;
+                };
+                $formatPotential = function ($value): string {
+                    if ($value === null || $value === '') {
+                        return '';
+                    }
+                    if (! is_numeric($value)) {
+                        return (string) $value;
+                    }
+                    $int = (int) $value;
+                    if ($int < 0) {
+                        return '(-) '.abs($int);
+                    }
+                    return (string) $int;
+                };
+            @endphp
 
             @if($psych)
-            <!-- Aspek Kognitif Card -->
-            <div class="card">
-                <div class="card-header">ASPEK KOGNITIF</div>
+            <div class="card" style="background-color: #E0F2FE; border-color: #bae6fd; margin-bottom: 12px;">
+                <div class="card-header" style="background-color: #0ea5e9; display: flex; align-items: center; gap: 4px;">
+                    <span style="display: inline-block; width: 10px; height: 10px; border-radius: 9999px; background-color: #e0f2fe; margin-right: 2px;"></span>
+                    <span>ASPEK KOGNITIF & KLINIS</span>
+                </div>
                 <div class="card-body">
-                    <table class="score-table">
+                    <table style="width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 8pt;">
                         <tr>
-                            <th align="left">ASPEK KOGNITIF</th>
-                            <th align="left">KETERANGAN ASPEK</th>
-                            <th width="50">SKALA</th>
-                        </tr>
-                        @php
-                            $cogDescriptions = [
-                                'Verbal' => 'Kemampuan berkomunikasi dan memahami bahasa',
-                                'Numerical' => 'Kemampuan berpikir praktis matematis dan berhitung',
-                                'Logical' => 'Kemampuan untuk memahami masalah secara hubungan sebab akibat dan menemukan solusi',
-                                'Spatial' => 'Kemampuan untuk berlaku cermat dalam menyelesaikan suatu pekerjaan atau tugas'
-                            ];
-                            $cogMap = [
-                                'Verbal' => 'Kemampuan Verbal',
-                                'Numerical' => 'Kemampuan Numerikal',
-                                'Logical' => 'Kemampuan Berpikir Logis',
-                                'Spatial' => 'Kemampuan Visual Spasial'
-                            ];
-                        @endphp
-                        @foreach(['Verbal', 'Numerical', 'Logical', 'Spatial'] as $aspect)
-                        <tr>
-                            <td style="font-weight: bold;">{{ $cogMap[$aspect] }}</td>
-                            <td>{{ $cogDescriptions[$aspect] }}</td>
-                            <td align="center" style="font-weight: bold;">
-                                {{ $psych->{'cognitive_'.strtolower($aspect).'_score'} ?? '-' }}
-                                <span style="margin-left: 5px; color: #6b7280; font-size: 7pt;">{{ $psych->{'cognitive_'.strtolower($aspect).'_scale'} ?? '' }}</span>
+                            <td style="width: 60%; padding-right: 8px; vertical-align: top;">
+                                <table style="width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 7.5pt; margin-bottom: 6px;">
+                                    <tr>
+                                        <th colspan="3" style="background-color: #bfdbfe; border: 1px solid #9ca3af; padding: 4px; text-align: center; font-weight: bold;">
+                                            ASPEK KOGNITIF
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th style="width: 35%; border: 1px solid #9ca3af; padding: 4px; text-align: center;">ASPEK</th>
+                                        <th style="width: 45%; border: 1px solid #9ca3af; padding: 4px; text-align: center;">KETERANGAN ASPEK</th>
+                                        <th style="width: 20%; border: 1px solid #9ca3af; padding: 4px; text-align: center;">SKALA</th>
+                                    </tr>
+                                    @php
+                                        $cognitiveRows = [
+                                            [
+                                                'label' => 'Kemampuan Verbal',
+                                                'desc' => 'Kemampuan berkomunikasi dan memahami bahasa',
+                                                'score' => $psych->cognitive_verbal_score ?? null,
+                                                'scale' => $psych->cognitive_verbal_scale ?? null,
+                                            ],
+                                            [
+                                                'label' => 'Kemampuan Numerikal',
+                                                'desc' => 'Kemampuan berpikir praktis matematis dan berhitung',
+                                                'score' => $psych->cognitive_numerical_score ?? null,
+                                                'scale' => $psych->cognitive_numerical_scale ?? null,
+                                            ],
+                                            [
+                                                'label' => 'Kemampuan Berpikir Logis',
+                                                'desc' => 'Kemampuan untuk memahami masalah secara hubungan sebab akibat dan menemukan solusi',
+                                                'score' => $psych->cognitive_logical_score ?? null,
+                                                'scale' => $psych->cognitive_logical_scale ?? null,
+                                            ],
+                                            [
+                                                'label' => 'Kemampuan Visual Spasial',
+                                                'desc' => 'Kemampuan untuk berlaku cermat dalam menyelesaikan suatu pekerjaan atau tugas',
+                                                'score' => $psych->cognitive_spatial_score ?? null,
+                                                'scale' => $psych->cognitive_spatial_scale ?? null,
+                                            ],
+                                        ];
+                                    @endphp
+                                    @foreach($cognitiveRows as $row)
+                                    <tr>
+                                        <td style="border: 1px solid #9ca3af; padding: 4px;">{{ $row['label'] }}</td>
+                                        <td style="border: 1px solid #9ca3af; padding: 4px;">{{ $row['desc'] }}</td>
+                                        <td style="border: 1px solid #9ca3af; padding: 4px; text-align: center;">
+                                            @if($row['score'] !== null)
+                                                {{ $row['score'] }} /
+                                            @endif
+                                            {{ $formatScale($row['scale']) }}
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                </table>
+
+                                <table style="width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 7.5pt;">
+                                    <tr>
+                                        <th colspan="2" style="width: 40%; background-color: #bfdbfe; border: 1px solid #9ca3af; padding: 4px; text-align: center; font-weight: bold;">
+                                            ASPEK POTENSI
+                                        </th>
+                                        <th colspan="2" style="width: 60%; background-color: #bfdbfe; border: 1px solid #9ca3af; padding: 4px; text-align: center; font-weight: bold;">
+                                            SKALA ASSESSMENT GRAFIS
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th style="width: 30%; border: 1px solid #9ca3af; padding: 4px; text-align: left;">ASPEK</th>
+                                        <th style="width: 10%; border: 1px solid #9ca3af; padding: 4px; text-align: center;">SKOR</th>
+                                        <th style="width: 10%; border: 1px solid #9ca3af; padding: 4px; text-align: center;">KET</th>
+                                        <th style="width: 50%; border: 1px solid #9ca3af; padding: 4px; text-align: left;">KETERANGAN</th>
+                                    </tr>
+                                    <tr>
+                                        <td style="border: 1px solid #9ca3af; padding: 4px;">Intelektual (Original Scale)</td>
+                                        <td style="border: 1px solid #9ca3af; padding: 4px; text-align: center;">
+                                            {{ $formatPotential($psych->potential_intellectual_score ?? null) }}
+                                        </td>
+                                        <td rowspan="3" style="border: 1px solid #9ca3af; padding: 4px; vertical-align: top; font-size: 7pt;">
+                                            <div>3</div>
+                                            <div>2</div>
+                                            <div>1</div>
+                                            <div>(-)</div>
+                                        </td>
+                                        <td rowspan="3" style="border: 1px solid #9ca3af; padding: 4px; vertical-align: top; font-size: 7pt;">
+                                            <div>= Berkembang Baik / Optimal</div>
+                                            <div>= Cukup Berkembang</div>
+                                            <div>= Kurang Berkembang</div>
+                                            <div>= Berkembang namun Ada Hambatan</div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border: 1px solid #9ca3af; padding: 4px;">Sosial</td>
+                                        <td style="border: 1px solid #9ca3af; padding: 4px; text-align: center;">
+                                            {{ $formatPotential($psych->potential_social_score ?? null) }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border: 1px solid #9ca3af; padding: 4px;">Emosional</td>
+                                        <td style="border: 1px solid #9ca3af; padding: 4px; text-align: center;">
+                                            {{ $formatPotential($psych->potential_emotional_score ?? null) }}
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td style="width: 40%; vertical-align: top;">
+                                <table style="width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 7.5pt; margin-bottom: 6px;">
+                                    <tr>
+                                        <th style="background-color: #bfdbfe; border: 1px solid #9ca3af; padding: 4px; text-align: center; font-weight: bold;">
+                                            TARAF KECERDASAN (FULL SCALE)
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <td style="border: 1px solid #9ca3af; padding: 0;">
+                                            <table style="width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 7.2pt;">
+                                                @php
+                                                    $iqCategory = trim((string) ($psych->iq_category ?? ''));
+                                                    $iqRows = [
+                                                        'Very Superior' => '119 – Ke atas',
+                                                        'Tinggi' => '105 - 118',
+                                                        'Cukup' => '100 - 104',
+                                                        'Sedang' => '95 - 99',
+                                                        'Rendah' => '81 - 94',
+                                                    ];
+                                                @endphp
+                                                @foreach($iqRows as $label => $range)
+                                                <tr>
+                                                    <td style="width: 55%; border-bottom: 1px solid #e5e7eb; padding: 3px 4px;">
+                                                        {{ $label }}
+                                                    </td>
+                                                    <td style="width: 30%; border-bottom: 1px solid #e5e7eb; padding: 3px 4px;">
+                                                        {{ $range }}
+                                                    </td>
+                                                    <td style="width: 15%; border-bottom: 1px solid #e5e7eb; padding: 3px 4px; text-align: center;">
+                                                        @if(strcasecmp($iqCategory, $label) === 0)
+                                                            √
+                                                        @endif
+                                                    </td>
+                                                </tr>
+                                                @endforeach
+                                            </table>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border: 1px solid #9ca3af; padding: 4px; font-size: 7.2pt;">
+                                            Skor IQ: <strong>{{ $psych->iq_full_scale ?? '-' }}</strong>
+                                        </td>
+                                    </tr>
+                                </table>
+
+                                <table style="width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 7.5pt;">
+                                    <tr>
+                                        <th style="background-color: #bfdbfe; border: 1px solid #9ca3af; padding: 4px; text-align: center; font-weight: bold;">
+                                            TARAF KEMATANGAN PERKEMBANGAN<br>SESUAI TINGKAT USIA
+                                        </th>
+                                    </tr>
+                                    @php
+                                        $maturity = trim((string) ($psych->maturity_recommendation ?? ''));
+                                        $maturityRows = [
+                                            'Disarankan',
+                                            'Dipertimbangkan',
+                                            'Tidak Disarankan',
+                                        ];
+                                    @endphp
+                                    @foreach($maturityRows as $row)
+                                    <tr>
+                                        <td style="border: 1px solid #9ca3af; padding: 4px;">
+                                            <span style="display: inline-block; width: 65%;">{{ $row }}</span>
+                                            <span style="display: inline-block; width: 20%; text-align: center;">
+                                                @if(strcasecmp($maturity, $row) === 0)
+                                                    √
+                                                @endif
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                </table>
                             </td>
                         </tr>
-                        @endforeach
                     </table>
                 </div>
             </div>
-
-            <!-- Aspek Potensi & Kecerdasan Row -->
-            <div style="width: 100%; margin-bottom: 5px;">
-                <div style="float: left; width: 49%; margin-right: 1%;">
-                    <div class="card" style="height: 100%;">
-                        <div class="card-header">ASPEK POTENSI</div>
-                        <div class="card-body">
-                            <div style="font-size: 7.5pt;">
-                                <div style="border-bottom: 1px solid #e5e7eb; padding-bottom: 4px; margin-bottom: 4px; font-weight: bold; color: #5b21b6;">
-                                    <div style="float: left; width: 70%;">ASPEK</div>
-                                    <div style="float: right; width: 30%; text-align: center;">SKOR</div>
-                                    <div style="clear: both;"></div>
-                                </div>
-                                
-                                <div style="border-bottom: 1px solid #f3f4f6; padding: 4px 0;">
-                                    <div style="float: left; width: 70%;">Intelektual (Original Scale)</div>
-                                    <div style="float: right; width: 30%; text-align: center; font-weight: bold;">{{ $psych->potential_intellectual_score ?? '-' }}</div>
-                                    <div style="clear: both;"></div>
-                                </div>
-                                <div style="border-bottom: 1px solid #f3f4f6; padding: 4px 0;">
-                                    <div style="float: left; width: 70%;">Sosial</div>
-                                    <div style="float: right; width: 30%; text-align: center; font-weight: bold;">
-                                        {{ $psych->potential_social_score ? '(-) ' . $psych->potential_social_score : '-' }}
-                                    </div>
-                                    <div style="clear: both;"></div>
-                                </div>
-                                <div style="border-bottom: 1px solid #f3f4f6; padding: 4px 0; margin-bottom: 10px;">
-                                    <div style="float: left; width: 70%;">Emosional</div>
-                                    <div style="float: right; width: 30%; text-align: center; font-weight: bold;">
-                                        {{ $psych->potential_emotional_score ? '(-) ' . $psych->potential_emotional_score : '-' }}
-                                    </div>
-                                    <div style="clear: both;"></div>
-                                </div>
-                            </div>
-
-                            <div style="font-size: 7pt; background: #f9fafb; padding: 5px; border-radius: 4px; border: 1px solid #e5e7eb;">
-                                <div style="font-weight: bold; margin-bottom: 2px; color: #4c1d95;">SKALA ASSESSMENT GRAFIS:</div>
-                                <div><strong>3 =</strong> Berkembang Baik / Optimal</div>
-                                <div><strong>2 =</strong> Cukup Berkembang</div>
-                                <div><strong>1 =</strong> Kurang Berkembang</div>
-                                <div><strong>(-) =</strong> Berkembang namun Ada Hambatan</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div style="float: left; width: 49%;">
-                    <div class="card" style="height: 100%;">
-                        <div class="card-header">SKALA ASSESSMENT GRAFIS</div>
-                         <div class="card-body">
-                            <div style="font-size: 7.5pt;">
-                                <div style="margin-bottom: 4px; padding-bottom: 2px; border-bottom: 1px solid #f3f4f6;">
-                                    <strong>3</strong> = Berkembang Baik / Optimal
-                                </div>
-                                <div style="margin-bottom: 4px; padding-bottom: 2px; border-bottom: 1px solid #f3f4f6;">
-                                    <strong>2</strong> = Cukup Berkembang
-                                </div>
-                                <div style="margin-bottom: 4px; padding-bottom: 2px; border-bottom: 1px solid #f3f4f6;">
-                                    <strong>1</strong> = Kurang Berkembang
-                                </div>
-                                <div>
-                                    <strong>(-)</strong> = Berkembang namun Ada Hambatan
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div style="clear: both;"></div>
-            </div>
-
-            <!-- Taraf Kecerdasan & Kematangan Row -->
-            <div style="width: 100%; margin-bottom: 5px;">
-                <div style="float: left; width: 49%; margin-right: 1%;">
-                    <div class="card" style="height: 100%;">
-                        <div class="card-header">TARAF KECERDASAN (FULL SCALE)</div>
-                            <div class="card-body">
-                                <div style="font-size: 7.5pt;">
-                                    @php
-                                        $iqRanges = [
-                                            'Very Superior' => '119 - Ke atas',
-                                            'Tinggi' => '105 - 118',
-                                            'Cukup' => '100 - 104',
-                                            'Sedang' => '95 - 99',
-                                            'Rendah' => '81 - 94'
-                                        ];
-                                        $currentIqCat = trim($psych->iq_category ?? '');
-                                    @endphp
-                                    @foreach($iqRanges as $cat => $range)
-                                    <div style="border-bottom: 1px solid #f3f4f6; padding: 4px 0;">
-                                        <div style="float: left; width: 40%;">{{ $cat }}</div>
-                                        <div style="float: left; width: 40%; text-align: center;">{{ $range }}</div>
-                                        <div style="float: right; width: 10%; text-align: center;">
-                                            @if(strcasecmp($currentIqCat, $cat) === 0)
-                                            <span style="font-weight: bold; color: #5b21b6;">V</span>
-                                            @endif
-                                        </div>
-                                        <div style="clear: both;"></div>
-                                    </div>
-                                    @endforeach
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                <div style="float: left; width: 49%;">
-                    <div class="card" style="height: 100%;">
-                        <div class="card-header">TARAF KEMATANGAN PERKEMBANGAN</div>
-                            <div class="card-body">
-                                <div style="font-size: 7.5pt;">
-                                    @php
-                                        $maturityLevels = ['Disarankan', 'Dipertimbangkan', 'Tidak Disarankan'];
-                                        $currentMaturity = trim($psych->maturity_recommendation ?? '');
-                                    @endphp
-                                    @foreach($maturityLevels as $level)
-                                    <div style="border-bottom: 1px solid #f3f4f6; padding: 4px 0;">
-                                        <div style="float: left; width: 80%;">{{ $level }}</div>
-                                        <div style="float: right; width: 10%; text-align: center;">
-                                            @if(strcasecmp($currentMaturity, $level) === 0)
-                                            <span style="font-weight: bold; color: #5b21b6;">V</span>
-                                            @endif
-                                        </div>
-                                        <div style="clear: both;"></div>
-                                    </div>
-                                    @endforeach
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                <div style="clear: both;"></div>
-            </div>
             @endif
-
-            <h2 style="color: #4c1d95; margin-top: 10px; margin-bottom: 8px; font-size: 14pt; border-bottom: 2px solid #4c1d95; padding-bottom: 4px; display: inline-block;">PERSONAL MAPPING</h2>
 
             <table class="table" style="margin-bottom: 8px;">
                 <tr>
-                    <!-- LEFT COLUMN: Personality & Love Language & Learning Style -->
+                    <!-- LEFT COLUMN: Personality & Love Language -->
                     <td class="align-top" style="width: 55%; padding-right: 10px;">
                         
                         <!-- Personality Card -->
@@ -614,49 +661,20 @@
                             <div class="card-body">
                                 @php
                                     $personalityScores = $assessment->scores->where('category', 'personality')->values();
-                                    $persRows = ['Sanguinis', 'Koleris', 'Melankolis', 'Phlegmatis'];
                                 @endphp
                                 <table class="score-table">
                                     <tr>
                                         <th style="text-align: left;">ASPEK</th>
                                         @foreach($labels as $l) <th width="18">{{ $l }}</th> @endforeach
                                     </tr>
-                                    @foreach($persRows as $rowName)
-                                    @php
-                                        $score = $personalityScores->filter(function($s) use ($rowName) {
-                                            return stripos($s->aspect_name, $rowName) !== false;
-                                        })->first();
-                                    @endphp
+                                    @foreach($personalityScores as $s)
                                     <tr>
-                                        <td>{{ $rowName }}</td>
+                                        <td>{{ $s?->aspect_name ?? '' }}</td>
                                         @foreach($labels as $l)
                                         <td align="center">
-                                            <div class="score-box {{ $score && $score->label === $l ? 'active' : '' }}">
-                                                {{ $score && $score->label === $l ? 'X' : '' }}
+                                            <div class="score-box {{ $s && $s->label === $l ? 'active' : '' }}">
+                                                {{ $s && $s->label === $l ? 'X' : '' }}
                                             </div>
-                                        </td>
-                                        @endforeach
-                                    </tr>
-                                    @endforeach
-                                </table>
-                            </div>
-                        </div>
-
-                        <!-- Learning Style Card -->
-                        <div class="card">
-                            <div class="card-header">LEARNING STYLE</div>
-                            <div class="card-body">
-                                <table class="score-table">
-                                    <tr>
-                                        <th style="text-align: left;">ASPEK</th>
-                                        @foreach($labels as $l) <th width="18">{{ $l }}</th> @endforeach
-                                    </tr>
-                                    @foreach(['Visual', 'Auditory', 'Kinestetik'] as $ls)
-                                    <tr>
-                                        <td>{{ $ls }}</td>
-                                        @foreach($labels as $l)
-                                        <td align="center">
-                                            <div class="score-box"></div>
                                         </td>
                                         @endforeach
                                     </tr>
@@ -667,38 +685,23 @@
 
                         <!-- Love Language Card -->
                         <div class="card">
-                            <div class="card-header">BAHASA CINTA</div>
+                            <div class="card-header">LOVE LANGUAGE</div>
                             <div class="card-body">
                                 @php
                                     $loveLanguageScores = $assessment->scores->where('category', 'love_language')->values();
-                                    $llRows = [
-                                        'Kata Pendukung' => ['Words of Affirmation', 'Kata Pendukung'],
-                                        'Waktu Berkualitas' => ['Quality Time', 'Waktu Berkualitas'],
-                                        'Hadiah' => ['Receiving Gifts', 'Hadiah'],
-                                        'Service' => ['Acts of Service', 'Pelayanan', 'Service'],
-                                        'Sentuhan' => ['Physical Touch', 'Sentuhan Fisik', 'Sentuhan']
-                                    ];
                                 @endphp
                                 <table class="score-table">
                                     <tr>
                                         <th style="text-align: left;">ASPEK</th>
                                         @foreach($labels as $l) <th width="18">{{ $l }}</th> @endforeach
                                     </tr>
-                                    @foreach($llRows as $displayName => $aliases)
-                                    @php
-                                        $score = $loveLanguageScores->filter(function($s) use ($aliases) {
-                                            foreach($aliases as $alias) {
-                                                if (stripos($s->aspect_name, $alias) !== false) return true;
-                                            }
-                                            return false;
-                                        })->first();
-                                    @endphp
+                                    @foreach($loveLanguageScores as $s)
                                     <tr>
-                                        <td>{{ $displayName }}</td>
+                                        <td>{{ $s?->aspect_name ?? '' }}</td>
                                         @foreach($labels as $l)
                                         <td align="center">
-                                            <div class="score-box {{ $score && $score->label === $l ? 'active' : '' }}">
-                                                {{ $score && $score->label === $l ? 'X' : '' }}
+                                            <div class="score-box {{ $s && $s->label === $l ? 'active' : '' }}">
+                                                {{ $s && $s->label === $l ? 'X' : '' }}
                                             </div>
                                         </td>
                                         @endforeach
@@ -718,49 +721,74 @@
                             <div class="card-header">MULTIPLE INTELLIGENCE</div>
                             <div class="card-body">
                                 @php
-                                    $miScores = $assessment->scores->where('category', 'multiple_intelligence')->values();
-                                    $miRows = [
-                                        'Linguistic' => ['Linguistik', 'Linguistic'],
-                                        'Numeric' => ['Logika Matematika', 'Numeric', 'Logical'],
-                                        'Visual – Spatial' => ['Visual Spasial', 'Visual'],
-                                        'Bodily Kinesthetic' => ['Kinestetik', 'Bodily'],
-                                        'Musical' => ['Musikal', 'Musical'],
-                                        'Inter-personal' => ['Interpersonal'],
-                                        'Intra-personal' => ['Intrapersonal'],
-                                        'Naturalist' => ['Naturalis', 'Naturalist']
+                                    $miOrder = [
+                                        'linguistik',
+                                        'logika matematika',
+                                        'visual spasial',
+                                        'musikal',
+                                        'kinestetik',
+                                        'interpersonal',
+                                        'intrapersonal',
+                                        'naturalis',
                                     ];
-                                @endphp
-                                <table class="score-table">
-                                    <tr>
-                                        <th style="text-align: left;">ASPEK</th>
-                                        @foreach($labels as $l) <th width="18">{{ $l }}</th> @endforeach
-                                    </tr>
-                                    @foreach($miRows as $displayName => $aliases)
-                                    @php
-                                        $score = $miScores->filter(function($s) use ($aliases) {
-                                            foreach($aliases as $alias) {
-                                                if (stripos($s->aspect_name, $alias) !== false) return true;
+
+                                    $miIndex = function (?string $name) use ($miOrder): int {
+                                        $raw = mb_strtolower((string) $name);
+                                        $norm = preg_replace('/[^a-z0-9]+/u', ' ', $raw);
+                                        $norm = trim((string) $norm);
+
+                                        $aliases = [
+                                            'linguistik' => ['linguistik', 'linguistic'],
+                                            'logika matematika' => ['logika matematika', 'logical mathematical', 'logicalmathematical', 'logical mathematical', 'logico mathematical'],
+                                            'visual spasial' => ['visual spasial', 'visual spatial', 'visualspatial', 'spatial'],
+                                            'musikal' => ['musikal', 'musical'],
+                                            'kinestetik' => ['kinestetik', 'bodily kinesthetic', 'bodilykinesthetic', 'kinaesthetic', 'kinesthetic'],
+                                            'interpersonal' => ['interpersonal'],
+                                            'intrapersonal' => ['intrapersonal'],
+                                            'naturalis' => ['naturalis', 'naturalist', 'naturalistic'],
+                                        ];
+
+                                        $key = null;
+                                        foreach ($aliases as $candidate => $terms) {
+                                            foreach ($terms as $t) {
+                                                $tNorm = trim((string) preg_replace('/[^a-z0-9]+/u', ' ', mb_strtolower($t)));
+                                                if ($tNorm !== '' && (str_contains($norm, $tNorm) || str_contains(str_replace(' ', '', $norm), str_replace(' ', '', $tNorm)))) {
+                                                    $key = $candidate;
+                                                    break 2;
+                                                }
                                             }
-                                            return false;
-                                        })->first();
-                                    @endphp
-                                    <tr>
-                                        <td>{{ $displayName }}</td>
-                                        @foreach($labels as $l)
-                                        <td align="center">
-                                            <div class="score-box {{ $score && $score->label === $l ? 'active' : '' }}">
-                                                {{ $score && $score->label === $l ? 'X' : '' }}
-                                            </div>
-                                        </td>
-                                        @endforeach
-                                    </tr>
-                                    @endforeach
-                                </table>
+                                        }
+
+                                        $idx = $key !== null ? array_search($key, $miOrder, true) : false;
+                                        return $idx === false ? 999 : $idx;
+                                    };
+
+                                    $miScores = $assessment->scores
+                                        ->where('category', 'multiple_intelligence')
+                                        ->sortBy(fn ($s) => $miIndex($s->aspect_name))
+                                        ->values();
+                                @endphp
+
+                                @foreach($miScores as $s)
+                                @php $p = $s->score_value * 2; @endphp
+                                <div style="margin-bottom: 6px;">
+                                    <div style="margin-bottom: 2px; font-size: 7.5pt;">
+                                        <span style="font-weight: bold;">{{ $s->aspect_name }}</span>
+                                        <span style="float: right;">{{ $p }}%</span>
+                                    </div>
+                                    <table class="progress-table">
+                                        <tr>
+                                            <td class="progress-fill" width="{{ $p }}%"></td>
+                                            <td class="progress-empty"></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                @endforeach
                             </div>
                         </div>
 
                         <!-- Legend Card -->
-                        <div class="card">
+                        <div class="card" style="background-color: #f9fafb; border-style: dashed;">
                             <div class="card-body">
                                 <div style="font-weight: bold; font-size: 7.5pt; margin-bottom: 4px; color: #4c1d95;">KETERANGAN SKOR:</div>
                                 <div class="legend-grid">
@@ -778,10 +806,6 @@
             </table>
 
             <!-- Talents Mapping Card -->
-            <div class="page-break"></div>
-            
-            <h2 style="color: #4c1d95; margin-bottom: 12px; font-size: 14pt; border-bottom: 2px solid #4c1d95; padding-bottom: 4px; display: inline-block;">TALENTS MAPPING</h2>
-
             <div class="card">
                 <div class="card-header">TALENTS MAPPING ANALYSIS</div>
                 <div class="card-body">
@@ -789,85 +813,35 @@
                         <tr>
                             <td width="33%">
                                 <div style="color: #6b7280; font-size: 6.5pt; text-transform: uppercase;">Brain Dominance</div>
-                                <div style="font-weight: bold;">{{ $tm->brain_dominance ?? '-' }}</div>
+                                <div style="font-weight: bold;">{{ $assessment->talentsMapping->brain_dominance ?? '-' }}</div>
                             </td>
                             <td width="33%">
                                 <div style="color: #6b7280; font-size: 6.5pt; text-transform: uppercase;">Social Dominance</div>
-                                <div style="font-weight: bold;">{{ $tm->social_dominance ?? '-' }}</div>
+                                <div style="font-weight: bold;">{{ $assessment->talentsMapping->social_dominance ?? '-' }}</div>
                             </td>
                             <td width="33%">
                                 <div style="color: #6b7280; font-size: 6.5pt; text-transform: uppercase;">Skill Dominance</div>
-                                <div style="font-weight: bold;">{{ $tm->skill_dominance ?? '-' }}</div>
-                            </td>
-                        </tr>
-                    </table>
-                    
-                    <table class="table tm-table" style="font-size: 8.5pt; margin-top: 10px;">
-                        <tr>
-                            <td style="width: 25%; vertical-align: top;">
-                                <div style="color: #4c1d95; font-weight: bold; margin-bottom: 5px;">Strength Approach</div>
-                                <ul style="margin: 0; padding-left: 15px;">
-                                    @foreach($tm->strengths ? array_map('trim', explode(',', $tm->strengths)) : [] as $item)
-                                        <li>{{ $item }}</li>
-                                    @endforeach
-                                </ul>
-                            </td>
-                            <td style="width: 25%; vertical-align: top;">
-                                <div style="color: #4c1d95; font-weight: bold; margin-bottom: 5px;">Deficit Approach</div>
-                                <ul style="margin: 0; padding-left: 15px;">
-                                    @foreach($tm->deficits ? array_map('trim', explode(',', $tm->deficits)) : [] as $item)
-                                        <li>{{ $item }}</li>
-                                    @endforeach
-                                </ul>
-                            </td>
-                            <td style="width: 25%; vertical-align: top;">
-                                <div style="color: #4c1d95; font-weight: bold; margin-bottom: 5px;">Cluster Strength</div>
-                                <ul style="margin: 0; padding-left: 15px;">
-                                    @foreach($tm->cluster_strength ? array_map('trim', explode(',', $tm->cluster_strength)) : [] as $item)
-                                        <li>{{ $item }}</li>
-                                    @endforeach
-                                </ul>
-                            </td>
-                            <td style="width: 25%; vertical-align: top;">
-                                <div style="color: #4c1d95; font-weight: bold; margin-bottom: 5px;">Personal Branding</div>
-                                <ul style="margin: 0; padding-left: 15px;">
-                                    @foreach($tm->personal_branding ? array_map('trim', explode(',', $tm->personal_branding)) : [] as $item)
-                                        <li>{{ $item }}</li>
-                                    @endforeach
-                                </ul>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
-
-            <!-- Conclusion Card -->
-            <div class="card">
-                <div class="card-header">KESIMPULAN</div>
-                <div class="card-body">
-                    <table style="border: none; width: 100%; font-size: 9pt;">
-                        <tr>
-                            <td style="border: none; width: 20px; vertical-align: top;">1.</td>
-                            <td style="border: none; vertical-align: top;">
-                                Taraf Kemampuan Intelektual Umum <strong>{{ strtoupper($assessment->subject->name) }}</strong> : <strong>{{ $psych->iq_category ?? '...' }}</strong>
+                                <div style="font-weight: bold;">{{ $assessment->talentsMapping->skill_dominance ?? '-' }}</div>
                             </td>
                         </tr>
                         <tr>
-                            <td style="border: none; width: 20px; vertical-align: top;">2.</td>
-                            <td style="border: none; vertical-align: top;">
-                                Rekomendasi atas penelusuran potensi bakat dan minat :
-                                <div style="font-weight: bold; margin-top: 5px;">
-                                    {{ $psych->recommendations ?? '[Belum ada data rekomendasi]' }}
-                                </div>
+                            <td colspan="2">
+                                <div style="color: #6b7280; font-size: 6.5pt; text-transform: uppercase; margin-top: 4px;">Strengths</div>
+                                <div style="font-weight: bold;">{{ $assessment->talentsMapping->strengths ?? '-' }}</div>
+                            </td>
+                            <td>
+                                <div style="color: #6b7280; font-size: 6.5pt; text-transform: uppercase; margin-top: 4px;">Defisit</div>
+                                <div style="font-weight: bold;">{{ $assessment->talentsMapping->deficits ?? '-' }}</div>
                             </td>
                         </tr>
                         <tr>
-                            <td style="border: none; width: 20px; vertical-align: top;">3.</td>
-                            <td style="border: none; vertical-align: top;">
-                                Saran yang membutuhkan penanganan terapeutik (asesemen kasuistik, konseling & terapi) :
-                                <div style="margin-top: 5px;">
-                                     {{ $psych->suggestions ?? '[Belum ada data saran]' }}
-                                </div>
+                            <td>
+                                <div style="color: #6b7280; font-size: 6.5pt; text-transform: uppercase; margin-top: 4px;">Cluster Strength</div>
+                                <div style="font-weight: bold;">{{ $assessment->talentsMapping->cluster_strength ?? '-' }}</div>
+                            </td>
+                            <td colspan="2">
+                                <div style="color: #6b7280; font-size: 6.5pt; text-transform: uppercase; margin-top: 4px;">Personal Branding</div>
+                                <div style="font-weight: bold;">{{ $assessment->talentsMapping->personal_branding ?? '-' }}</div>
                             </td>
                         </tr>
                     </table>
@@ -877,15 +851,13 @@
             <!-- Signature -->
             <div class="signature-box">
                 <div style="font-size: 8.5pt; margin-bottom: 8px;">Bogor, {{ $assessment->test_date->format('d F Y') }}</div>
-                @if(!empty($signature))
-                    <img src="{{ $signature }}" style="height: 60px; margin-bottom: 5px;">
-                @elseif(!empty($signatureAmbu))
+                @if(!empty($signatureAmbu))
                     <img src="{{ $signatureAmbu }}" style="height: 55px; margin-bottom: 4px;">
                 @else
                     <div style="height: 55px;"></div>
                 @endif
-                <div style="font-weight: bold; font-size: 9.5pt; text-decoration: underline;">{{ $assessment->psychologist_name ?? 'Anggia Chrisanti, S.Psi, M.Psi, Psikolog' }}</div>
-                <div style="font-size: 7.5pt;">SIPP: {{ $assessment->psychologist_sipp ?? '0514-22-2-1' }}</div>
+                <div style="font-weight: bold; font-size: 9.5pt; text-decoration: underline;">Anggia Chrisanti, S.Psi, M.Psi, Psikolog</div>
+                <div style="font-size: 7.5pt;">No.SIAP HIMPSI 20250719</div>
             </div>
         </div>
     </div>
@@ -919,7 +891,6 @@
                     </p>
                 </td>
             </tr>
-            <!-- ... (Keeping the rest of Kamus Laporan as is) ... -->
             <tr>
                 <td>
                     <p><strong>ACTIVATOR</strong><br>
@@ -1246,37 +1217,23 @@
         <table class="kamus-table">
             <tr>
                 <td>
-                    <p><strong>1. LINGUISTIK</strong><br>
-                        Kecerdasan dalam mengolah kata-kata, baik secara lisan maupun tertulis. Orang dengan kecerdasan ini umumnya gemar membaca, menulis, berbicara, dan mendengarkan cerita. Mereka mampu menggunakan bahasa untuk meyakinkan, menghibur, atau menyampaikan informasi secara efektif.
-                    </p>
-                    <p><strong>2. LOGIKA MATEMATIKA</strong><br>
-                        Kecerdasan dalam menganalisis masalah secara logis, menemukan pola, dan melakukan operasi matematis. Orang dengan kecerdasan ini menyukai angka, teka-teki, eksperimen, dan berpikir kritis. Mereka cenderung sistematis dalam menyelesaikan masalah.
-                    </p>
-                    <p><strong>3. VISUAL SPASIAL</strong><br>
-                        Kecerdasan dalam memvisualisasikan objek dan ruang. Orang dengan kecerdasan ini memiliki kemampuan membayangkan bentuk, warna, dan dimensi. Mereka umumnya menyukai menggambar, merancang, membaca peta, dan memiliki kepekaan estetika yang baik.
-                    </p>
-                    <p><strong>4. MUSIKAL</strong><br>
-                        Kecerdasan dalam mengenali, membedakan, dan mengekspresikan bentuk-bentuk musik. Orang dengan kecerdasan ini peka terhadap nada, irama, dan ritme. Mereka seringkali gemar menyanyi, bermain alat musik, atau sekadar mendengarkan musik.
-                    </p>
+                    <p><strong>Linguistic Intelligence</strong><br>Kecerdasan linguistik adalah kemampuan seseorang dalam menggunakan dan memahami bahasa secara efektif, baik secara lisan maupun tulisan. Individu dengan kecerdasan ini biasanya peka terhadap makna kata, susunan kalimat, serta mampu menyampaikan dan menerima informasi dengan jelas. Kelebihannya terlihat pada kemampuan berbicara, menulis, mengingat informasi verbal, dan mempelajari bahasa. Namun, kecerdasan linguistik tidak selalu diikuti oleh kemampuan yang sama baiknya pada bidang lain seperti logika, visual, atau gerak tubuh.</p>
+                    <p><strong>Logical-Mathematical Intelligence</strong><br>Kecerdasan numerikal merupakan kemampuan berpikir logis dan teratur dalam memecahkan masalah yang berkaitan dengan angka, pola, dan hubungan sebab akibat. Individu dengan kecerdasan ini cenderung mudah mengelompokkan masalah, menyusun langkah penyelesaian, dan melihat inti persoalan secara rasional. Kelebihannya terletak pada ketelitian dan kejelasan berpikir, sedangkan keterbatasannya dapat muncul pada situasi yang menuntut pendekatan emosional atau intuisi.</p>
+                    <p><strong>Visual-Spatial Intelligence</strong><br>Kecerdasan visual-spasial adalah kemampuan memahami dan mengolah informasi yang berkaitan dengan gambar, bentuk, warna, dan ruang. Individu dengan kecerdasan ini mampu membayangkan objek, memahami posisi dan arah, serta melihat hubungan antar unsur visual. Kelebihannya tampak pada daya imajinasi dan orientasi ruang, sementara keterbatasannya dapat terlihat pada tugas yang sangat bergantung pada bahasa atau simbol abstrak.</p>
+                    <p><strong>Musical Intelligence</strong><br>Kecerdasan musik adalah kemampuan mengenali, membedakan, dan mengekspresikan unsur-unsur musik seperti ritme, melodi, dan nada. Individu dengan kecerdasan ini peka terhadap bunyi dan dapat menggunakan musik untuk membantu konsentrasi, suasana belajar, dan daya ingat. Kelebihannya terletak pada kepekaan terhadap suara dan pola bunyi, sedangkan keterbatasannya adalah kemampuan ini tidak selalu berkaitan langsung dengan bidang akademik lain.</p>
                 </td>
                 <td>
-                    <p><strong>5. KINESTETIK</strong><br>
-                        Kecerdasan dalam menggunakan seluruh tubuh atau bagian tubuh untuk mengekspresikan ide dan perasaan, serta keterampilan tangan untuk menciptakan atau mengubah sesuatu. Orang dengan kecerdasan ini menyukai aktivitas fisik, olahraga, menari, atau membuat kerajinan tangan.
-                    </p>
-                    <p><strong>6. INTERPERSONAL</strong><br>
-                        Kecerdasan dalam memahami dan berinteraksi dengan orang lain secara efektif. Orang dengan kecerdasan ini peka terhadap perasaan, motivasi, dan watak orang lain. Mereka umumnya pandai bergaul, bekerja sama dalam tim, dan memiliki empati yang tinggi.
-                    </p>
-                    <p><strong>7. INTRAPERSONAL</strong><br>
-                        Kecerdasan dalam memahami diri sendiri, termasuk kekuatan, kelemahan, keinginan, dan perasaan. Orang dengan kecerdasan ini memiliki kesadaran diri yang tinggi, mampu merefleksikan pengalaman, dan memiliki tujuan hidup yang jelas.
-                    </p>
-                    <p><strong>8. NATURALIS</strong><br>
-                        Kecerdasan dalam mengenali, mengkategorikan, dan memahami flora, fauna, serta fenomena alam lainnya. Orang dengan kecerdasan ini menyukai kegiatan di alam bebas, berkebun, memelihara hewan, atau mengamati lingkungan sekitar.
-                    </p>
+                    <p><strong>Interpersonal Intelligence</strong><br>Kecerdasan interpersonal adalah kemampuan memahami perasaan, niat, dan perilaku orang lain melalui komunikasi verbal dan nonverbal. Individu dengan kecerdasan ini biasanya mudah berinteraksi, bekerja sama, dan menyesuaikan diri dalam lingkungan sosial. Kelebihannya adalah kemampuan membangun hubungan dan bekerja dalam kelompok, sementara keterbatasannya dapat berupa ketergantungan pada respons sosial dalam mengambil keputusan.</p>
+                    <p><strong>Intrapersonal Intelligence</strong><br>Kecerdasan intrapersonal adalah kemampuan memahami diri sendiri, termasuk emosi, motivasi, kekuatan, dan kelemahan pribadi. Individu dengan kecerdasan ini mampu mengelola diri, menetapkan tujuan, dan bertindak sesuai nilai yang diyakini. Kelebihannya terletak pada kesadaran diri dan pengendalian emosi, sedangkan keterbatasannya dapat berupa kecenderungan menarik diri atau terlalu fokus pada pemikiran internal.</p>
+                    <p><strong>Bodily-Kinesthetic Intelligence</strong><br>Kecerdasan bodily-kinestetik adalah kemampuan menggunakan tubuh secara terampil untuk melakukan aktivitas fisik dan mengekspresikan ide atau perasaan. Individu dengan kecerdasan ini memiliki koordinasi gerak, keseimbangan, dan kontrol tubuh yang baik. Kelebihannya tampak pada keterampilan fisik dan aktivitas yang melibatkan gerakan, sementara keterbatasannya dapat muncul pada tugas yang menuntut pemrosesan verbal atau simbolik tinggi.</p>
+                    <p><strong>Naturalist Intelligence</strong><br>Kecerdasan naturalis adalah kemampuan mengenali, membedakan, dan mengelompokkan unsur-unsur alam dan lingkungan sekitar. Individu dengan kecerdasan ini peka terhadap tanaman, hewan, dan fenomena alam serta menunjukkan perhatian terhadap lingkungan. Kelebihannya adalah kemampuan observasi dan klasifikasi alam, sedangkan keterbatasannya terletak pada penerapan yang lebih terbatas di luar konteks lingkungan hidup.</p>
                 </td>
             </tr>
         </table>
 
     </div>
-    </div>
+</div>
+
+
 </body>
 </html>

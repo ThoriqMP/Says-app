@@ -12,9 +12,6 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
-use PhpOffice\PhpWord\PhpWord;
-use PhpOffice\PhpWord\IOFactory;
-use PhpOffice\PhpWord\Shared\Converter;
 
 class PsychologicalAssessmentController extends Controller
 {
@@ -65,9 +62,9 @@ class PsychologicalAssessmentController extends Controller
             'psychological.cognitive_logical_scale' => 'nullable|integer',
             'psychological.cognitive_spatial_score' => 'nullable|integer',
             'psychological.cognitive_spatial_scale' => 'nullable|integer',
-            'psychological.potential_intellectual_score' => 'nullable|integer',
-            'psychological.potential_social_score' => 'nullable|integer',
-            'psychological.potential_emotional_score' => 'nullable|integer',
+            'psychological.potential_intellectual_score' => 'nullable|string',
+            'psychological.potential_social_score' => 'nullable|string',
+            'psychological.potential_emotional_score' => 'nullable|string',
             'psychological.iq_full_scale' => 'nullable|string',
             'psychological.iq_category' => 'nullable|string',
             'psychological.maturity_recommendation' => 'nullable|string',
@@ -85,11 +82,21 @@ class PsychologicalAssessmentController extends Controller
             'psychologist_name' => $data['psychologist_name'],
         ]);
 
+        // Update Subject DOB if provided
+        if (!empty($data['subject_dob'])) {
+            $assessment->subject->update(['date_of_birth' => $data['subject_dob']]);
+        }
+
         // Update/Create Psychological Data
         if (!empty($data['psychological'])) {
+            $psychological = $data['psychological'];
+            $psychological['potential_intellectual_score'] = $this->parsePotentialScore($psychological['potential_intellectual_score'] ?? null);
+            $psychological['potential_social_score'] = $this->parsePotentialScore($psychological['potential_social_score'] ?? null);
+            $psychological['potential_emotional_score'] = $this->parsePotentialScore($psychological['potential_emotional_score'] ?? null);
+
             $assessment->psychologicalAssessment()->updateOrCreate(
                 ['assessment_id' => $assessment->id],
-                $data['psychological']
+                $psychological
             );
         }
 
@@ -173,9 +180,9 @@ class PsychologicalAssessmentController extends Controller
             'psychological.cognitive_logical_scale' => 'nullable|integer',
             'psychological.cognitive_spatial_score' => 'nullable|integer',
             'psychological.cognitive_spatial_scale' => 'nullable|integer',
-            'psychological.potential_intellectual_score' => 'nullable|integer',
-            'psychological.potential_social_score' => 'nullable|integer',
-            'psychological.potential_emotional_score' => 'nullable|integer',
+            'psychological.potential_intellectual_score' => 'nullable|string',
+            'psychological.potential_social_score' => 'nullable|string',
+            'psychological.potential_emotional_score' => 'nullable|string',
             'psychological.iq_full_scale' => 'nullable|string',
             'psychological.iq_category' => 'nullable|string',
             'psychological.maturity_recommendation' => 'nullable|string',
@@ -210,6 +217,9 @@ class PsychologicalAssessmentController extends Controller
         // Save Psychological Data
         if (!empty($data['psychological'])) {
             $psychData = $data['psychological'];
+            $psychData['potential_intellectual_score'] = $this->parsePotentialScore($psychData['potential_intellectual_score'] ?? null);
+            $psychData['potential_social_score'] = $this->parsePotentialScore($psychData['potential_social_score'] ?? null);
+            $psychData['potential_emotional_score'] = $this->parsePotentialScore($psychData['potential_emotional_score'] ?? null);
             $psychData['assessment_id'] = $assessment->id;
             PsychologicalAssessment::create($psychData);
         }
@@ -307,279 +317,31 @@ class PsychologicalAssessmentController extends Controller
         return $pdf->download($filename);
     }
 
-    public function docx(Assessment $assessment)
+
+
+
+    private function parsePotentialScore($value): ?int
     {
-        $assessment->load(['subject', 'user', 'scores', 'talentsMapping', 'psychologicalAssessment']);
-        $psychData = $assessment->psychologicalAssessment;
-
-        $phpWord = new PhpWord();
-        $section = $phpWord->addSection();
-
-        // Title
-        $section->addText('LAPORAN ASESMEN PSIKOLOGIS', ['bold' => true, 'size' => 16, 'color' => '4338CA'], ['alignment' => 'center']);
-        $section->addText('DOKUMEN RAHASIA', ['size' => 10, 'color' => '555555'], ['alignment' => 'center']);
-        $section->addTextBreak(1);
-
-        // Subject Info
-        $styleTable = ['borderSize' => 6, 'borderColor' => '999999', 'cellMargin' => 80];
-        $phpWord->addTableStyle('Subject Table', $styleTable);
-        $table = $section->addTable('Subject Table');
-        
-        $table->addRow();
-        $table->addCell(3000)->addText('Nama Lengkap', ['bold' => true]);
-        $table->addCell(6000)->addText($assessment->subject->name);
-        
-        $table->addRow();
-        $table->addCell(3000)->addText('Usia', ['bold' => true]);
-        $table->addCell(6000)->addText($assessment->subject->precise_age);
-        
-        $table->addRow();
-        $table->addCell(3000)->addText('Tanggal Pemeriksaan', ['bold' => true]);
-        $table->addCell(6000)->addText($assessment->test_date->format('d F Y'));
-
-        $section->addTextBreak(1);
-        $section->addText('HASIL PEMERIKSAAN', ['bold' => true, 'size' => 14, 'color' => '4338CA', 'underline' => 'single']);
-        $section->addTextBreak(1);
-
-        // 1. Aspek Kognitif
-        $section->addText('ASPEK KOGNITIF & POTENSI', ['bold' => true, 'size' => 11, 'color' => '5B21B6']);
-        $section->addText('ASPEK KOGNITIF', ['bold' => true, 'size' => 10, 'color' => '5B21B6']);
-        
-        $table = $section->addTable('Subject Table');
-        $table->addRow();
-        $table->addCell(3000, ['bgColor' => 'F3F4F6'])->addText('Aspek', ['bold' => true]);
-        $table->addCell(4000, ['bgColor' => 'F3F4F6'])->addText('Keterangan', ['bold' => true]);
-        $table->addCell(2000, ['bgColor' => 'F3F4F6'])->addText('Skala', ['bold' => true]);
-
-        $cogDescriptions = [
-            'Verbal' => 'Kemampuan berkomunikasi dan memahami bahasa',
-            'Numerical' => 'Kemampuan berpikir praktis matematis dan berhitung',
-            'Logical' => 'Kemampuan untuk memahami masalah secara hubungan sebab akibat dan menemukan solusi',
-            'Spatial' => 'Kemampuan untuk berlaku cermat dalam menyelesaikan suatu pekerjaan atau tugas'
-        ];
-        $cogMap = [
-            'Verbal' => 'Kemampuan Verbal',
-            'Numerical' => 'Kemampuan Numerikal',
-            'Logical' => 'Kemampuan Berpikir Logis',
-            'Spatial' => 'Kemampuan Visual Spasial'
-        ];
-
-        foreach(['Verbal', 'Numerical', 'Logical', 'Spatial'] as $aspect) {
-            $table->addRow();
-            $table->addCell(3000)->addText($cogMap[$aspect]);
-            $table->addCell(4000)->addText($cogDescriptions[$aspect]);
-            $scoreVal = $psychData->{'cognitive_'.strtolower($aspect).'_score'} ?? '-';
-            $scaleVal = $psychData->{'cognitive_'.strtolower($aspect).'_scale'} ?? '';
-            $table->addCell(2000)->addText($scoreVal . ' ' . $scaleVal, ['bold' => true], ['alignment' => 'center']);
-        }
-        $section->addTextBreak(1);
-
-        // 2. Aspek Potensi
-        $section->addText('ASPEK POTENSI', ['bold' => true, 'size' => 10, 'color' => '5B21B6']);
-        
-        $table = $section->addTable('Subject Table');
-        $table->addRow();
-        $table->addCell(4000, ['bgColor' => 'F3F4F6'])->addText('Aspek Potensi', ['bold' => true]);
-        $table->addCell(2000, ['bgColor' => 'F3F4F6'])->addText('Skor', ['bold' => true]);
-        $table->addCell(3000, ['bgColor' => 'F3F4F6'])->addText('Keterangan Grafis', ['bold' => true]);
-
-        $potensiMap = [
-            'Intellectual' => 'Intelektual (Original Scale)',
-            'Social' => 'Sosial',
-            'Emotional' => 'Emosional'
-        ];
-
-        $legend = "3 = Berkembang Baik / Optimal\n2 = Cukup Berkembang\n1 = Kurang Berkembang\n(-) = Berkembang namun Ada Hambatan";
-
-        foreach(['Intellectual', 'Social', 'Emotional'] as $index => $aspect) {
-            $table->addRow();
-            $table->addCell(4000)->addText($potensiMap[$aspect]);
-            
-            $val = $psychData->{'potential_'.strtolower($aspect).'_score'} ?? '-';
-            if ($aspect !== 'Intellectual' && $val !== '-') {
-                $val = '(-) ' . $val;
-            }
-            $table->addCell(2000)->addText($val, ['bold' => true], ['alignment' => 'center']);
-            
-            if ($index === 0) {
-                 $table->addCell(3000, ['vMerge' => 'restart'])->addText($legend, ['size' => 8]);
-            } else {
-                 $table->addCell(3000, ['vMerge' => 'continue']);
-            }
-        }
-        $section->addTextBreak(1);
-
-        // IQ & Maturity
-        $section->addText('KESIMPULAN', ['bold' => true, 'size' => 10, 'color' => '5B21B6']);
-        
-        // IQ Table
-        $section->addText('Taraf Kecerdasan (Full Scale)', ['bold' => true, 'size' => 9]);
-        $table = $section->addTable('Subject Table');
-        $table->addRow();
-        $table->addCell(3000, ['bgColor' => 'F3F4F6'])->addText('Kategori');
-        $table->addCell(3000, ['bgColor' => 'F3F4F6'])->addText('Range');
-        $table->addCell(1000, ['bgColor' => 'F3F4F6'])->addText('Cek');
-
-        $iqRanges = [
-            'Very Superior' => '119 - Ke atas',
-            'Tinggi' => '105 - 118',
-            'Cukup' => '100 - 104',
-            'Sedang' => '95 - 99',
-            'Rendah' => '81 - 94'
-        ];
-        $currentIqCat = trim($psychData->iq_category ?? '');
-
-        foreach($iqRanges as $cat => $range) {
-            $table->addRow();
-            $table->addCell(3000)->addText($cat);
-            $table->addCell(3000)->addText($range);
-            $check = (strcasecmp($currentIqCat, $cat) === 0) ? 'V' : '';
-            $table->addCell(1000)->addText($check, ['bold' => true], ['alignment' => 'center']);
-        }
-        $section->addTextBreak(1);
-
-        // Maturity Table
-        $section->addText('Taraf Kematangan Perkembangan', ['bold' => true, 'size' => 9]);
-        $table = $section->addTable('Subject Table');
-        $table->addRow();
-        $table->addCell(6000, ['bgColor' => 'F3F4F6'])->addText('Rekomendasi');
-        $table->addCell(1000, ['bgColor' => 'F3F4F6'])->addText('Cek');
-
-        $maturityLevels = ['Disarankan', 'Dipertimbangkan', 'Tidak Disarankan'];
-        $currentMaturity = trim($psychData->maturity_recommendation ?? '');
-
-        foreach($maturityLevels as $level) {
-            $table->addRow();
-            $table->addCell(6000)->addText($level);
-            $check = (strcasecmp($currentMaturity, $level) === 0) ? 'V' : '';
-            $table->addCell(1000)->addText($check, ['bold' => true], ['alignment' => 'center']);
-        }
-        
-        // Personal Mapping Section
-        // $section->addPageBreak(); // Removed to keep in one page if possible
-        $section->addText('(PERSONAL MAPPING)', ['bold' => true, 'size' => 14, 'color' => '4338CA', 'underline' => 'single']);
-        $section->addTextBreak(1);
-
-        // Personality
-        $section->addText('PERSONALITY', ['bold' => true, 'size' => 11]);
-        $personalityScores = $assessment->scores->where('category', 'personality')->values();
-        $table = $section->addTable('Subject Table');
-        $table->addRow();
-        $table->addCell(3000, ['bgColor' => 'F3F4F6'])->addText('Aspek', ['bold' => true]);
-        $table->addCell(3000, ['bgColor' => 'F3F4F6'])->addText('Label', ['bold' => true]);
-        
-        foreach($personalityScores as $s) {
-            $table->addRow();
-            $table->addCell(3000)->addText($s->aspect_name);
-            $table->addCell(3000)->addText($s->label);
-        }
-        $section->addTextBreak(1);
-
-        // Love Language
-        $section->addText('LOVE LANGUAGE', ['bold' => true, 'size' => 11]);
-        $llScores = $assessment->scores->where('category', 'love_language')->values();
-        $table = $section->addTable('Subject Table');
-        $table->addRow();
-        $table->addCell(3000, ['bgColor' => 'F3F4F6'])->addText('Aspek', ['bold' => true]);
-        $table->addCell(3000, ['bgColor' => 'F3F4F6'])->addText('Label', ['bold' => true]);
-        
-        foreach($llScores as $s) {
-            $table->addRow();
-            $table->addCell(3000)->addText($s->aspect_name);
-            $table->addCell(3000)->addText($s->label);
-        }
-        $section->addTextBreak(1);
-
-        // MI
-        $section->addText('MULTIPLE INTELLIGENCE', ['bold' => true, 'size' => 11]);
-        $miScores = $assessment->scores->where('category', 'multiple_intelligence')->values();
-        $table = $section->addTable('Subject Table');
-        $table->addRow();
-        $table->addCell(3000, ['bgColor' => 'F3F4F6'])->addText('Aspek', ['bold' => true]);
-        $table->addCell(3000, ['bgColor' => 'F3F4F6'])->addText('Score', ['bold' => true]);
-        
-        foreach($miScores as $s) {
-            $table->addRow();
-            $table->addCell(3000)->addText($s->aspect_name);
-            $table->addCell(3000)->addText($s->score_value);
+        if ($value === null) {
+            return null;
         }
 
-        $section->addTextBreak(1);
-
-        // Talents Mapping
-        if ($assessment->talentsMapping) {
-            $section->addPageBreak();
-            $section->addText('TALENTS MAPPING', ['bold' => true, 'size' => 11]);
-            $tm = $assessment->talentsMapping;
-            
-            $table = $section->addTable('Subject Table');
-            
-            $table->addRow();
-            $table->addCell(3000)->addText('Brain Dominance', ['color' => '666666', 'size' => 9]);
-            $table->addCell(3000)->addText('Social Dominance', ['color' => '666666', 'size' => 9]);
-            $table->addCell(3000)->addText('Skill Dominance', ['color' => '666666', 'size' => 9]);
-            
-            $table->addRow();
-            $table->addCell(3000)->addText($tm->brain_dominance, ['bold' => true]);
-            $table->addCell(3000)->addText($tm->social_dominance, ['bold' => true]);
-            $table->addCell(3000)->addText($tm->skill_dominance, ['bold' => true]);
-            
-            $section->addTextBreak(1);
-            
-            $section->addText('Cluster Strength: ' . $tm->cluster_strength);
-            $section->addText('Personal Branding: ' . $tm->personal_branding);
-            
-            $section->addTextBreak(1);
-            
-            $section->addText('Strengths:', ['bold' => true, 'color' => '059669']);
-            $section->addText($tm->strengths);
-            
-            $section->addTextBreak(1);
-            
-            $section->addText('Deficits:', ['bold' => true, 'color' => 'DC2626']);
-            $section->addText($tm->deficits);
+        $string = trim((string) $value);
+        if ($string === '') {
+            return null;
         }
 
-        $section->addTextBreak(2);
-
-        // Signature
-        $signaturePath = storage_path('app/public/logos/ttd_Ambu-removebg-preview.png');
-        if (file_exists($signaturePath)) {
-            $table = $section->addTable(['borderSize' => 0]);
-            $table->addRow();
-            $table->addCell(5000); // Spacer
-            $cell = $table->addCell(4000);
-            $cell->addText('Bogor, ' . $assessment->test_date->format('d F Y'), ['alignment' => 'center']);
-            $cell->addText('Psikolog Pemeriksa,', ['alignment' => 'center']);
-            try {
-                $cell->addImage($signaturePath, ['height' => 60, 'align' => 'center']);
-            } catch (\Exception $e) {
-                // Ignore image error
-            }
-            $cell->addText($assessment->psychologist_name, ['bold' => true, 'underline' => 'single', 'alignment' => 'center']);
-            $cell->addText('SIPP: ' . ($assessment->psychologist_sipp ?? '0514-22-2-1'), ['size' => 9, 'alignment' => 'center']);
+        if (preg_match('/-?\d+/', $string, $matches) !== 1) {
+            return null;
         }
 
-        $subjectName = $this->safeFilename($assessment->subject?->name ?? 'TanpaNama');
-        $testDate = $assessment->test_date?->format('dmY') ?? now()->format('dmY');
-        $filename = 'PSIKOLOGI_'.$subjectName.'_'.$testDate.'.docx';
+        $number = (int) $matches[0];
 
-        $writer = IOFactory::createWriter($phpWord, 'Word2007');
-        
-        // Clean buffer to prevent file corruption
-        if (ob_get_length()) {
-            ob_end_clean();
+        if (str_starts_with($string, '(-')) {
+            return -abs($number);
         }
 
-        header("Content-Description: File Transfer");
-        header('Content-Disposition: attachment; filename="' . $filename . '"');
-        header('Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document');
-        header('Content-Transfer-Encoding: binary');
-        header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-        header('Expires: 0');
-        
-        $writer->save("php://output");
-        exit;
+        return $number;
     }
 
     private function getBase64Image($path)

@@ -81,7 +81,6 @@ Route::middleware(['auth'])->group(function () {
         Route::put('/{assessment}', [\App\Http\Controllers\PsychologicalAssessment\PsychologicalAssessmentController::class, 'update'])->name('update');
         Route::get('/{assessment}', [\App\Http\Controllers\PsychologicalAssessment\PsychologicalAssessmentController::class, 'show'])->name('show');
         Route::get('/{assessment}/pdf', [\App\Http\Controllers\PsychologicalAssessment\PsychologicalAssessmentController::class, 'pdf'])->name('pdf');
-        Route::get('/{assessment}/docx', [\App\Http\Controllers\PsychologicalAssessment\PsychologicalAssessmentController::class, 'docx'])->name('docx');
     });
 
     // Family Mapping Routes

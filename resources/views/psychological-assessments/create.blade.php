@@ -110,6 +110,16 @@
                     </div>
 
                     <!-- Asesmen Psikologis Inputs -->
+                    @php
+                        $cognitiveScaleOptions = [
+                            5 => 'A',
+                            4 => 'B',
+                            3 => 'C',
+                            2 => 'D',
+                            1 => 'E',
+                        ];
+                    @endphp
+
                     <div class="mb-10 border-t pt-6">
                         <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">Data Asesmen Psikologis</h3>
                         
@@ -127,8 +137,15 @@
                                         </div>
                                         <div>
                                             <label class="text-xs text-gray-500">Scale</label>
-                                            <input type="number" name="psychological[cognitive_{{ strtolower($aspect) }}_scale]" 
-                                                   class="w-full px-2 py-1 text-sm border rounded">
+                                            <select name="psychological[cognitive_{{ strtolower($aspect) }}_scale]" 
+                                                    class="w-full px-2 py-1 text-sm border rounded bg-white dark:bg-gray-700">
+                                                <option value="">Pilih Skala</option>
+                                                @foreach($cognitiveScaleOptions as $val => $label)
+                                                    <option value="{{ $val }}" {{ old('psychological.cognitive_'.strtolower($aspect).'_scale') == $val ? 'selected' : '' }}>
+                                                        {{ $label }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
@@ -143,7 +160,9 @@
                                     <div class="text-sm font-medium mb-3">{{ $aspect }}</div>
                                     <div>
                                         <label class="text-xs text-gray-500">Score</label>
-                                        <input type="number" name="psychological[potential_{{ strtolower($aspect) }}_score]" 
+                                        <input type="text" name="psychological[potential_{{ strtolower($aspect) }}_score]" 
+                                               value="{{ old('psychological.potential_'.strtolower($aspect).'_score') }}"
+                                               placeholder="contoh: 2 atau (-) 3"
                                                class="w-full px-2 py-1 text-sm border rounded">
                                     </div>
                                 </div>
@@ -163,14 +182,22 @@
                                     <div>
                                         <label class="block text-sm text-gray-700 mb-1">Category</label>
                                         <select name="psychological[iq_category]" class="w-full px-3 py-2 border rounded-lg">
-                                            <option value="">Select Category</option>
-                                            <option value="Very Superior">Very Superior</option>
-                                            <option value="Superior">Superior</option>
-                                            <option value="High Average">High Average</option>
-                                            <option value="Average">Average</option>
-                                            <option value="Low Average">Low Average</option>
-                                            <option value="Borderline">Borderline</option>
-                                            <option value="Intellectually Deficient">Intellectually Deficient</option>
+                                            <option value="">Pilih Kategori IQ</option>
+                                            <option value="Very Superior" {{ old('psychological.iq_category') === 'Very Superior' ? 'selected' : '' }}>
+                                                Very Superior (119 ke atas)
+                                            </option>
+                                            <option value="Tinggi" {{ old('psychological.iq_category') === 'Tinggi' ? 'selected' : '' }}>
+                                                Tinggi (105 - 118)
+                                            </option>
+                                            <option value="Cukup" {{ old('psychological.iq_category') === 'Cukup' ? 'selected' : '' }}>
+                                                Cukup (100 - 104)
+                                            </option>
+                                            <option value="Sedang" {{ old('psychological.iq_category') === 'Sedang' ? 'selected' : '' }}>
+                                                Sedang (95 - 99)
+                                            </option>
+                                            <option value="Rendah" {{ old('psychological.iq_category') === 'Rendah' ? 'selected' : '' }}>
+                                                Rendah (81 - 94)
+                                            </option>
                                         </select>
                                     </div>
                                 </div>

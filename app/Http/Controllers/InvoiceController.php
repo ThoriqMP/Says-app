@@ -152,12 +152,11 @@ class InvoiceController extends Controller
      */
     public function edit(Invoice $invoice)
     {
-        $students = Siswa::all();
         $services = Layanan::all();
         $schoolProfile = ProfilSekolah::first();
-        $invoice->load(['invoiceDetails.layanan']);
+        $invoice->load(['invoiceDetails.layanan', 'siswa']);
 
-        return view('invoices.edit', compact('invoice', 'students', 'services', 'schoolProfile'));
+        return view('invoices.edit', compact('invoice', 'services', 'schoolProfile'));
     }
 
     /**
@@ -183,12 +182,22 @@ class InvoiceController extends Controller
         DB::beginTransaction();
 
         try {
-            $invoice->update([
+            $updateData = [
                 'id_siswa' => $request->id_siswa,
                 'tanggal_invoice' => $request->tanggal_invoice,
                 'jatuh_tempo' => $request->jatuh_tempo,
                 'status' => $request->status,
-            ]);
+            ];
+
+            // Cek jika bulan atau tahun berubah, generate nomor baru agar reset sesuai bulan
+            $oldDate = $invoice->tanggal_invoice;
+            $newDate = Carbon::parse($request->tanggal_invoice);
+
+            if ($oldDate->format('Y-m') !== $newDate->format('Y-m')) {
+                $updateData['no_invoice'] = Invoice::generateInvoiceNumber($newDate);
+            }
+
+            $invoice->update($updateData);
 
             $dueDate = Carbon::parse($request->jatuh_tempo);
             $dueMonthName = $this->getIndonesianMonthName($dueDate->month);

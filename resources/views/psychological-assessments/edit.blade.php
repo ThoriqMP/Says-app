@@ -98,6 +98,16 @@
                         </div>
                     </div>
 
+                    @php
+                        $cognitiveScaleOptions = [
+                            5 => 'A',
+                            4 => 'B',
+                            3 => 'C',
+                            2 => 'D',
+                            1 => 'E',
+                        ];
+                    @endphp
+
                     <!-- Asesmen Psikologis Inputs -->
                     <div class="mb-10 border-t pt-6">
                         <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">Data Asesmen Psikologis</h3>
@@ -117,9 +127,19 @@
                                         </div>
                                         <div>
                                             <label class="text-xs text-gray-500">Scale</label>
-                                            <input type="number" name="psychological[cognitive_{{ strtolower($aspect) }}_scale]" 
-                                                   value="{{ old('psychological.cognitive_'.strtolower($aspect).'_scale', $assessment->psychologicalAssessment->{'cognitive_'.strtolower($aspect).'_scale'} ?? '') }}"
-                                                   class="w-full px-2 py-1 text-sm border rounded">
+                                            @php
+                                                $scaleField = 'cognitive_'.strtolower($aspect).'_scale';
+                                                $currentScale = old('psychological.'.$scaleField, $assessment->psychologicalAssessment->{$scaleField} ?? null);
+                                            @endphp
+                                            <select name="psychological[{{ $scaleField }}]" 
+                                                    class="w-full px-2 py-1 text-sm border rounded bg-white dark:bg-gray-700">
+                                                <option value="">Pilih Skala</option>
+                                                @foreach($cognitiveScaleOptions as $val => $label)
+                                                    <option value="{{ $val }}" {{ (string) $currentScale === (string) $val ? 'selected' : '' }}>
+                                                        {{ $label }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
@@ -134,8 +154,9 @@
                                     <div class="text-sm font-medium mb-3">{{ $aspect }}</div>
                                     <div>
                                         <label class="text-xs text-gray-500">Score</label>
-                                        <input type="number" name="psychological[potential_{{ strtolower($aspect) }}_score]" 
+                                        <input type="text" name="psychological[potential_{{ strtolower($aspect) }}_score]" 
                                                value="{{ old('psychological.potential_'.strtolower($aspect).'_score', $assessment->psychologicalAssessment->{'potential_'.strtolower($aspect).'_score'} ?? '') }}"
+                                               placeholder="contoh: 2 atau (-) 3"
                                                class="w-full px-2 py-1 text-sm border rounded">
                                     </div>
                                 </div>
@@ -155,11 +176,21 @@
                                     </div>
                                     <div>
                                         <label class="block text-sm text-gray-700 mb-1">Category</label>
+                                        @php
+                                            $iqCurrent = old('psychological.iq_category', $assessment->psychologicalAssessment->iq_category ?? '');
+                                            $iqOptions = [
+                                                'Very Superior' => 'Very Superior (119 ke atas)',
+                                                'Tinggi' => 'Tinggi (105 - 118)',
+                                                'Cukup' => 'Cukup (100 - 104)',
+                                                'Sedang' => 'Sedang (95 - 99)',
+                                                'Rendah' => 'Rendah (81 - 94)',
+                                            ];
+                                        @endphp
                                         <select name="psychological[iq_category]" class="w-full px-3 py-2 border rounded-lg">
-                                            <option value="">Select Category</option>
-                                            @foreach(['Very Superior', 'Superior', 'High Average', 'Average', 'Low Average', 'Borderline', 'Intellectually Deficient'] as $cat)
-                                                <option value="{{ $cat }}" {{ (old('psychological.iq_category', $assessment->psychologicalAssessment->iq_category ?? '') == $cat) ? 'selected' : '' }}>
-                                                    {{ $cat }}
+                                            <option value="">Pilih Kategori IQ</option>
+                                            @foreach($iqOptions as $value => $label)
+                                                <option value="{{ $value }}" {{ (string) $iqCurrent === (string) $value ? 'selected' : '' }}>
+                                                    {{ $label }}
                                                 </option>
                                             @endforeach
                                         </select>
