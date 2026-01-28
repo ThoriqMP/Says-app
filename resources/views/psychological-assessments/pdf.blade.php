@@ -643,6 +643,8 @@
         <div class="content-wrapper">
             <div style="page-break-inside: avoid;">
 
+            <h2 style="color: #4c1d95; margin-bottom: 8px; font-size: 14pt; border-bottom: 2px solid #4c1d95; padding-bottom: 4px; display: inline-block;">PERSONAL MAPPING</h2>
+
             <table class="table" style="margin-bottom: 8px;">
                 <tr>
                     <!-- LEFT COLUMN: Personality & Love Language -->
@@ -844,8 +846,8 @@
             <!-- Signature -->
             <div class="signature-box">
                 <div style="font-size: 8.5pt; margin-bottom: 8px;">Bogor, {{ $assessment->test_date->format('d F Y') }}</div>
-                @if(!empty($signatureAmbu))
-                    <img src="{{ $signatureAmbu }}" style="height: 55px; margin-bottom: 4px;">
+                @if(!empty($signature))
+                    <img src="{{ $signature }}" style="height: 55px; margin-bottom: 4px;">
                 @else
                     <div style="height: 55px;"></div>
                 @endif
