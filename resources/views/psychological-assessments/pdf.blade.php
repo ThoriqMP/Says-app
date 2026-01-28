@@ -429,6 +429,7 @@
     <!-- DASHBOARD PAGE -->
     <div class="page page-break">
         <div class="content-wrapper">
+            <div style="page-break-inside: avoid;">
             <h2 style="color: #4c1d95; margin-bottom: 8px; font-size: 14pt; border-bottom: 2px solid #4c1d95; padding-bottom: 4px; display: inline-block;">HASIL PEMERIKSAAN</h2>
 
             @php
@@ -462,9 +463,9 @@
             @endphp
 
             @if($psych)
-            <div class="card" style="background-color: #E0F2FE; border-color: #bae6fd; margin-bottom: 12px;">
-                <div class="card-header" style="background-color: #0ea5e9; display: flex; align-items: center; gap: 4px;">
-                    <span style="display: inline-block; width: 10px; height: 10px; border-radius: 9999px; background-color: #e0f2fe; margin-right: 2px;"></span>
+            <div class="card" style="background-color: #F5F3FF; border-color: #e0e7ff; margin-bottom: 12px;">
+                <div class="card-header" style="background-color: #5b21b6; display: flex; align-items: center; gap: 4px;">
+                    <span style="display: inline-block; width: 10px; height: 10px; border-radius: 9999px; background-color: #F5F3FF; margin-right: 2px;"></span>
                     <span>ASPEK KOGNITIF & KLINIS</span>
                 </div>
                 <div class="card-body">
@@ -534,31 +535,31 @@
 
                                 <table style="width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 7.5pt;">
                                     <tr>
-                                        <th colspan="2" style="width: 40%; background-color: #bfdbfe; border: 1px solid #9ca3af; padding: 4px; text-align: center; font-weight: bold;">
+                                        <th colspan="2" style="width: 40%; background-color: #EDE9FE; border: 1px solid #c4b5fd; padding: 4px; text-align: center; font-weight: bold;">
                                             ASPEK POTENSI
                                         </th>
-                                        <th colspan="2" style="width: 60%; background-color: #bfdbfe; border: 1px solid #9ca3af; padding: 4px; text-align: center; font-weight: bold;">
+                                        <th colspan="2" style="width: 60%; background-color: #EDE9FE; border: 1px solid #c4b5fd; padding: 4px; text-align: center; font-weight: bold;">
                                             SKALA ASSESSMENT GRAFIS
                                         </th>
                                     </tr>
                                     <tr>
-                                        <th style="width: 30%; border: 1px solid #9ca3af; padding: 4px; text-align: left;">ASPEK</th>
-                                        <th style="width: 10%; border: 1px solid #9ca3af; padding: 4px; text-align: center;">SKOR</th>
-                                        <th style="width: 10%; border: 1px solid #9ca3af; padding: 4px; text-align: center;">KET</th>
-                                        <th style="width: 50%; border: 1px solid #9ca3af; padding: 4px; text-align: left;">KETERANGAN</th>
+                                        <th style="width: 30%; border: 1px solid #c4b5fd; padding: 4px; text-align: left;">ASPEK</th>
+                                        <th style="width: 10%; border: 1px solid #c4b5fd; padding: 4px; text-align: center;">SKOR</th>
+                                        <th style="width: 10%; border: 1px solid #c4b5fd; padding: 4px; text-align: center;">KET</th>
+                                        <th style="width: 50%; border: 1px solid #c4b5fd; padding: 4px; text-align: left;">KETERANGAN</th>
                                     </tr>
                                     <tr>
-                                        <td style="border: 1px solid #9ca3af; padding: 4px;">Intelektual (Original Scale)</td>
-                                        <td style="border: 1px solid #9ca3af; padding: 4px; text-align: center;">
+                                        <td style="border: 1px solid #c4b5fd; padding: 4px;">Intelektual (Original Scale)</td>
+                                        <td style="border: 1px solid #c4b5fd; padding: 4px; text-align: center;">
                                             {{ $formatPotential($psych->potential_intellectual_score ?? null) }}
                                         </td>
-                                        <td rowspan="3" style="border: 1px solid #9ca3af; padding: 4px; vertical-align: top; font-size: 7pt;">
+                                        <td rowspan="3" style="border: 1px solid #c4b5fd; padding: 4px; vertical-align: top; font-size: 7pt;">
                                             <div>3</div>
                                             <div>2</div>
                                             <div>1</div>
                                             <div>(-)</div>
                                         </td>
-                                        <td rowspan="3" style="border: 1px solid #9ca3af; padding: 4px; vertical-align: top; font-size: 7pt;">
+                                        <td rowspan="3" style="border: 1px solid #c4b5fd; padding: 4px; vertical-align: top; font-size: 7pt;">
                                             <div>= Berkembang Baik / Optimal</div>
                                             <div>= Cukup Berkembang</div>
                                             <div>= Kurang Berkembang</div>
@@ -566,14 +567,14 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td style="border: 1px solid #9ca3af; padding: 4px;">Sosial</td>
-                                        <td style="border: 1px solid #9ca3af; padding: 4px; text-align: center;">
+                                        <td style="border: 1px solid #c4b5fd; padding: 4px;">Sosial</td>
+                                        <td style="border: 1px solid #c4b5fd; padding: 4px; text-align: center;">
                                             {{ $formatPotential($psych->potential_social_score ?? null) }}
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td style="border: 1px solid #9ca3af; padding: 4px;">Emosional</td>
-                                        <td style="border: 1px solid #9ca3af; padding: 4px; text-align: center;">
+                                        <td style="border: 1px solid #c4b5fd; padding: 4px;">Emosional</td>
+                                        <td style="border: 1px solid #c4b5fd; padding: 4px; text-align: center;">
                                             {{ $formatPotential($psych->potential_emotional_score ?? null) }}
                                         </td>
                                     </tr>
@@ -582,12 +583,12 @@
                             <td style="width: 40%; vertical-align: top;">
                                 <table style="width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 7.5pt; margin-bottom: 6px;">
                                     <tr>
-                                        <th style="background-color: #bfdbfe; border: 1px solid #9ca3af; padding: 4px; text-align: center; font-weight: bold;">
+                                        <th style="background-color: #EDE9FE; border: 1px solid #c4b5fd; padding: 4px; text-align: center; font-weight: bold;">
                                             TARAF KECERDASAN (FULL SCALE)
                                         </th>
                                     </tr>
                                     <tr>
-                                        <td style="border: 1px solid #9ca3af; padding: 0;">
+                                        <td style="border: 1px solid #c4b5fd; padding: 0;">
                                             <table style="width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 7.2pt;">
                                                 @php
                                                     $iqCategory = trim((string) ($psych->iq_category ?? ''));
@@ -619,7 +620,7 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td style="border: 1px solid #9ca3af; padding: 4px; font-size: 7.2pt;">
+                                        <td style="border: 1px solid #c4b5fd; padding: 4px; font-size: 7.2pt;">
                                             Skor IQ: <strong>{{ $psych->iq_full_scale ?? '-' }}</strong>
                                         </td>
                                     </tr>
@@ -627,7 +628,7 @@
 
                                 <table style="width: 100%; border-collapse: collapse; table-layout: fixed; font-size: 7.5pt;">
                                     <tr>
-                                        <th style="background-color: #bfdbfe; border: 1px solid #9ca3af; padding: 4px; text-align: center; font-weight: bold;">
+                                        <th style="background-color: #EDE9FE; border: 1px solid #c4b5fd; padding: 4px; text-align: center; font-weight: bold;">
                                             TARAF KEMATANGAN PERKEMBANGAN<br>SESUAI TINGKAT USIA
                                         </th>
                                     </tr>
@@ -642,7 +643,7 @@
                                     @foreach($maturityRows as $row)
                                     <tr>
                                         @php $isActiveMaturity = strcasecmp($maturity, $row) === 0; @endphp
-                                        <td style="border: 1px solid #9ca3af; padding: 4px; {{ $isActiveMaturity ? 'background-color:#F5F3FF; font-weight:bold;' : '' }}">
+                                        <td style="border: 1px solid #c4b5fd; padding: 4px; {{ $isActiveMaturity ? 'background-color:#F5F3FF; font-weight:bold;' : '' }}">
                                             <span style="display: inline-block; width: 65%;">{{ $row }}</span>
                                             <span style="display: inline-block; width: 20%; text-align: center;">
                                                 @if($isActiveMaturity)
@@ -868,6 +869,7 @@
                 @endif
                 <div style="font-weight: bold; font-size: 9.5pt; text-decoration: underline;">Anggia Chrisanti, S.Psi, M.Psi, Psikolog</div>
                 <div style="font-size: 7.5pt;">No.SIAP HIMPSI 20250719</div>
+            </div>
             </div>
         </div>
     </div>
