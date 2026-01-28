@@ -41,12 +41,48 @@ class AuthController extends Controller
         if (Auth::attempt($credentials, $request->remember)) {
             $request->session()->regenerate();
 
-            return redirect()->intended('/dashboard');
+            return redirect()->intended($this->getRedirectPath());
         }
 
         return back()->withErrors([
             'email' => 'Email atau password salah.',
         ])->withInput();
+    }
+
+    /**
+     * Get redirect path based on user permissions
+     */
+    private function getRedirectPath()
+    {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
+        // Pimpinan always goes to dashboard
+        if ($user->isPimpinan()) {
+            return route('dashboard');
+        }
+
+        // Check permissions in priority order
+        $permissions = [
+            'dashboard' => 'dashboard',
+            'invoices.index' => 'invoices.index',
+            'assessments.index' => 'assessments.index',
+            'psychological-assessments.index' => 'psychological-assessments.index',
+            'family-mapping.index' => 'family-mapping.index',
+            'subjects.index' => 'subjects.index',
+            'students.index' => 'students.index',
+            'services.index' => 'services.index',
+            'school-profile.edit' => 'school-profile.edit',
+        ];
+
+        foreach ($permissions as $permission => $route) {
+            if ($user->hasPermission($permission)) {
+                return route($route);
+            }
+        }
+
+        // Fallback if no permissions (should not happen ideally)
+        return route('dashboard');
     }
 
     /**
