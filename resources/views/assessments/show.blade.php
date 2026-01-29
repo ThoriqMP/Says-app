@@ -143,12 +143,12 @@
                      @click.self="openPreview = false"
                      x-trap.noscroll="openPreview"
                      class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-                    <div class="bg-white w-full max-w-4xl mx-4 rounded-lg shadow-lg overflow-hidden">
-                        <div class="flex justify-between items-center px-4 py-2 border-b relative z-10">
-                            <h3 class="font-semibold">Preview Laporan</h3>
+                    <div class="bg-white dark:bg-gray-800 w-full max-w-4xl mx-4 rounded-lg shadow-lg overflow-hidden">
+                        <div class="flex justify-between items-center px-4 py-2 border-b dark:border-gray-700 relative z-10">
+                            <h3 class="font-semibold text-gray-900 dark:text-gray-100">Preview Laporan</h3>
                             <button type="button" @click="openPreview = false" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold bg-gray-500 text-white hover:bg-gray-600 transition">Tutup</button>
                         </div>
-                        <div class="p-4 max-h-[80vh] relative z-0">
+                        <div class="p-4 max-h-[80vh] relative z-0 bg-gray-100 dark:bg-gray-900">
                             <iframe 
                                 src="{{ route('assessments.pdf.view', $assessment) }}"
                                 class="w-full h-[70vh]"

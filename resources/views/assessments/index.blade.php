@@ -3,7 +3,7 @@
 @section('title', 'Asesmen Psikologi')
 
 @section('content')
-<div class="py-12 bg-gray-50 min-h-screen">
+<div class="py-12 bg-gray-50 dark:bg-gray-900 min-h-screen">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <!-- Header -->
@@ -18,7 +18,7 @@
                 <input type="text" 
                        name="search" 
                        value="{{ request('search') }}"
-                       class="w-full pl-11 pr-4 py-2.5 border border-gray-300 rounded-full text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400 transition shadow-sm" 
+                       class="w-full pl-11 pr-4 py-2.5 border border-gray-300 dark:border-gray-700 rounded-full text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 transition shadow-sm" 
                        placeholder="Pencarian nama subjek...">
             </form>
 
@@ -33,7 +33,7 @@
         </div>
 
         @if (session('success'))
-            <div class="mb-6 bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-xl flex items-center gap-2 shadow-sm">
+            <div class="mb-6 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 text-green-700 dark:text-green-400 px-4 py-3 rounded-xl flex items-center gap-2 shadow-sm">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                 </svg>
@@ -44,13 +44,13 @@
         <!-- Grid Cards -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6" x-data="{ openPreview: false, previewUrl: null }">
             @forelse($assessments as $assessment)
-                <div class="bg-white rounded-[20px] border border-gray-200 p-6 shadow-sm hover:shadow-md transition duration-200 flex flex-col">
+                <div class="bg-white dark:bg-gray-800 rounded-[20px] border border-gray-200 dark:border-gray-700 p-6 shadow-sm hover:shadow-md transition duration-200 flex flex-col">
                     
                     <!-- Row 1: Identitas & Usia -->
                     <div class="flex justify-between items-start mb-4">
                         <div>
-                            <h3 class="text-lg font-bold text-gray-900 leading-tight">{{ $assessment->subject->name }}</h3>
-                            <div class="flex items-center gap-1.5 mt-1 text-sm text-gray-500">
+                            <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 leading-tight">{{ $assessment->subject->name }}</h3>
+                            <div class="flex items-center gap-1.5 mt-1 text-sm text-gray-500 dark:text-gray-400">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
                                 </svg>
@@ -58,29 +58,29 @@
                             </div>
                         </div>
                         <div class="text-right">
-                            <div class="text-xs text-gray-500 font-medium mb-0.5">Usia</div>
+                            <div class="text-xs text-gray-500 dark:text-gray-400 font-medium mb-0.5">Usia</div>
                             <div class="flex items-baseline justify-end gap-1">
-                                <span class="text-2xl font-bold text-gray-900">{{ $assessment->subject->age ?? '-' }}</span>
-                                <span class="text-xs text-gray-500 font-medium">Tahun</span>
+                                <span class="text-2xl font-bold text-gray-900 dark:text-gray-100">{{ $assessment->subject->age ?? '-' }}</span>
+                                <span class="text-xs text-gray-500 dark:text-gray-400 font-medium">Tahun</span>
                             </div>
                         </div>
                     </div>
 
                     <!-- Row 2: Asesor & Status -->
-                    <div class="flex justify-between items-start mb-6 border-t border-gray-100 pt-4">
+                    <div class="flex justify-between items-start mb-6 border-t border-gray-100 dark:border-gray-700 pt-4">
                         <div>
-                            <div class="text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-1">Asesor</div>
+                            <div class="text-[10px] text-gray-400 dark:text-gray-500 font-bold uppercase tracking-wider mb-1">Asesor</div>
                             <div class="flex items-center gap-2">
-                                <div class="w-6 h-6 rounded-full bg-gray-100 flex items-center justify-center text-gray-500">
+                                <div class="w-6 h-6 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center text-gray-500 dark:text-gray-400">
                                     <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                                     </svg>
                                 </div>
-                                <span class="text-sm font-semibold text-gray-700">{{ $assessment->psychologist_name }}</span>
+                                <span class="text-sm font-semibold text-gray-700 dark:text-gray-300">{{ $assessment->psychologist_name }}</span>
                             </div>
                         </div>
                         <div class="text-right flex flex-col items-end">
-                            <div class="text-[10px] text-gray-400 font-bold uppercase tracking-wider mb-1">Status Kelengkapan</div>
+                            <div class="text-[10px] text-gray-400 dark:text-gray-500 font-bold uppercase tracking-wider mb-1">Status Kelengkapan</div>
                             <div class="flex flex-wrap justify-end gap-1.5 max-w-[200px]">
                                 @php
                                     $scores = $assessment->scores->groupBy('category');
@@ -114,7 +114,7 @@
                     </div>
 
                     <!-- Row 3: Action Buttons -->
-                    <div class="mt-auto grid grid-cols-4 gap-2 pt-4 border-t border-gray-100">
+                    <div class="mt-auto grid grid-cols-4 gap-2 pt-4 border-t border-gray-100 dark:border-gray-700">
                         <a href="{{ route('assessments.show', $assessment) }}" 
                            class="h-9 flex items-center justify-center gap-1.5 rounded-lg bg-slate-800 text-white hover:bg-slate-900 transition text-xs font-medium"
                            title="Lihat Detail">
@@ -159,14 +159,14 @@
                     </div>
                 </div>
             @empty
-                <div class="col-span-1 md:col-span-2 flex flex-col items-center justify-center py-12 px-4 border-2 border-dashed border-gray-300 rounded-[20px] bg-white text-center">
-                    <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4 text-gray-400">
+                <div class="col-span-1 md:col-span-2 flex flex-col items-center justify-center py-12 px-4 border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-[20px] bg-white dark:bg-gray-800 text-center">
+                    <div class="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mb-4 text-gray-400 dark:text-gray-500">
                         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
                         </svg>
                     </div>
-                    <h3 class="text-lg font-medium text-gray-900">Belum ada asesmen</h3>
-                    <p class="text-gray-500 mt-1 max-w-sm">Mulai dengan membuat asesmen baru untuk subjek.</p>
+                    <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">Belum ada asesmen</h3>
+                    <p class="text-gray-500 dark:text-gray-400 mt-1 max-w-sm">Mulai dengan membuat asesmen baru untuk subjek.</p>
                 </div>
             @endforelse
 
@@ -176,19 +176,19 @@
                  @click.self="openPreview = false; previewUrl = null"
                  x-trap.noscroll="openPreview"
                  class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-                <div class="bg-white w-full max-w-5xl mx-4 rounded-lg shadow-lg overflow-hidden">
-                    <div class="flex justify-between items-center px-4 py-2 border-b relative z-10">
-                        <h3 class="font-semibold">Preview PDF</h3>
+                <div class="bg-white dark:bg-gray-800 w-full max-w-5xl mx-4 rounded-lg shadow-lg overflow-hidden">
+                    <div class="flex justify-between items-center px-4 py-2 border-b dark:border-gray-700 relative z-10">
+                        <h3 class="font-semibold text-gray-900 dark:text-gray-100">Preview PDF</h3>
                         <button type="button"
                                 @click="openPreview = false; previewUrl = null"
-                                class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium bg-gray-100 text-gray-700 hover:bg-gray-200 transition">
+                                class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition">
                             <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                             </svg>
                             Tutup
                         </button>
                     </div>
-                    <div class="p-4 max-h-[85vh] relative z-0">
+                    <div class="p-4 max-h-[85vh] relative z-0 bg-gray-100 dark:bg-gray-900">
                         <iframe :src="previewUrl"
                                 class="w-full h-[75vh]"
                                 frameborder="0">

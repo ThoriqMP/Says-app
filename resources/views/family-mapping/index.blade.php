@@ -20,14 +20,14 @@
                 <form method="GET" action="{{ route('family-mapping.index') }}" class="mb-6">
                     <div class="relative max-w-lg">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="h-5 w-5 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                             </svg>
                         </div>
                         <input type="text" 
                                name="search" 
                                value="{{ request('search') }}"
-                               class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-lg leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-purple-500 focus:border-purple-500 sm:text-sm" 
+                               class="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg leading-5 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-purple-500 focus:border-purple-500 sm:text-sm" 
                                placeholder="Cari nama subjek...">
                     </div>
                 </form>
@@ -67,7 +67,7 @@
                         </div>
                     </div>
 
-                    <div x-cloak x-show="error" class="p-3 rounded-lg bg-red-50 text-red-700 border border-red-200">
+                    <div x-cloak x-show="error" class="p-3 rounded-lg bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400 border border-red-200 dark:border-red-800">
                         <span x-text="error"></span>
                     </div>
 
@@ -97,16 +97,16 @@
                      @click.self="openPreview = false; previewUrl = null"
                      x-trap.noscroll="openPreview"
                      class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-                    <div class="bg-white w-full max-w-5xl mx-4 rounded-lg shadow-lg overflow-hidden">
-                        <div class="flex justify-between items-center px-4 py-2 border-b relative z-10">
-                            <h3 class="font-semibold">Preview PDF</h3>
+                    <div class="bg-white dark:bg-gray-800 w-full max-w-5xl mx-4 rounded-lg shadow-lg overflow-hidden">
+                        <div class="flex justify-between items-center px-4 py-2 border-b dark:border-gray-700 relative z-10">
+                            <h3 class="font-semibold text-gray-900 dark:text-gray-100">Preview PDF</h3>
                             <button type="button"
                                     @click="openPreview = false; previewUrl = null"
                                     class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold bg-gray-500 text-white hover:bg-gray-600 transition">
                                 Tutup
                             </button>
                         </div>
-                        <div class="p-4 max-h-[85vh] relative z-0">
+                        <div class="p-4 max-h-[85vh] relative z-0 bg-gray-100 dark:bg-gray-900">
                             <iframe :src="previewUrl"
                                     class="w-full h-[75vh]"
                                     frameborder="0">

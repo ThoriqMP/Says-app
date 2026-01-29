@@ -70,42 +70,42 @@
 
                 <!-- Invoice Status Cards -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                    <div class="bg-white border border-blue-200 rounded-lg p-6">
+                    <div class="bg-white dark:bg-gray-800 border border-blue-200 dark:border-blue-800 rounded-lg p-6">
                         <div class="flex items-center justify-between">
                             <div>
-                                <p class="text-sm font-medium text-gray-600">Invoice Pending</p>
-                                <p class="text-2xl font-semibold text-blue-600">{{ $pendingInvoices }}</p>
+                                <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Invoice Pending</p>
+                                <p class="text-2xl font-semibold text-blue-600 dark:text-blue-400">{{ $pendingInvoices }}</p>
                             </div>
-                            <div class="bg-blue-100 rounded-full p-3">
-                                <svg class="h-6 w-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div class="bg-blue-100 dark:bg-blue-900/30 rounded-full p-3">
+                                <svg class="h-6 w-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                 </svg>
                             </div>
                         </div>
                     </div>
 
-                    <div class="bg-white border border-green-200 rounded-lg p-6">
+                    <div class="bg-white dark:bg-gray-800 border border-green-200 dark:border-green-800 rounded-lg p-6">
                         <div class="flex items-center justify-between">
                             <div>
-                                <p class="text-sm font-medium text-gray-600">Invoice Paid</p>
-                                <p class="text-2xl font-semibold text-green-600">{{ $paidInvoices }}</p>
+                                <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Invoice Paid</p>
+                                <p class="text-2xl font-semibold text-green-600 dark:text-green-400">{{ $paidInvoices }}</p>
                             </div>
-                            <div class="bg-green-100 rounded-full p-3">
-                                <svg class="h-6 w-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div class="bg-green-100 dark:bg-green-900/30 rounded-full p-3">
+                                <svg class="h-6 w-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                 </svg>
                             </div>
                         </div>
                     </div>
 
-                    <div class="bg-white border border-red-200 rounded-lg p-6">
+                    <div class="bg-white dark:bg-gray-800 border border-red-200 dark:border-red-800 rounded-lg p-6">
                         <div class="flex items-center justify-between">
                             <div>
-                                <p class="text-sm font-medium text-gray-600">Invoice Overdue</p>
-                                <p class="text-2xl font-semibold text-red-600">{{ $overdueInvoices }}</p>
+                                <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Invoice Overdue</p>
+                                <p class="text-2xl font-semibold text-red-600 dark:text-red-400">{{ $overdueInvoices }}</p>
                             </div>
-                            <div class="bg-red-100 rounded-full p-3">
-                                <svg class="h-6 w-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div class="bg-red-100 dark:bg-red-900/30 rounded-full p-3">
+                                <svg class="h-6 w-6 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
                                 </svg>
                             </div>
@@ -114,42 +114,42 @@
                 </div>
 
                 <!-- Quick Actions -->
-                <div class="bg-gray-50 rounded-lg p-6">
+                <div class="bg-gray-50 dark:bg-gray-700/30 rounded-lg p-6">
                     <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-4">Aksi Cepat</h3>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <a href="{{ route('invoices.create') }}" class="flex items-center p-4 bg-white rounded-lg shadow hover:shadow-md transition-shadow">
-                            <div class="bg-blue-100 rounded-full p-3 mr-4">
-                                <svg class="h-6 w-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <a href="{{ route('invoices.create') }}" class="flex items-center p-4 bg-white dark:bg-gray-800 rounded-lg shadow hover:shadow-md transition-shadow">
+                            <div class="bg-blue-100 dark:bg-blue-900/30 rounded-full p-3 mr-4">
+                                <svg class="h-6 w-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                                 </svg>
                             </div>
                             <div>
-                                <p class="font-medium text-gray-900">Buat Invoice</p>
-                                <p class="text-sm text-gray-500">Invoice baru untuk siswa</p>
+                                <p class="font-medium text-gray-900 dark:text-gray-100">Buat Invoice</p>
+                                <p class="text-sm text-gray-500 dark:text-gray-400">Invoice baru untuk siswa</p>
                             </div>
                         </a>
 
-                        <a href="{{ route('students.create') }}" class="flex items-center p-4 bg-white rounded-lg shadow hover:shadow-md transition-shadow">
-                            <div class="bg-green-100 rounded-full p-3 mr-4">
-                                <svg class="h-6 w-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <a href="{{ route('students.create') }}" class="flex items-center p-4 bg-white dark:bg-gray-800 rounded-lg shadow hover:shadow-md transition-shadow">
+                            <div class="bg-green-100 dark:bg-green-900/30 rounded-full p-3 mr-4">
+                                <svg class="h-6 w-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
                                 </svg>
                             </div>
                             <div>
-                                <p class="font-medium text-gray-900">Tambah Siswa</p>
-                                <p class="text-sm text-gray-500">Daftarkan siswa baru</p>
+                                <p class="font-medium text-gray-900 dark:text-gray-100">Tambah Siswa</p>
+                                <p class="text-sm text-gray-500 dark:text-gray-400">Daftarkan siswa baru</p>
                             </div>
                         </a>
 
-                        <a href="{{ route('services.create') }}" class="flex items-center p-4 bg-white rounded-lg shadow hover:shadow-md transition-shadow">
-                            <div class="bg-purple-100 rounded-full p-3 mr-4">
-                                <svg class="h-6 w-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <a href="{{ route('services.create') }}" class="flex items-center p-4 bg-white dark:bg-gray-800 rounded-lg shadow hover:shadow-md transition-shadow">
+                            <div class="bg-purple-100 dark:bg-purple-900/30 rounded-full p-3 mr-4">
+                                <svg class="h-6 w-6 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
                                 </svg>
                             </div>
                             <div>
-                                <p class="font-medium text-gray-900">Tambah Layanan</p>
-                                <p class="text-sm text-gray-500">Kelola jenis layanan</p>
+                                <p class="font-medium text-gray-900 dark:text-gray-100">Tambah Layanan</p>
+                                <p class="text-sm text-gray-500 dark:text-gray-400">Kelola jenis layanan</p>
                             </div>
                         </a>
                     </div>

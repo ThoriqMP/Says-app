@@ -16,14 +16,14 @@
                 </div>
 
                 @if ($errors->any())
-                    <div class="mb-4 bg-red-50 border border-red-200 rounded-lg p-4">
+                    <div class="mb-4 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 rounded-lg p-4">
                         <div class="flex">
-                            <svg class="h-5 w-5 text-red-400 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="h-5 w-5 text-red-400 dark:text-red-300 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                             </svg>
                             <div class="ml-3">
-                                <h3 class="text-sm font-medium text-red-800">Terjadi kesalahan</h3>
-                                <div class="mt-1 text-sm text-red-700">
+                                <h3 class="text-sm font-medium text-red-800 dark:text-red-200">Terjadi kesalahan</h3>
+                                <div class="mt-1 text-sm text-red-700 dark:text-red-300">
                                     @foreach ($errors->all() as $error)
                                         <p>{{ $error }}</p>
                                     @endforeach

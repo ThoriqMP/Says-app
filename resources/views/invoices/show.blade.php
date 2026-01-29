@@ -86,10 +86,10 @@
                             <div>
                                 <strong>Status:</strong> 
                                 <span class="px-2 py-1 rounded-full text-xs font-medium
-                                    @if($invoice->status == 'paid') bg-green-100 text-green-800
-                                    @elseif($invoice->status == 'sent') bg-blue-100 text-blue-800
-                                    @elseif($invoice->status == 'overdue') bg-red-100 text-red-800
-                                    @else bg-gray-100 text-gray-800
+                                    @if($invoice->status == 'paid') bg-green-100 dark:bg-green-900/50 text-green-800 dark:text-green-300
+                                    @elseif($invoice->status == 'sent') bg-blue-100 dark:bg-blue-900/50 text-blue-800 dark:text-blue-300
+                                    @elseif($invoice->status == 'overdue') bg-red-100 dark:bg-red-900/50 text-red-800 dark:text-red-300
+                                    @else bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-300
                                     @endif">
                                     {{ ucfirst($invoice->status) }}
                                 </span>

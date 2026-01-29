@@ -3,7 +3,7 @@
 @section('title', 'Data Subjek')
 
 @section('content')
-<div class="py-12 bg-gray-50 min-h-screen">
+<div class="py-12 bg-gray-50 dark:bg-gray-900 min-h-screen">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <!-- Header -->
@@ -53,7 +53,7 @@
         <!-- Grid Cards -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             @forelse($subjects as $subject)
-                <div class="bg-white rounded-[20px] border border-gray-200 p-6 shadow-sm hover:shadow-md transition duration-200 flex flex-col">
+                <div class="bg-white dark:bg-gray-800 rounded-[20px] border border-gray-200 dark:border-gray-700 p-6 shadow-sm hover:shadow-md transition duration-200 flex flex-col">
                     
                     <div class="flex justify-between items-start mb-4">
                         <div class="flex items-center gap-3">
@@ -61,27 +61,27 @@
                                 {{ substr($subject->name, 0, 1) }}
                             </div>
                             <div>
-                                <h3 class="text-lg font-bold text-gray-900 leading-tight">{{ $subject->name }}</h3>
-                                <div class="text-xs text-gray-500 mt-0.5">
+                                <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 leading-tight">{{ $subject->name }}</h3>
+                                <div class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
                                     {{ $subject->gender === 'male' ? 'Laki-laki' : ($subject->gender === 'female' ? 'Perempuan' : '-') }}
                                 </div>
                             </div>
                         </div>
                         <div class="text-right">
-                            <div class="text-xs text-gray-500 font-medium mb-0.5">Usia</div>
-                            <span class="text-xl font-bold text-gray-900">{{ $subject->age ?? '-' }}</span>
-                            <span class="text-[10px] text-gray-500">thn</span>
+                            <div class="text-xs text-gray-500 dark:text-gray-400 font-medium mb-0.5">Usia</div>
+                            <span class="text-xl font-bold text-gray-900 dark:text-gray-100">{{ $subject->age ?? '-' }}</span>
+                            <span class="text-[10px] text-gray-500 dark:text-gray-400">thn</span>
                         </div>
                     </div>
 
-                    <div class="space-y-2 mb-6 border-t border-gray-100 pt-4">
+                    <div class="space-y-2 mb-6 border-t border-gray-100 dark:border-gray-700 pt-4">
                         <div class="flex justify-between text-sm">
-                            <span class="text-gray-500">No. HP</span>
-                            <span class="font-medium text-gray-900">{{ $subject->phone ?? '-' }}</span>
+                            <span class="text-gray-500 dark:text-gray-400">No. HP</span>
+                            <span class="font-medium text-gray-900 dark:text-gray-100">{{ $subject->phone ?? '-' }}</span>
                         </div>
                         <div class="flex justify-between text-sm">
-                            <span class="text-gray-500">Jumlah Asesmen</span>
-                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
+                            <span class="text-gray-500 dark:text-gray-400">Jumlah Asesmen</span>
+                            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-300">
                                 {{ $subject->assessments_count ?? 0 }}
                             </span>
                         </div>
@@ -110,14 +110,14 @@
                     </div>
                 </div>
             @empty
-                <div class="col-span-full flex flex-col items-center justify-center py-12 px-4 border-2 border-dashed border-gray-300 rounded-[20px] bg-white text-center">
-                    <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4 text-gray-400">
+                <div class="col-span-full flex flex-col items-center justify-center py-12 px-4 border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-[20px] bg-white dark:bg-gray-800 text-center">
+                    <div class="w-16 h-16 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center mb-4 text-gray-400">
                         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
                         </svg>
                     </div>
-                    <h3 class="text-lg font-medium text-gray-900">Belum ada subjek</h3>
-                    <p class="text-gray-500 mt-1">Silakan tambahkan data subjek baru.</p>
+                    <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100">Belum ada subjek</h3>
+                    <p class="text-gray-500 dark:text-gray-400 mt-1">Silakan tambahkan data subjek baru.</p>
                 </div>
             @endforelse
         </div>

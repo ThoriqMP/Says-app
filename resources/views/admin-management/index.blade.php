@@ -20,7 +20,7 @@
                             <input type="text" 
                                    name="search" 
                                    value="{{ request('search') }}"
-                                   class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" 
+                                   class="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition dark:bg-gray-700 dark:text-gray-300 dark:placeholder-gray-400" 
                                    placeholder="Cari admin...">
                         </form>
 
@@ -94,12 +94,12 @@
                                 <div class="flex flex-wrap gap-2">
                                     @if(is_array($admin->permissions) && count($admin->permissions) > 0)
                                         @foreach(array_slice($admin->permissions, 0, 3) as $permission)
-                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-50 text-blue-700 border border-blue-100">
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 border border-blue-100 dark:border-blue-800">
                                                 {{ str_replace(['.index', '.edit'], '', $permission) }}
                                             </span>
                                         @endforeach
                                         @if(count($admin->permissions) > 3)
-                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-50 text-gray-600 border border-gray-200">
+                                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-50 dark:bg-gray-700 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-600">
                                                 +{{ count($admin->permissions) - 3 }} lainnya
                                             </span>
                                         @endif
