@@ -60,6 +60,10 @@ class FamilyMappingController extends Controller
         $ibuPersonality = $this->dominantAspects($ibu->scores, 'personality', $rank);
         $irisanPersonality = array_values(array_intersect($ayahPersonality, $ibuPersonality));
 
+        $ayahLearningStyle = $this->dominantAspects($ayah->scores, 'learning_style', $rank);
+        $ibuLearningStyle = $this->dominantAspects($ibu->scores, 'learning_style', $rank);
+        $irisanLearningStyle = array_values(array_intersect($ayahLearningStyle, $ibuLearningStyle));
+
         $ayahLoveLanguage = $this->dominantAspects($ayah->scores, 'love_language', $rank);
         $ibuLoveLanguage = $this->dominantAspects($ibu->scores, 'love_language', $rank);
         $irisanLoveLanguage = array_values(array_intersect($ayahLoveLanguage, $ibuLoveLanguage));
@@ -85,6 +89,9 @@ class FamilyMappingController extends Controller
             'ayahPersonality' => $ayahPersonality,
             'ibuPersonality' => $ibuPersonality,
             'irisanPersonality' => $irisanPersonality,
+            'ayahLearningStyle' => $ayahLearningStyle,
+            'ibuLearningStyle' => $ibuLearningStyle,
+            'irisanLearningStyle' => $irisanLearningStyle,
             'ayahLoveLanguage' => $ayahLoveLanguage,
             'ibuLoveLanguage' => $ibuLoveLanguage,
             'irisanLoveLanguage' => $irisanLoveLanguage,

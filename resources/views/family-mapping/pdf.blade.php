@@ -260,6 +260,17 @@
                                     @endif
                                 </div>
 
+                                <div class="mini-label">Learning Style (Dominan)</div>
+                                <div class="badge-wrap">
+                                    @if(!empty($ayahLearningStyle))
+                                        @foreach($ayahLearningStyle as $item)
+                                            <span class="badge">{{ $item }}</span>
+                                        @endforeach
+                                    @else
+                                        <span class="muted">-</span>
+                                    @endif
+                                </div>
+
                                 <div class="mini-label">Love Language (Dominan)</div>
                                 <div class="badge-wrap" style="margin-bottom: 0;">
                                     @if(!empty($ayahLoveLanguage))
@@ -289,6 +300,17 @@
                                     @endif
                                 </div>
 
+                                <div class="mini-label">Learning Style (Kesamaan)</div>
+                                <div class="badge-wrap">
+                                    @if(!empty($irisanLearningStyle))
+                                        @foreach($irisanLearningStyle as $item)
+                                            <span class="badge">{{ $item }}</span>
+                                        @endforeach
+                                    @else
+                                        <span class="muted">-</span>
+                                    @endif
+                                </div>
+
                                 <div class="mini-label">Love Language (Kesamaan)</div>
                                 <div class="badge-wrap" style="margin-bottom: 0;">
                                     @if(!empty($irisanLoveLanguage))
@@ -311,6 +333,17 @@
                                 <div class="badge-wrap">
                                     @if(!empty($ibuPersonality))
                                         @foreach($ibuPersonality as $item)
+                                            <span class="badge">{{ $item }}</span>
+                                        @endforeach
+                                    @else
+                                        <span class="muted">-</span>
+                                    @endif
+                                </div>
+
+                                <div class="mini-label">Learning Style (Dominan)</div>
+                                <div class="badge-wrap">
+                                    @if(!empty($ibuLearningStyle))
+                                        @foreach($ibuLearningStyle as $item)
                                             <span class="badge">{{ $item }}</span>
                                         @endforeach
                                     @else

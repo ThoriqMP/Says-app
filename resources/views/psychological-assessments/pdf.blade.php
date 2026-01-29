@@ -383,7 +383,7 @@
                 <table class="cover-header-table">
                     <tr>
                         <td class="align-top" style="width: 60%">
-                            <div class="cover-headline">LAPORAN<br>HASIL ASESMEN<br>PERSONAL MAPPING</div>
+                            <div class="cover-headline">LAPORAN<br>HASIL ASESMEN<br>PSIKOLOGIS</div>
                             <div class="cover-subheadline">DOKUMEN RAHASIA</div>
                         </td>
                         <td class="align-top text-right" style="width: 40%">
@@ -644,56 +644,82 @@
 
             </div>
             @endif
+
+            <!-- PERSONALITY SECTION (Moved Here) -->
+            <div style="margin-top: 15px; page-break-inside: avoid; width: 100%;">
+                 <h2 style="color: #4c1d95; margin-bottom: 8px; font-size: 14pt; border-bottom: 2px solid #4c1d95; padding-bottom: 4px; display: inline-block;">PERSONAL MAPPING</h2>
+                 
+                 <div class="card" style="background-color:rgba(245, 243, 255, 0.1); border-color:#e0e7ff;">
+                     <div class="card-header">PERSONALITY</div>
+                     <div class="card-body">
+                         @php
+                             $personalityScores = $assessment->scores->where('category', 'personality')->values();
+                         @endphp
+                         <table class="score-table">
+                             <tr>
+                                 <th style="text-align: left;">ASPEK</th>
+                                 @foreach($labels as $l) <th width="18">{{ $l }}</th> @endforeach
+                             </tr>
+                             @foreach($personalityScores as $s)
+                             <tr>
+                                 <td>{{ $s?->aspect_name ?? '' }}</td>
+                                 @foreach($labels as $l)
+                                 <td align="center">
+                                     <div class="score-box {{ $s && $s->label === $l ? 'active' : '' }}">
+                                         {{ $s && $s->label === $l ? 'X' : '' }}
+                                     </div>
+                                 </td>
+                                 @endforeach
+                             </tr>
+                             @endforeach
+                         </table>
+                     </div>
+                 </div>
+            </div>
+
             </div>
         </div>
     </div>
 
-    <div class="page page-break">
+    <!-- MERGED SECTION (Was Page 3) -->
+    <div class="page"> <!-- Removed page-break -->
         <div class="content-wrapper">
             <div style="page-break-inside: avoid;">
-
-            <h2 style="color: #4c1d95; margin-bottom: 8px; font-size: 14pt; border-bottom: 2px solid #4c1d95; padding-bottom: 4px; display: inline-block;">PERSONAL MAPPING</h2>
 
             <table class="table" style="margin-bottom: 8px;">
                 <tr>
                     <!-- LEFT COLUMN: Personality & Love Language -->
                     <td class="align-top" style="width: 55%; padding-right: 10px;">
                         
-                        <!-- Personality Card -->
-                        <div class="card" style="background-color:#F5F3FF; border-color:#e0e7ff;">
-                            <div class="card-header">PERSONALITY</div>
-                            <div class="card-body">
-                                @php
-                                    $personalityScores = $assessment->scores->where('category', 'personality')->values();
-                                @endphp
-                                <table class="score-table">
-                                    <tr>
-                                        <th style="text-align: left;">ASPEK</th>
-                                        @foreach($labels as $l) <th width="18">{{ $l }}</th> @endforeach
-                                    </tr>
-                                    @foreach($personalityScores as $s)
-                                    <tr>
-                                        <td>{{ $s?->aspect_name ?? '' }}</td>
-                                        @foreach($labels as $l)
-                                        <td align="center">
-                                            <div class="score-box {{ $s && $s->label === $l ? 'active' : '' }}">
-                                                {{ $s && $s->label === $l ? 'X' : '' }}
-                                            </div>
-                                        </td>
-                                        @endforeach
-                                    </tr>
-                                    @endforeach
-                                </table>
-                            </div>
-                        </div>
+                        <!-- Personality Card Moved to Previous Section -->
 
                         <!-- Learning Style Card -->
-                        <div class="card" style="background-color:#F5F3FF; border-color:#e0e7ff;">
+                        <div class="card" style="background-color:rgba(245, 243, 255, 0.1); border-color:#e0e7ff;">
                             <div class="card-header">LEARNING STYLE</div>
                             <div class="card-body">
                                 @php
                                     $learningStyleScores = $assessment->scores->where('category', 'learning_style')->values();
+                                    
+                                    // Calculate Dominant Learning Style
+                                    $lsDominants = [];
+                                    $lsPriorities = ['SD', 'D', 'AD'];
+                                    foreach($lsPriorities as $prio) {
+                                        $found = $learningStyleScores->where('label', $prio)->pluck('aspect_name')->all();
+                                        if(!empty($found)) {
+                                            $lsDominants = array_merge($lsDominants, $found);
+                                        }
+                                    }
                                 @endphp
+
+                                @if(!empty($lsDominants))
+                                <div style="margin-bottom: 10px; padding: 8px; background-color: rgba(255,255,255,0.5); border-radius: 6px; border: 1px solid #e0e7ff;">
+                                    <div style="font-size: 8pt; font-weight: bold; color: #4c1d95; margin-bottom: 4px;">DOMINAN:</div>
+                                    <div style="font-size: 8.5pt; color: #374151;">
+                                        {{ implode(', ', $lsDominants) }}
+                                    </div>
+                                </div>
+                                @endif
+
                                 <table class="score-table">
                                     <tr>
                                         <th style="text-align: left;">ASPEK</th>
@@ -716,7 +742,7 @@
                         </div>
 
                         <!-- Love Language Card -->
-                        <div class="card" style="background-color:#F5F3FF; border-color:#e0e7ff;">
+                        <div class="card" style="background-color:rgba(245, 243, 255, 0.1); border-color:#e0e7ff;">
                             <div class="card-header">LOVE LANGUAGE</div>
                             <div class="card-body">
                                 @php
@@ -749,7 +775,7 @@
                     <td class="align-top" style="width: 45%;">
                         
                         <!-- MI Card -->
-                        <div class="card" style="background-color:#F5F3FF; border-color:#e0e7ff;">
+                        <div class="card" style="background-color:rgba(245, 243, 255, 0.1); border-color:#e0e7ff;">
                             <div class="card-header">MULTIPLE INTELLIGENCE</div>
                             <div class="card-body">
                                 @php
@@ -838,7 +864,7 @@
             </table>
 
             <!-- Talents Mapping Card -->
-            <div class="card" style="background-color:#F5F3FF; border-color:#e0e7ff;">
+            <div class="card" style="background-color:rgba(245, 243, 255, 0.1); border-color:#e0e7ff;">
                 <div class="card-header">TALENTS MAPPING ANALYSIS</div>
                 <div class="card-body">
                     <table class="table tm-table" style="font-size: 8.5pt;">
@@ -881,7 +907,7 @@
             </div>
 
             <!-- Conclusion & Recommendation Card -->
-            <div class="card" style="background-color:#F5F3FF; border-color:#e0e7ff;">
+            <div class="card" style="background-color:rgba(245, 243, 255, 0.1); border-color:#e0e7ff;">
                 <div class="card-header">KESIMPULAN & REKOMENDASI</div>
                 <div class="card-body">
                     <div style="margin-bottom: 10px;">
