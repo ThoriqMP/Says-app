@@ -40,7 +40,7 @@
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Subjek</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Usia</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Tanggal Tes</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Psikolog</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Asesor</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Aksi</th>
                             </tr>
                         </thead>
@@ -48,16 +48,55 @@
                             @forelse($assessments as $assessment)
                                 <tr>
                                     <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-gray-100">
-                                        {{ $assessment->subject->name }}
-                                        @if($assessment->psychologicalAssessment)
-                                            <span class="ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800">
-                                                Lengkap
+                                        <div class="mb-2">{{ $assessment->subject->name }}</div>
+                                        
+                                        @php
+                                            $p = $assessment->psychologicalAssessment;
+                                            $scores = $assessment->scores->groupBy('category');
+                                            $tm = $assessment->talentsMapping;
+
+                                            // 1. Psikologis: Kognitif, Potensi, IQ, Kematangan
+                                            $isPsikologisComplete = $p && 
+                                                                    $p->cognitive_verbal_score && 
+                                                                    $p->potential_intellectual_score && 
+                                                                    $p->iq_category && 
+                                                                    $p->maturity_recommendation;
+                                            
+                                            // 2. Personal Mapping: Personality, Learning Style, Love Language
+                                            $isPersonalMappingComplete = isset($scores['personality']) && 
+                                                                         isset($scores['learning_style']) && 
+                                                                         isset($scores['love_language']);
+                                            
+                                            // 3. Talent Mapping: Brain, Social, Skill, Strengths, Deficits
+                                            $isTalentMappingComplete = $tm && 
+                                                                       $tm->brain_dominance && 
+                                                                       $tm->social_dominance && 
+                                                                       $tm->skill_dominance && 
+                                                                       $tm->strengths && 
+                                                                       $tm->deficits;
+
+                                            // 4. Rekomendasi
+                                            $isRekomendasiComplete = $p && !empty($p->job_recommendation);
+                                        @endphp
+
+                                        <div class="flex flex-wrap gap-1">
+                                            <!-- Pill 1: Psikologis -->
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium {{ $isPsikologisComplete ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800' }}">
+                                                Psikologis
                                             </span>
-                                        @else
-                                            <span class="ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-yellow-100 text-yellow-800">
-                                                Belum Ada Data Kognitif
+                                            <!-- Pill 2: Personal Mapping -->
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium {{ $isPersonalMappingComplete ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800' }}">
+                                                Personal Mapping
                                             </span>
-                                        @endif
+                                            <!-- Pill 3: Talent Mapping -->
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium {{ $isTalentMappingComplete ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800' }}">
+                                                Talent Mapping
+                                            </span>
+                                            <!-- Pill 4: Rekomendasi -->
+                                            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium {{ $isRekomendasiComplete ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800' }}">
+                                                Rekomendasi
+                                            </span>
+                                        </div>
                                     </td>
                                     <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-100">
                                         {{ $assessment->subject->precise_age }}

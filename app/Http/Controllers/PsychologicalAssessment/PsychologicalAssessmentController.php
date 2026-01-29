@@ -19,7 +19,7 @@ class PsychologicalAssessmentController extends Controller
     {
         // Menampilkan semua asesmen (Personal Mapping)
         // User ingin bisa mengambil data dari asesmen personal mapping yang sudah ada
-        $assessments = Assessment::with(['subject', 'psychologicalAssessment'])
+        $assessments = Assessment::with(['subject', 'psychologicalAssessment', 'scores', 'talentsMapping'])
             ->latest('test_date')
             ->paginate(10);
 
@@ -65,12 +65,14 @@ class PsychologicalAssessmentController extends Controller
             'psychological.potential_intellectual_score' => 'nullable|string',
             'psychological.potential_social_score' => 'nullable|string',
             'psychological.potential_emotional_score' => 'nullable|string',
-            'psychological.iq_full_scale' => 'nullable|string',
+            // 'psychological.iq_full_scale' => 'nullable|string', // Removed manual input
             'psychological.iq_category' => 'nullable|string',
             'psychological.maturity_recommendation' => 'nullable|string',
+            'psychological.job_recommendation' => 'nullable|string',
 
             // Existing Assessment Data (Personality, MI, TM, etc.)
             'personality' => 'nullable|array',
+            'learning_style' => 'nullable|array',
             'love_language' => 'nullable|array',
             'multiple_intelligence' => 'nullable|array',
             'talents' => 'nullable|array',
@@ -93,6 +95,8 @@ class PsychologicalAssessmentController extends Controller
             $psychological['potential_intellectual_score'] = $this->parsePotentialScore($psychological['potential_intellectual_score'] ?? null);
             $psychological['potential_social_score'] = $this->parsePotentialScore($psychological['potential_social_score'] ?? null);
             $psychological['potential_emotional_score'] = $this->parsePotentialScore($psychological['potential_emotional_score'] ?? null);
+            // Derive IQ Range/Scale from Category logic if needed (or just leave null)
+            // $psychological['iq_full_scale'] = null; 
 
             $assessment->psychologicalAssessment()->updateOrCreate(
                 ['assessment_id' => $assessment->id],
@@ -103,7 +107,7 @@ class PsychologicalAssessmentController extends Controller
         // Sync Scores (Delete old and re-insert for simplicity or update)
         // Only delete scores for categories we are updating to avoid deleting other potential data
         $assessment->scores()
-            ->whereIn('category', ['personality', 'love_language', 'multiple_intelligence'])
+            ->whereIn('category', ['personality', 'learning_style', 'love_language', 'multiple_intelligence'])
             ->delete();
 
         $scoresPayload = [];
@@ -111,6 +115,16 @@ class PsychologicalAssessmentController extends Controller
             $scoresPayload[] = [
                 'assessment_id' => $assessment->id,
                 'category' => 'personality',
+                'aspect_name' => $aspect,
+                'score_value' => null,
+                'label' => $label,
+            ];
+        }
+
+        foreach ($data['learning_style'] ?? [] as $aspect => $label) {
+            $scoresPayload[] = [
+                'assessment_id' => $assessment->id,
+                'category' => 'learning_style',
                 'aspect_name' => $aspect,
                 'score_value' => null,
                 'label' => $label,
@@ -183,12 +197,14 @@ class PsychologicalAssessmentController extends Controller
             'psychological.potential_intellectual_score' => 'nullable|string',
             'psychological.potential_social_score' => 'nullable|string',
             'psychological.potential_emotional_score' => 'nullable|string',
-            'psychological.iq_full_scale' => 'nullable|string',
+            // 'psychological.iq_full_scale' => 'nullable|string', // Removed
             'psychological.iq_category' => 'nullable|string',
             'psychological.maturity_recommendation' => 'nullable|string',
+            'psychological.job_recommendation' => 'nullable|string',
 
             // Existing Assessment Data (Personality, MI, TM, etc.)
             'personality' => 'nullable|array',
+            'learning_style' => 'nullable|array',
             'love_language' => 'nullable|array',
             'multiple_intelligence' => 'nullable|array',
             'talents' => 'nullable|array',
@@ -224,13 +240,23 @@ class PsychologicalAssessmentController extends Controller
             PsychologicalAssessment::create($psychData);
         }
 
-        // Save Scores (Personality, Love Language, MI)
+        // Save Scores (Personality, Learning Style, Love Language, MI)
         $scoresPayload = [];
 
         foreach ($data['personality'] ?? [] as $aspect => $label) {
             $scoresPayload[] = [
                 'assessment_id' => $assessment->id,
                 'category' => 'personality',
+                'aspect_name' => $aspect,
+                'score_value' => null,
+                'label' => $label,
+            ];
+        }
+
+        foreach ($data['learning_style'] ?? [] as $aspect => $label) {
+            $scoresPayload[] = [
+                'assessment_id' => $assessment->id,
+                'category' => 'learning_style',
                 'aspect_name' => $aspect,
                 'score_value' => null,
                 'label' => $label,

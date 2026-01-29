@@ -595,9 +595,18 @@
 
                             <!-- IQ Badge -->
                             <div style="background-color: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px 10px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); margin-bottom: 15px;">
-                                <div style="font-size: 10pt; font-weight: bold; color: #6b7280; text-transform: uppercase; margin-bottom: 5px;">IQ</div>
-                                <div style="font-size: 32pt; font-weight: 800; color: #111827; line-height: 1; margin-bottom: 5px;">
-                                    {{ $psych->iq_full_scale ?? '-' }}
+                                <div style="font-size: 10pt; font-weight: bold; color: #6b7280; text-transform: uppercase; margin-bottom: 5px;">Rentang IQ</div>
+                                @php
+                                    $iqCategory = $psych->iq_category ?? null;
+                                    $iqRange = '-';
+                                    if ($iqCategory === 'Very Superior') $iqRange = '119 - Ke atas';
+                                    elseif ($iqCategory === 'Tinggi') $iqRange = '105 - 118';
+                                    elseif ($iqCategory === 'Cukup') $iqRange = '100 - 104';
+                                    elseif ($iqCategory === 'Sedang') $iqRange = '95 - 99';
+                                    elseif ($iqCategory === 'Rendah') $iqRange = '81 - 94';
+                                @endphp
+                                <div style="font-size: 24pt; font-weight: 800; color: #111827; line-height: 1; margin-bottom: 5px;">
+                                    {{ $iqRange }}
                                 </div>
                                 <div style="font-size: 11pt; font-weight: bold; color: #111827;">
                                     {{ $psych->iq_category ?? '-' }}
@@ -663,6 +672,34 @@
                                         @foreach($labels as $l) <th width="18">{{ $l }}</th> @endforeach
                                     </tr>
                                     @foreach($personalityScores as $s)
+                                    <tr>
+                                        <td>{{ $s?->aspect_name ?? '' }}</td>
+                                        @foreach($labels as $l)
+                                        <td align="center">
+                                            <div class="score-box {{ $s && $s->label === $l ? 'active' : '' }}">
+                                                {{ $s && $s->label === $l ? 'X' : '' }}
+                                            </div>
+                                        </td>
+                                        @endforeach
+                                    </tr>
+                                    @endforeach
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Learning Style Card -->
+                        <div class="card" style="background-color:#F5F3FF; border-color:#e0e7ff;">
+                            <div class="card-header">LEARNING STYLE</div>
+                            <div class="card-body">
+                                @php
+                                    $learningStyleScores = $assessment->scores->where('category', 'learning_style')->values();
+                                @endphp
+                                <table class="score-table">
+                                    <tr>
+                                        <th style="text-align: left;">ASPEK</th>
+                                        @foreach($labels as $l) <th width="18">{{ $l }}</th> @endforeach
+                                    </tr>
+                                    @foreach($learningStyleScores as $s)
                                     <tr>
                                         <td>{{ $s?->aspect_name ?? '' }}</td>
                                         @foreach($labels as $l)
@@ -840,6 +877,23 @@
                             </td>
                         </tr>
                     </table>
+                </div>
+            </div>
+
+            <!-- Conclusion & Recommendation Card -->
+            <div class="card" style="background-color:#F5F3FF; border-color:#e0e7ff;">
+                <div class="card-header">KESIMPULAN & REKOMENDASI</div>
+                <div class="card-body">
+                    <div style="margin-bottom: 10px;">
+                        <div style="font-weight: bold; font-size: 9pt; color: #4c1d95; margin-bottom: 4px;">Rekomendasi Pekerjaan:</div>
+                        <div style="font-size: 9pt; color: #374151; white-space: pre-wrap;">{{ $psych->job_recommendation ?? '-' }}</div>
+                    </div>
+                    <div>
+                        <div style="font-weight: bold; font-size: 9pt; color: #4c1d95; margin-bottom: 4px;">Saran yang membutuhkan penanganan terapeutik (asesemen kasuistik, konseling & terapi):</div>
+                        <div style="font-size: 9pt; color: #374151;">
+                            Menyelesaikan hambatan-hambatan emosi dan sosialnya, dan mengembangkan diri pada aktivitas yang disukai serta sesuai potensi.
+                        </div>
+                    </div>
                 </div>
             </div>
 

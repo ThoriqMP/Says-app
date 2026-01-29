@@ -101,7 +101,7 @@
                                            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Psikolog</label>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Asesor</label>
                                     <input type="text" name="psychologist_name" x-model="form.psychologist_name"
                                            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
                                 </div>
@@ -175,11 +175,6 @@
                                 <h4 class="text-md font-medium text-gray-700 dark:text-gray-300 mb-3">Taraf Kecerdasan (Full Scale)</h4>
                                 <div class="space-y-3">
                                     <div>
-                                        <label class="block text-sm text-gray-700 dark:text-gray-300 mb-1">IQ Score</label>
-                                        <input type="text" name="psychological[iq_full_scale]" placeholder="e.g. 110"
-                                               class="w-full px-3 py-2 border rounded-lg">
-                                    </div>
-                                    <div>
                                         <label class="block text-sm text-gray-700 dark:text-gray-300 mb-1">Category</label>
                                         <select name="psychological[iq_category]" class="w-full px-3 py-2 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
                                             <option value="">Pilih Kategori IQ</option>
@@ -232,6 +227,31 @@
                                             <label class="inline-flex items-center">
                                                 <input type="radio" 
                                                        name="personality[{{ $aspect }}]"
+                                                       value="{{ $label }}"
+                                                       class="text-blue-600 border-gray-300 focus:ring-blue-500">
+                                                <span class="ml-1 text-xs">{{ $label }}</span>
+                                            </label>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+
+                    <div class="mb-10">
+                        <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">Learning Style</h3>
+                        <div class="space-y-4">
+                            @php
+                                $learningAspects = ['Visual', 'Auditory', 'Kinestetik'];
+                            @endphp
+                            @foreach($learningAspects as $aspect)
+                                <div>
+                                    <div class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{{ $aspect }}</div>
+                                    <div class="flex flex-wrap gap-3">
+                                        @foreach($labels as $label)
+                                            <label class="inline-flex items-center">
+                                                <input type="radio" 
+                                                       name="learning_style[{{ $aspect }}]"
                                                        value="{{ $label }}"
                                                        class="text-blue-600 border-gray-300 focus:ring-blue-500">
                                                 <span class="ml-1 text-xs">{{ $label }}</span>
@@ -344,6 +364,16 @@
                         </div>
                     </div>
 
+                    <div class="mb-10">
+                        <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">Kesimpulan & Rekomendasi</h3>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Rekomendasi Pekerjaan</label>
+                            <textarea name="psychological[job_recommendation]" rows="4"
+                                      class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                                      placeholder="Tuliskan rekomendasi pekerjaan di sini..."></textarea>
+                        </div>
+                    </div>
+
                     <div class="flex justify-end">
                         <button type="submit" 
                                 class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition w-full sm:w-auto">
@@ -361,14 +391,14 @@
 function assessmentForm() {
     return {
         form: {
-            subject_id: {{ Illuminate\Support\Js::from(old('subject_id')) }},
-            new_subject_name: {{ Illuminate\Support\Js::from(old('new_subject_name')) }},
-            new_subject_dob: {{ Illuminate\Support\Js::from(old('new_subject_dob')) }},
+            subject_id: @json(old('subject_id')),
+            new_subject_name: @json(old('new_subject_name')),
+            new_subject_dob: @json(old('new_subject_dob')),
             calculated_age: '',
-            new_subject_gender: {{ Illuminate\Support\Js::from(old('new_subject_gender')) }},
-            new_subject_phone: {{ Illuminate\Support\Js::from(old('new_subject_phone')) }},
-            test_date: {{ Illuminate\Support\Js::from(old('test_date', date('Y-m-d'))) }},
-            psychologist_name: {{ Illuminate\Support\Js::from(old('psychologist_name')) }},
+            new_subject_gender: @json(old('new_subject_gender')),
+            new_subject_phone: @json(old('new_subject_phone')),
+            test_date: @json(old('test_date', date('Y-m-d'))),
+            psychologist_name: @json(old('psychologist_name')),
         },
         mi: {},
         calculateAge() {
@@ -396,50 +426,4 @@ function assessmentForm() {
 }
 </script>
 @endpush
-    <script>
-        function assessmentForm() {
-            return {
-                form: {
-                    subject_id: '',
-                    new_subject_name: '',
-                    new_subject_dob: '',
-                    new_subject_gender: '',
-                    new_subject_phone: '',
-                    test_date: new Date().toISOString().split('T')[0],
-                    psychologist_name: 'Anggia Chrisanti, S.Psi, M.Psi, Psikolog',
-                    calculated_age: '',
-                },
-                mi: {},
-                submitForm(e) {
-                    e.target.submit();
-                },
-                calculateAge() {
-                    if (!this.form.new_subject_dob) {
-                        this.form.calculated_age = '';
-                        return;
-                    }
-                    const dob = new Date(this.form.new_subject_dob);
-                    const now = new Date();
-                    
-                    let years = now.getFullYear() - dob.getFullYear();
-                    let months = now.getMonth() - dob.getMonth();
-                    let days = now.getDate() - dob.getDate();
-
-                    if (days < 0) {
-                        months--;
-                        // Get days in previous month
-                        const prevMonth = new Date(now.getFullYear(), now.getMonth(), 0);
-                        days += prevMonth.getDate();
-                    }
-
-                    if (months < 0) {
-                        years--;
-                        months += 12;
-                    }
-
-                    this.form.calculated_age = `${years} thn ${months} bln ${days} hari`;
-                }
-            }
-        }
-    </script>
 @endsection

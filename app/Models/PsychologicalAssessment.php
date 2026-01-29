@@ -18,6 +18,7 @@ class PsychologicalAssessment extends Model
         'iq_full_scale',
         'iq_category',
         'maturity_recommendation',
+        'job_recommendation',
     ];
 
     public function assessment()

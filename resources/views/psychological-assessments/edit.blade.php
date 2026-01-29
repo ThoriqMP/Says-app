@@ -90,7 +90,7 @@
                                            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Psikolog</label>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Asesor</label>
                                     <input type="text" name="psychologist_name" x-model="form.psychologist_name"
                                            class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
                                 </div>
@@ -169,12 +169,6 @@
                                 <h4 class="text-md font-medium text-gray-700 dark:text-gray-300 mb-3">Taraf Kecerdasan (Full Scale)</h4>
                                 <div class="space-y-3">
                                     <div>
-                                        <label class="block text-sm text-gray-700 dark:text-gray-300 mb-1">IQ Score</label>
-                                        <input type="text" name="psychological[iq_full_scale]" placeholder="e.g. 110"
-                                               value="{{ old('psychological.iq_full_scale', $assessment->psychologicalAssessment->iq_full_scale ?? '') }}"
-                                               class="w-full px-3 py-2 border rounded-lg">
-                                    </div>
-                                    <div>
                                         <label class="block text-sm text-gray-700 dark:text-gray-300 mb-1">Category</label>
                                         @php
                                             $iqCurrent = old('psychological.iq_category', $assessment->psychologicalAssessment->iq_category ?? '');
@@ -231,6 +225,32 @@
                                                        name="personality[{{ $aspect }}]"
                                                        value="{{ $label }}"
                                                        {{ (old('personality.'.$aspect, $scores['personality'][$aspect] ?? '') == $label) ? 'checked' : '' }}
+                                                       class="text-blue-600 border-gray-300 focus:ring-blue-500">
+                                                <span class="ml-1 text-xs">{{ $label }}</span>
+                                            </label>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+
+                    <div class="mb-10">
+                        <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">Learning Style</h3>
+                        <div class="space-y-4">
+                            @php
+                                $learningAspects = ['Visual', 'Auditory', 'Kinestetik'];
+                            @endphp
+                            @foreach($learningAspects as $aspect)
+                                <div>
+                                    <div class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{{ $aspect }}</div>
+                                    <div class="flex flex-wrap gap-3">
+                                        @foreach($labels as $label)
+                                            <label class="inline-flex items-center">
+                                                <input type="radio" 
+                                                       name="learning_style[{{ $aspect }}]"
+                                                       value="{{ $label }}"
+                                                       {{ (old('learning_style.'.$aspect, $scores['learning_style'][$aspect] ?? '') == $label) ? 'checked' : '' }}
                                                        class="text-blue-600 border-gray-300 focus:ring-blue-500">
                                                 <span class="ml-1 text-xs">{{ $label }}</span>
                                             </label>
@@ -345,6 +365,16 @@
                                        value="{{ old('talents.personal_branding', $assessment->talentsMapping->personal_branding ?? '') }}"
                                        class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
                             </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-10">
+                        <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">Kesimpulan & Rekomendasi</h3>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Rekomendasi Pekerjaan</label>
+                            <textarea name="psychological[job_recommendation]" rows="4"
+                                      class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                                      placeholder="Tuliskan rekomendasi pekerjaan di sini...">{{ old('psychological.job_recommendation', $assessment->psychologicalAssessment->job_recommendation ?? '') }}</textarea>
                         </div>
                     </div>
 
