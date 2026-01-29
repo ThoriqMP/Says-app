@@ -366,9 +366,12 @@
     </style>
 </head>
 <body>
+    @if(!empty($logoProsekar))
     <div class="watermark">
-        <img src="https://drive.google.com/file/d/1B8MuPYldtZeiOAPTYuhwsWmSaNnDhXEz/view" alt="Watermark">
+        <img src="{{ $logoProsekar }}" alt="Watermark">
     </div>
+    @endif
+
     <!-- COVER PAGE -->
     <div class="page cover-page">
         <div class="cover-content">
