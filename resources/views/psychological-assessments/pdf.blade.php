@@ -911,7 +911,7 @@
                 <div class="card-header">KESIMPULAN & REKOMENDASI</div>
                 <div class="card-body">
                     <div style="margin-bottom: 10px;">
-                        <div style="font-weight: bold; font-size: 9pt; color: #4c1d95; margin-bottom: 4px;">Rekomendasi Pekerjaan:</div>
+                        <div style="font-weight: bold; font-size: 9pt; color: #4c1d95; margin-bottom: 4px;">Rekomendasi atas penelusuran potensi bakat dan minat:</div>
                         <div style="font-size: 9pt; color: #374151; white-space: pre-wrap;">{{ $psych->job_recommendation ?? '-' }}</div>
                     </div>
                     <div>
@@ -925,7 +925,7 @@
 
             <!-- Signature -->
             <div class="signature-box">
-                <div style="font-size: 8.5pt; margin-bottom: 8px;">Bogor, {{ $assessment->test_date->format('d F Y') }}</div>
+                <div style="font-size: 8.5pt; margin-bottom: 0px;">Bogor, {{ $assessment->test_date->format('d F Y') }}</div>
                 @if(!empty($signature))
                     <img src="{{ $signature }}" style="height: 55px; margin-bottom: 4px;">
                 @else
