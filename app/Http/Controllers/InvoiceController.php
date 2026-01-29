@@ -27,7 +27,7 @@ class InvoiceController extends Controller
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function($q) use ($search) {
-                $q->where('nomor_invoice', 'like', "%{$search}%")
+                $q->where('no_invoice', 'like', "%{$search}%")
                   ->orWhereHas('siswa', function($subQ) use ($search) {
                       $subQ->where('nama_siswa', 'like', "%{$search}%")
                            ->orWhere('nama_orang_tua', 'like', "%{$search}%");
