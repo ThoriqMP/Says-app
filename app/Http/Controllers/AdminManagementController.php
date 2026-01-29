@@ -21,9 +21,19 @@ class AdminManagementController extends Controller
         'school-profile.edit' => 'Profil Sekolah',
     ];
 
-    public function index()
+    public function index(Request $request)
     {
-        $admins = User::where('role', 'admin')->latest()->paginate(10);
+        $query = User::where('role', 'admin')->latest();
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('email', 'like', "%{$search}%");
+            });
+        }
+
+        $admins = $query->paginate(10);
         return view('admin-management.index', compact('admins'));
     }
 

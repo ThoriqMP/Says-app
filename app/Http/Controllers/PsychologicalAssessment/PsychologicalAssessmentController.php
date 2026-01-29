@@ -15,13 +15,21 @@ use Illuminate\Support\Facades\File;
 
 class PsychologicalAssessmentController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         // Menampilkan semua asesmen (Personal Mapping)
         // User ingin bisa mengambil data dari asesmen personal mapping yang sudah ada
-        $assessments = Assessment::with(['subject', 'psychologicalAssessment', 'scores', 'talentsMapping'])
-            ->latest('test_date')
-            ->paginate(10);
+        $query = Assessment::with(['subject', 'psychologicalAssessment', 'scores', 'talentsMapping'])
+            ->latest('test_date');
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->whereHas('subject', function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%");
+            });
+        }
+
+        $assessments = $query->paginate(10);
 
         return view('psychological-assessments.index', compact('assessments'));
     }
@@ -343,8 +351,16 @@ class PsychologicalAssessmentController extends Controller
         return $pdf->download($filename);
     }
 
+    public function destroy(Assessment $assessment)
+    {
+        $assessment->scores()->delete();
+        $assessment->talentsMapping()->delete();
+        $assessment->psychologicalAssessment()->delete();
+        $assessment->delete();
 
-
+        return redirect()->route('psychological-assessments.index')
+            ->with('success', 'Asesmen Psikologis berhasil dihapus.');
+    }
 
     private function parsePotentialScore($value): ?int
     {

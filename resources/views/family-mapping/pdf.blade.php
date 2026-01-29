@@ -215,7 +215,7 @@
                                     <div style="display: table-cell; width: 50%;">
                                         <div class="kv-label">Usia</div>
                                         <div class="kv-value" style="font-size: 10.5pt;">
-                                            {{ $ayah->subject->age !== null ? $ayah->subject->age.' Tahun' : '-' }}
+                                            {{ $ayah->subject->getPreciseAge($ayah->test_date) ?? '-' }}
                                         </div>
                                     </div>
                                     <div style="display: table-cell; width: 50%;">

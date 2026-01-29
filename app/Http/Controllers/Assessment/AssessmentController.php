@@ -12,13 +12,23 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 
+use Illuminate\Http\Request;
+
 class AssessmentController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $assessments = Assessment::with(['subject'])
-            ->latest('test_date')
-            ->paginate(10);
+        $query = Assessment::with(['subject'])
+            ->latest('test_date');
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->whereHas('subject', function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%");
+            });
+        }
+
+        $assessments = $query->paginate(10);
 
         return view('assessments.index', compact('assessments'));
     }

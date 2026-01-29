@@ -409,7 +409,7 @@
                     <div style="display: table; width: 100%;">
                         <div style="display: table-cell; width: 50%;">
                             <div class="subject-label">Usia</div>
-                            <div class="subject-value" style="font-size: 12pt;">{{ $assessment->subject->precise_age }}</div>
+                            <div class="subject-value" style="font-size: 12pt;">{{ $assessment->subject->getPreciseAge($assessment->test_date) }}</div>
                         </div>
                         <div style="display: table-cell; width: 50%;">
                             <div class="subject-label">Jenis Kelamin</div>

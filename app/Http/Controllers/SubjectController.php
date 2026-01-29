@@ -7,9 +7,19 @@ use Illuminate\Http\Request;
 
 class SubjectController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $subjects = Subject::withCount('assessments')->orderBy('name')->paginate(10);
+        $query = Subject::withCount('assessments')->orderBy('name');
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%")
+                  ->orWhere('phone', 'like', "%{$search}%");
+            });
+        }
+
+        $subjects = $query->paginate(10);
 
         return view('subjects.index', compact('subjects'));
     }

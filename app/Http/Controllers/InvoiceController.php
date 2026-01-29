@@ -20,11 +20,26 @@ class InvoiceController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $invoices = Invoice::with(['siswa', 'profilSekolah'])
-            ->latest()
-            ->paginate(10);
+        $query = Invoice::with(['siswa', 'profilSekolah'])->latest();
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('nomor_invoice', 'like', "%{$search}%")
+                  ->orWhereHas('siswa', function($subQ) use ($search) {
+                      $subQ->where('nama_siswa', 'like', "%{$search}%")
+                           ->orWhere('nama_orang_tua', 'like', "%{$search}%");
+                  });
+            });
+        }
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        $invoices = $query->paginate(10);
 
         return view('invoices.index', compact('invoices'));
     }

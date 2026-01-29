@@ -11,13 +11,21 @@ use Illuminate\Support\Facades\File;
 
 class FamilyMappingController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         abort_if(! in_array(Auth::user()?->role, ['pimpinan', 'admin'], true), 403);
 
-        $assessments = Assessment::with(['subject'])
-            ->latest('test_date')
-            ->get();
+        $query = Assessment::with(['subject'])
+            ->latest('test_date');
+
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->whereHas('subject', function($q) use ($search) {
+                $q->where('name', 'like', "%{$search}%");
+            });
+        }
+
+        $assessments = $query->get();
 
         $assessmentsAyah = $assessments->filter(fn ($a) => $a->subject?->gender === 'male');
         $assessmentsIbu = $assessments->filter(fn ($a) => $a->subject?->gender === 'female');

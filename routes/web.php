@@ -104,6 +104,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/{assessment}/edit', [\App\Http\Controllers\PsychologicalAssessment\PsychologicalAssessmentController::class, 'edit'])->name('edit');
         Route::put('/{assessment}', [\App\Http\Controllers\PsychologicalAssessment\PsychologicalAssessmentController::class, 'update'])->name('update');
         Route::get('/{assessment}', [\App\Http\Controllers\PsychologicalAssessment\PsychologicalAssessmentController::class, 'show'])->name('show');
+        Route::delete('/{assessment}', [\App\Http\Controllers\PsychologicalAssessment\PsychologicalAssessmentController::class, 'destroy'])->name('destroy');
         Route::get('/{assessment}/pdf', [\App\Http\Controllers\PsychologicalAssessment\PsychologicalAssessmentController::class, 'pdf'])->name('pdf');
     });
 
