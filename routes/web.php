@@ -28,12 +28,13 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/{admin}', [\App\Http\Controllers\AdminManagementController::class, 'destroy'])->name('destroy');
     });
 
-    // Chat Routes (Accessible by all authenticated users, assuming all are admins/staff)
-    Route::get('/chat/messages', [\App\Http\Controllers\ChatController::class, 'index'])->name('chat.index');
+    // Chat Routes (Accessible by all authenticated users)
+    Route::get('/chat/contacts', [\App\Http\Controllers\ChatController::class, 'getContacts'])->name('chat.contacts');
+    Route::get('/chat/messages/{userId}', [\App\Http\Controllers\ChatController::class, 'getMessages'])->name('chat.messages');
     Route::post('/chat/messages', [\App\Http\Controllers\ChatController::class, 'store'])->name('chat.store');
+    Route::delete('/chat/messages/{id}', [\App\Http\Controllers\ChatController::class, 'destroy'])->name('chat.destroy');
     Route::post('/chat/mark-read', [\App\Http\Controllers\ChatController::class, 'markAsRead'])->name('chat.mark-read');
     Route::post('/chat/typing', [\App\Http\Controllers\ChatController::class, 'typing'])->name('chat.typing');
-    Route::get('/chat/typing-status', [\App\Http\Controllers\ChatController::class, 'getTypingStatus'])->name('chat.typing-status');
 
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])

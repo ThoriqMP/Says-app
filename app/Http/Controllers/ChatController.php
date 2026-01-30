@@ -10,38 +10,64 @@ use Illuminate\Support\Facades\Cache;
 
 class ChatController extends Controller
 {
-    public function index()
+    // Get list of contacts (other users)
+    public function getContacts()
     {
-        $user = Auth::user();
+        $currentUser = Auth::user();
         
-        // Update user last activity for typing status
-        Cache::put('user_online_' . $user->id, true, now()->addMinutes(1));
+        // Update user online status
+        Cache::put('user_online_' . $currentUser->id, true, now()->addMinutes(1));
 
-        $messages = Message::with('user:id,name,role')
+        $users = User::where('id', '!=', $currentUser->id)
+            ->select('id', 'name', 'role')
+            ->get()
+            ->map(function ($user) use ($currentUser) {
+                // Count unread messages from this specific user to me
+                $unreadCount = Message::where('user_id', $user->id)
+                    ->where('receiver_id', $currentUser->id)
+                    ->where('is_read', false)
+                    ->count();
+                
+                $user->unread_count = $unreadCount;
+                $user->is_online = Cache::has('user_online_' . $user->id);
+                return $user;
+            });
+
+        // Total unread for badge
+        $totalUnread = Message::where('receiver_id', $currentUser->id)
+            ->where('is_read', false)
+            ->count();
+
+        return response()->json([
+            'contacts' => $users,
+            'total_unread' => $totalUnread
+        ]);
+    }
+
+    // Get messages between current user and specific user
+    public function getMessages($userId)
+    {
+        $currentUser = Auth::id();
+
+        $messages = Message::where(function($q) use ($currentUser, $userId) {
+                $q->where('user_id', $currentUser)->where('receiver_id', $userId);
+            })
+            ->orWhere(function($q) use ($currentUser, $userId) {
+                $q->where('user_id', $userId)->where('receiver_id', $currentUser);
+            })
+            ->with('user:id,name,role')
             ->latest()
             ->take(50)
             ->get()
             ->reverse()
             ->values();
 
-        // Count unread messages for current user (messages NOT from current user and NOT read)
-        $unreadCount = Message::where('user_id', '!=', $user->id)
-            ->where('is_read', false)
-            ->count();
-
-        // Get typing users
-        $typingUsers = [];
-        $users = User::where('id', '!=', $user->id)->get();
-        foreach ($users as $u) {
-            if (Cache::has('user_is_typing_' . $u->id)) {
-                $typingUsers[] = $u->name;
-            }
-        }
+        // Check if other user is typing (specific to this chat)
+        $isTyping = Cache::has('user_is_typing_' . $userId);
 
         return response()->json([
             'messages' => $messages,
-            'unread_count' => $unreadCount,
-            'typing_users' => $typingUsers
+            'is_typing' => $isTyping
         ]);
     }
 
@@ -49,10 +75,12 @@ class ChatController extends Controller
     {
         $request->validate([
             'message' => 'required|string|max:1000',
+            'receiver_id' => 'required|exists:users,id'
         ]);
 
         $message = Message::create([
             'user_id' => Auth::id(),
+            'receiver_id' => $request->receiver_id,
             'message' => $request->message,
             'is_read' => false,
         ]);
@@ -60,9 +88,14 @@ class ChatController extends Controller
         return response()->json($message->load('user:id,name,role'));
     }
 
-    public function markAsRead()
+    public function markAsRead(Request $request)
     {
-        Message::where('user_id', '!=', Auth::id())
+        $request->validate([
+            'sender_id' => 'required|exists:users,id'
+        ]);
+
+        Message::where('user_id', $request->sender_id)
+            ->where('receiver_id', Auth::id())
             ->where('is_read', false)
             ->update(['is_read' => true]);
 
@@ -75,20 +108,14 @@ class ChatController extends Controller
         return response()->json(['status' => 'success']);
     }
 
-    public function getTypingStatus()
+    public function destroy($id)
     {
-        $user = Auth::user();
-        $typingUsers = [];
-        
-        // Hanya ambil user ID dan Nama untuk performa, hindari load seluruh kolom
-        $users = User::where('id', '!=', $user->id)->select('id', 'name')->get();
-        
-        foreach ($users as $u) {
-            if (Cache::has('user_is_typing_' . $u->id)) {
-                $typingUsers[] = $u->name;
-            }
-        }
+        $message = Message::where('id', $id)
+            ->where('user_id', Auth::id())
+            ->firstOrFail();
 
-        return response()->json(['typing_users' => $typingUsers]);
+        $message->delete(); // Soft delete
+
+        return response()->json(['status' => 'success', 'id' => $id]);
     }
 }
