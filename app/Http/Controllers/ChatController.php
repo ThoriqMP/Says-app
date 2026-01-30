@@ -74,4 +74,21 @@ class ChatController extends Controller
         Cache::put('user_is_typing_' . Auth::id(), true, now()->addSeconds(3));
         return response()->json(['status' => 'success']);
     }
+
+    public function getTypingStatus()
+    {
+        $user = Auth::user();
+        $typingUsers = [];
+        
+        // Hanya ambil user ID dan Nama untuk performa, hindari load seluruh kolom
+        $users = User::where('id', '!=', $user->id)->select('id', 'name')->get();
+        
+        foreach ($users as $u) {
+            if (Cache::has('user_is_typing_' . $u->id)) {
+                $typingUsers[] = $u->name;
+            }
+        }
+
+        return response()->json(['typing_users' => $typingUsers]);
+    }
 }

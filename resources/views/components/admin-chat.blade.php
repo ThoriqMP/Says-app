@@ -7,7 +7,7 @@
          x-transition:leave="transition ease-in duration-200"
          x-transition:leave-start="opacity-100 translate-y-0 scale-100"
          x-transition:leave-end="opacity-0 translate-y-4 scale-95"
-         class="bg-white dark:bg-gray-800 w-96 h-[500px] rounded-lg shadow-xl flex flex-col mb-4 border border-gray-200 dark:border-gray-700 overflow-hidden"
+         class="bg-white dark:bg-gray-800 w-[calc(100vw-2rem)] sm:w-96 h-[500px] max-h-[calc(100vh-6rem)] rounded-lg shadow-xl flex flex-col mb-4 border border-gray-200 dark:border-gray-700 overflow-hidden"
          style="display: none;">
         
         <!-- Header -->
@@ -131,6 +131,7 @@ function adminChat() {
         newMessage: '',
         isLoading: false,
         intervalId: null,
+        typingIntervalId: null,
         unreadCount: 0,
         typingUsers: [],
         typingTimeout: null,
@@ -154,23 +155,33 @@ function adminChat() {
             if (this.isOpen) {
                 this.markAsRead();
                 this.$nextTick(() => this.scrollToBottom());
+                // Refresh typing status immediately when opened
+                this.fetchTypingStatus();
             }
         },
         
         startPolling() {
             this.fetchMessages();
+            this.fetchTypingStatus();
+            
+            // Poll pesan setiap 3 detik (biar tidak berat)
             if (this.intervalId) clearInterval(this.intervalId);
             this.intervalId = setInterval(() => {
                 this.fetchMessages();
             }, 3000);
+            
+            // Poll typing status setiap 1 detik (biar realtime)
+            // Hanya poll jika chat terbuka untuk hemat resource
+            if (this.typingIntervalId) clearInterval(this.typingIntervalId);
+            this.typingIntervalId = setInterval(() => {
+                if (this.isOpen) {
+                    this.fetchTypingStatus();
+                }
+            }, 1000);
         },
         
         stopPolling() {
             // We keep polling for notifications
-            // if (this.intervalId) {
-            //     clearInterval(this.intervalId);
-            //     this.intervalId = null;
-            // }
         },
         
         fetchMessages() {
@@ -184,7 +195,7 @@ function adminChat() {
                     
                     this.messages = data.messages;
                     this.unreadCount = data.unread_count;
-                    this.typingUsers = data.typing_users;
+                    // Note: typing_users dari endpoint index diabaikan, pakai endpoint khusus
                     
                     if (shouldScroll) {
                         this.$nextTick(() => this.scrollToBottom());
@@ -197,6 +208,18 @@ function adminChat() {
                 })
                 .catch(error => {
                     console.error('Error fetching messages:', error);
+                });
+        },
+        
+        fetchTypingStatus() {
+            fetch("{{ route('chat.typing-status') }}")
+                .then(res => res.json())
+                .then(data => {
+                    this.typingUsers = data.typing_users;
+                })
+                .catch(error => {
+                    // Silent fail for typing status
+                    console.error('Error fetching typing status:', error);
                 });
         },
         

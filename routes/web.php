@@ -33,6 +33,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/chat/messages', [\App\Http\Controllers\ChatController::class, 'store'])->name('chat.store');
     Route::post('/chat/mark-read', [\App\Http\Controllers\ChatController::class, 'markAsRead'])->name('chat.mark-read');
     Route::post('/chat/typing', [\App\Http\Controllers\ChatController::class, 'typing'])->name('chat.typing');
+    Route::get('/chat/typing-status', [\App\Http\Controllers\ChatController::class, 'getTypingStatus'])->name('chat.typing-status');
 
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])
