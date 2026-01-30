@@ -7,23 +7,9 @@
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
             <div class="p-6 text-gray-900 dark:text-gray-100">
-                <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
-                    <h2 class="text-2xl font-semibold text-gray-800 dark:text-gray-200">Daftar Invoice</h2>
-                    
-                    <div class="flex flex-col md:flex-row gap-3 w-full md:w-auto">
-                        <form action="{{ route('invoices.index') }}" method="GET" class="w-full md:w-64 relative">
-                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                                <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
-                                </svg>
-                            </div>
-                            <input type="text" 
-                                   name="search" 
-                                   value="{{ request('search') }}"
-                                   class="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" 
-                                   placeholder="Cari invoice...">
-                        </form>
-
+                <div class="flex flex-col gap-4 mb-6">
+                    <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                        <h2 class="text-2xl font-semibold text-gray-800 dark:text-gray-200">Daftar Invoice</h2>
                         <a href="{{ route('invoices.create') }}" 
                            class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition flex items-center justify-center whitespace-nowrap">
                             <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -31,6 +17,69 @@
                             </svg>
                             Buat Invoice Baru
                         </a>
+                    </div>
+
+                    <!-- Filter & Search Section -->
+                    <div class="bg-gray-50 dark:bg-gray-700/50 p-4 rounded-xl border border-gray-200 dark:border-gray-700">
+                        <form action="{{ route('invoices.index') }}" method="GET" class="flex flex-col lg:flex-row gap-4">
+                            <!-- Search -->
+                            <div class="flex-1 relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                                    </svg>
+                                </div>
+                                <input type="text" 
+                                       name="search" 
+                                       value="{{ request('search') }}"
+                                       class="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" 
+                                       placeholder="Cari invoice (No, Siswa, Ortu)...">
+                            </div>
+
+                            <!-- Month Filter -->
+                            <div class="w-full lg:w-48">
+                                <select name="month" onchange="this.form.submit()" class="w-full py-2 pl-3 pr-8 border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
+                                    <option value="">Semua Bulan</option>
+                                    @php
+                                        $bulanIndo = [
+                                            1 => 'Januari', 2 => 'Februari', 3 => 'Maret', 4 => 'April',
+                                            5 => 'Mei', 6 => 'Juni', 7 => 'Juli', 8 => 'Agustus',
+                                            9 => 'September', 10 => 'Oktober', 11 => 'November', 12 => 'Desember'
+                                        ];
+                                    @endphp
+                                    @foreach($bulanIndo as $num => $name)
+                                        <option value="{{ $num }}" {{ request('month') == $num ? 'selected' : '' }}>
+                                            {{ $name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <!-- Status Filter -->
+                            <div class="w-full lg:w-48">
+                                <select name="status" onchange="this.form.submit()" class="w-full py-2 pl-3 pr-8 border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
+                                    <option value="">Semua Status</option>
+                                    <option value="draft" {{ request('status') == 'draft' ? 'selected' : '' }}>Draft</option>
+                                    <option value="sent" {{ request('status') == 'sent' ? 'selected' : '' }}>Terkirim</option>
+                                    <option value="paid" {{ request('status') == 'paid' ? 'selected' : '' }}>Lunas</option>
+                                    <option value="overdue" {{ request('status') == 'overdue' ? 'selected' : '' }}>Jatuh Tempo</option>
+                                </select>
+                            </div>
+
+                            <!-- Buttons -->
+                            <div class="flex gap-2">
+                                <a href="{{ route('invoices.index') }}" class="px-4 py-2 bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-lg text-sm hover:bg-gray-300 dark:hover:bg-gray-500 transition flex items-center justify-center" title="Reset Filter">
+                                   Reset
+                                </a>
+                                
+                                <button type="submit" formaction="{{ route('invoices.export') }}" class="px-4 py-2 bg-green-600 text-white rounded-lg text-sm hover:bg-green-700 transition flex items-center justify-center whitespace-nowrap">
+                                    <svg class="h-4 w-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                                    </svg>
+                                    Export CSV
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
 

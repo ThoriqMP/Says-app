@@ -22,7 +22,7 @@ class InvoiceController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Invoice::with(['siswa', 'profilSekolah'])->latest();
+        $query = Invoice::with(['siswa', 'profilSekolah']);
 
         if ($request->filled('search')) {
             $search = $request->search;
@@ -39,9 +39,90 @@ class InvoiceController extends Controller
             $query->where('status', $request->status);
         }
 
+        if ($request->filled('month')) {
+            $query->whereMonth('jatuh_tempo', $request->month);
+        }
+
+        // Default Sort: Jatuh Tempo Descending
+        $query->orderBy('jatuh_tempo', 'desc');
+
         $invoices = $query->paginate(10);
 
         return view('invoices.index', compact('invoices'));
+    }
+
+    /**
+     * Export invoice recap to CSV
+     */
+    public function export(Request $request)
+    {
+        $query = Invoice::with(['siswa', 'invoiceDetails.layanan']);
+
+        // Apply same filters as index
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function($q) use ($search) {
+                $q->where('no_invoice', 'like', "%{$search}%")
+                  ->orWhereHas('siswa', function($subQ) use ($search) {
+                      $subQ->where('nama_siswa', 'like', "%{$search}%")
+                           ->orWhere('nama_orang_tua', 'like', "%{$search}%");
+                  });
+            });
+        }
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        if ($request->filled('month')) {
+            $query->whereMonth('jatuh_tempo', $request->month);
+        }
+
+        $query->orderBy('jatuh_tempo', 'desc');
+
+        $filename = 'rekap_invoice_' . date('Y-m-d_H-i-s') . '.csv';
+
+        return response()->streamDownload(function () use ($query) {
+            $handle = fopen('php://output', 'w');
+            
+            // Add BOM for Excel compatibility
+            fprintf($handle, chr(0xEF).chr(0xBB).chr(0xBF));
+
+            // Header
+            fputcsv($handle, [
+                'Tanggal Invoice',
+                'No Invoice',
+                'Nama Siswa',
+                'Item Tagihan',
+                'Harga Per Unit',
+                'Total Tagihan',
+                'Status'
+            ]);
+
+            // Chunking to handle large datasets memory-efficiently
+            $query->chunk(100, function ($invoices) use ($handle) {
+                foreach ($invoices as $invoice) {
+                    foreach ($invoice->invoiceDetails as $detail) {
+                        $itemName = $detail->layanan->nama_layanan ?? '-';
+                        if ($detail->deskripsi_tambahan) {
+                            $itemName .= ' (' . $detail->deskripsi_tambahan . ')';
+                        }
+
+                        fputcsv($handle, [
+                            $invoice->tanggal_invoice->format('Y-m-d'),
+                            $invoice->no_invoice,
+                            $invoice->siswa->nama_siswa ?? 'Tanpa Nama',
+                            $itemName,
+                            $detail->harga_satuan,
+                            $invoice->grand_total,
+                            ucfirst($invoice->status)
+                        ]);
+                    }
+                }
+            });
+
+            fclose($handle);
+        }, $filename);
     }
 
     /**

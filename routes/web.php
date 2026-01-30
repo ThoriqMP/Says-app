@@ -40,10 +40,14 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])
         ->name('dashboard')
         ->middleware('permission:dashboard');
+    Route::get('/dashboard/export', [DashboardController::class, 'export'])
+        ->name('dashboard.export')
+        ->middleware('permission:dashboard');
 
     // Invoice Routes
     Route::middleware('permission:invoices.index')->group(function () {
         Route::get('/students/search', [InvoiceController::class, 'searchStudents'])->name('students.search');
+        Route::get('/invoices/export', [InvoiceController::class, 'export'])->name('invoices.export');
         Route::get('/invoices', [InvoiceController::class, 'index'])->name('invoices.index');
         Route::get('/invoices/create', [InvoiceController::class, 'create'])->name('invoices.create');
         Route::post('/invoices', [InvoiceController::class, 'store'])->name('invoices.store');
