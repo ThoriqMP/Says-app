@@ -280,26 +280,40 @@
     </aside>
 
     <div x-cloak x-show="mobileOpen" class="lg:hidden fixed inset-0 z-50" aria-modal="true" role="dialog">
-        <div class="absolute inset-0 bg-black/50" @click="mobileOpen = false"></div>
-        <div class="absolute inset-y-0 left-0 w-72 max-w-[80vw] bg-white dark:bg-gray-800 shadow-xl flex flex-col">
-            <div class="h-16 px-4 flex items-center justify-between border-b border-gray-200 dark:border-gray-700">
-                <a href="{{ route('dashboard') }}" class="flex items-center gap-2" @click="mobileOpen = false">
-                    <div class="h-8 w-8 bg-blue-600 rounded-lg flex items-center justify-center">
-                        <svg class="h-5 w-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                        </svg>
+        <!-- Backdrop -->
+        <div class="absolute inset-0 bg-black/20 backdrop-blur-sm transition-opacity" 
+             x-show="mobileOpen"
+             x-transition:enter="ease-out duration-300"
+             x-transition:enter-start="opacity-0"
+             x-transition:enter-end="opacity-100"
+             x-transition:leave="ease-in duration-200"
+             x-transition:leave-start="opacity-100"
+             x-transition:leave-end="opacity-0"
+             @click="mobileOpen = false"></div>
+
+        <!-- Floating Pop-up Menu -->
+        <div class="absolute bottom-20 right-4 w-64 bg-white dark:bg-gray-800 rounded-2xl shadow-2xl flex flex-col overflow-hidden ring-1 ring-black/5"
+             x-show="mobileOpen"
+             x-transition:enter="transform transition ease-out duration-300"
+             x-transition:enter-start="translate-y-10 opacity-0 scale-95"
+             x-transition:enter-end="translate-y-0 opacity-100 scale-100"
+             x-transition:leave="transform transition ease-in duration-200"
+             x-transition:leave-start="translate-y-0 opacity-100 scale-100"
+             x-transition:leave-end="translate-y-10 opacity-0 scale-95">
+            
+            <div class="p-4 bg-gray-50 dark:bg-gray-900/50 border-b border-gray-100 dark:border-gray-700">
+                <div class="flex items-center gap-3">
+                    <div class="h-10 w-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
+                        {{ substr(Auth::user()->name, 0, 1) }}
                     </div>
-                    <span class="text-lg font-semibold text-gray-900 dark:text-white">SAYS-APP</span>
-                </a>
-                <button type="button" @click="mobileOpen = false"
-                        class="inline-flex items-center justify-center p-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition">
-                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                    </svg>
-                </button>
+                    <div class="overflow-hidden">
+                        <div class="text-sm font-bold text-gray-900 dark:text-gray-100 truncate">{{ Auth::user()->name }}</div>
+                        <div class="text-xs text-gray-500 dark:text-gray-400 truncate">{{ Auth::user()->email }}</div>
+                    </div>
+                </div>
             </div>
 
-            <nav class="flex-1 px-4 py-4 space-y-1 overflow-y-auto">
+            <nav class="flex-1 px-2 py-2 overflow-y-auto max-h-[60vh] space-y-1">
                 @if(auth()->user()->hasPermission('dashboard'))
                 <a href="{{ route('dashboard') }}" class="{{ $navLink(route('dashboard'), request()->routeIs('dashboard')) }}" @click="mobileOpen = false">
                     <span>Dashboard</span>
@@ -353,23 +367,23 @@
                     <span>Profil Sekolah</span>
                 </a>
                 @endif
-
+                
                 @if(auth()->user()->isPimpinan())
-                    <div class="pt-4 pb-2">
-                        <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Manajemen</div>
-                        <a href="{{ route('admin-management.index') }}" class="{{ $navLink(route('admin-management.index'), request()->routeIs('admin-management.*')) }}" @click="mobileOpen = false">
-                            <span>Kelola Admin</span>
-                        </a>
+                    <div class="pt-2 pb-1 px-2">
+                        <div class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-1">Manajemen</div>
                     </div>
+                    <a href="{{ route('admin-management.index') }}" class="{{ $navLink(route('admin-management.index'), request()->routeIs('admin-management.*')) }}" @click="mobileOpen = false">
+                        <span>Kelola Admin</span>
+                    </a>
                 @endif
             </nav>
 
-            <div class="px-4 py-4 border-t border-gray-200 dark:border-gray-700 space-y-3">
+            <div class="p-2 border-t border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50 space-y-2">
                 <button type="button" @click="toggle()"
-                        class="w-full inline-flex items-center justify-between px-3 py-2 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition">
-                    <span class="text-sm font-medium" x-show="!dark">Mode Gelap</span>
-                    <span class="text-sm font-medium" x-show="dark">Mode Terang</span>
-                    <span class="inline-flex items-center justify-center">
+                        class="w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-white dark:hover:bg-gray-800 hover:shadow-sm transition">
+                    <span x-show="!dark">Mode Gelap</span>
+                    <span x-show="dark">Mode Terang</span>
+                    <span class="inline-flex items-center justify-center text-blue-600 dark:text-yellow-400">
                         <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" x-show="!dark">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
                         </svg>
@@ -379,14 +393,12 @@
                     </span>
                 </button>
 
-                <div class="px-3">
-                    <div class="text-sm font-semibold text-gray-900 dark:text-gray-100">{{ Auth::user()->name }}</div>
-                    <div class="text-xs text-gray-500 dark:text-gray-400">{{ Auth::user()->email }}</div>
-                </div>
-
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
-                    <button type="submit" class="w-full inline-flex items-center justify-center px-3 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 transition font-semibold">
+                    <button type="submit" class="w-full flex items-center justify-center px-3 py-2 rounded-lg bg-red-50 text-red-600 hover:bg-red-100 dark:bg-red-900/20 dark:text-red-400 dark:hover:bg-red-900/30 transition text-sm font-semibold">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                        </svg>
                         Keluar
                     </button>
                 </form>
