@@ -35,7 +35,7 @@
             <div class="lg:flex">
                 @include('layouts.navigation')
 
-                <div class="flex-1 lg:pl-64">
+                <div class="flex-1 lg:pl-64 pb-20 lg:pb-0">
                     @if(isset($header))
                         <header class="bg-white dark:bg-gray-800 shadow">
                             <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">

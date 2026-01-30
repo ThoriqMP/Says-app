@@ -1,4 +1,9 @@
-<div x-data="adminChat()" x-init="initChat()" class="fixed z-50 bottom-0 right-0 sm:bottom-4 sm:right-4 w-full sm:w-auto">
+<div x-data="adminChat()" x-init="initChat()" @toggle-admin-chat.window="toggleChat"
+     class="fixed z-50 pointer-events-none
+            w-full h-full lg:w-auto lg:h-auto
+            bottom-0 left-0 lg:bottom-4 lg:right-4 lg:left-auto
+            flex flex-col justify-end items-center lg:block">
+
     <!-- Chat Window -->
     <div x-show="isOpen" 
          x-transition:enter="transition ease-out duration-300"
@@ -7,7 +12,9 @@
          x-transition:leave="transition ease-in duration-200"
          x-transition:leave-start="opacity-100 translate-y-0 scale-100"
          x-transition:leave-end="opacity-0 translate-y-4 scale-95"
-         class="bg-white dark:bg-gray-800 w-full h-[100vh] sm:h-[500px] sm:w-96 sm:rounded-lg shadow-xl flex flex-col sm:mb-4 border-t sm:border border-gray-200 dark:border-gray-700 overflow-hidden"
+         class="pointer-events-auto bg-white dark:bg-gray-800 
+                w-full h-full lg:h-[500px] lg:w-96 lg:rounded-lg shadow-xl 
+                flex flex-col lg:mb-4 border-t lg:border border-gray-200 dark:border-gray-700 overflow-hidden"
          style="display: none;">
         
         <!-- Header -->
@@ -208,7 +215,10 @@
             x-transition:leave="transition ease-in duration-200"
             x-transition:leave-start="opacity-100 scale-100"
             x-transition:leave-end="opacity-0 scale-90"
-            class="absolute bottom-4 right-4 sm:static bg-blue-600 hover:bg-blue-700 text-white p-3.5 rounded-full shadow-lg transition-transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 z-50 flex items-center justify-center">
+            class="pointer-events-auto mb-8 lg:mb-0 hidden lg:flex
+                   bg-blue-600 hover:bg-blue-700 text-white p-3.5 rounded-full shadow-lg transition-transform hover:scale-105 
+                   focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 
+                   items-center justify-center">
         
         <!-- Unread Badge -->
         <span x-show="totalUnread > 0" 
@@ -293,6 +303,7 @@ function adminChat() {
                 .then(data => {
                     this.contacts = data.contacts;
                     this.totalUnread = data.total_unread;
+                    window.dispatchEvent(new CustomEvent('chat-unread-update', { detail: this.totalUnread }));
                 });
         },
         
@@ -332,7 +343,11 @@ function adminChat() {
             .then(() => {
                 // Update local unread count immediately for better UX
                 const contact = this.contacts.find(c => c.id === this.selectedUser.id);
-                if (contact) contact.unread_count = 0;
+                if (contact) {
+                    this.totalUnread -= contact.unread_count; // Decrease global count
+                    contact.unread_count = 0;
+                    window.dispatchEvent(new CustomEvent('chat-unread-update', { detail: this.totalUnread }));
+                }
             });
         },
         
