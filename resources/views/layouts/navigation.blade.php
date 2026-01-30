@@ -4,6 +4,76 @@
             ? 'flex items-center gap-2 px-3 py-2 rounded-lg bg-blue-600 text-white font-semibold'
             : 'flex items-center gap-2 px-3 py-2 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition';
     };
+
+    // Prepare Mobile Bottom Nav Items (Top 2 Priority)
+    $mobileMenuItems = [];
+    $user = auth()->user();
+
+    // 1. Dashboard
+    if ($user->hasPermission('dashboard')) {
+        $mobileMenuItems[] = [
+            'route' => route('dashboard'),
+            'label' => 'Beranda',
+            'active_check' => request()->routeIs('dashboard'),
+            'icon_path' => 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6'
+        ];
+    }
+
+    // 2. Invoice
+    if ($user->hasPermission('invoices.index')) {
+        $mobileMenuItems[] = [
+            'route' => route('invoices.index'),
+            'label' => 'Invoice',
+            'active_check' => request()->routeIs('invoices*'),
+            'icon_path' => 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z'
+        ];
+    }
+
+    // 3. Students
+    if ($user->hasPermission('students.index')) {
+        $mobileMenuItems[] = [
+            'route' => route('students.index'),
+            'label' => 'Siswa',
+            'active_check' => request()->routeIs('students*'),
+            'icon_path' => 'M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z'
+        ];
+    }
+
+    // 4. Personal Mapping
+    if ($user->hasPermission('assessments.index')) {
+        $mobileMenuItems[] = [
+            'route' => route('assessments.index'),
+            'label' => 'Mapping',
+            'active_check' => request()->routeIs('assessments*'),
+            'icon_path' => 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01'
+        ];
+    }
+    
+    // 5. Psychological Assessments
+    if ($user->hasPermission('psychological-assessments.index')) {
+        $mobileMenuItems[] = [
+            'route' => route('psychological-assessments.index'),
+            'label' => 'Psikologis',
+            'active_check' => request()->routeIs('psychological-assessments*'),
+            'icon_path' => 'M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z'
+        ];
+    }
+
+    // Limit to 2 items
+    $bottomNavItems = array_slice($mobileMenuItems, 0, 2);
+
+    // Determine Page Title for Mobile Top Bar
+    $pageTitle = 'SAYS-APP';
+    if (request()->routeIs('dashboard')) $pageTitle = 'Beranda';
+    elseif (request()->routeIs('invoices*')) $pageTitle = 'Invoice';
+    elseif (request()->routeIs('students*')) $pageTitle = 'Data Siswa';
+    elseif (request()->routeIs('assessments*')) $pageTitle = 'Personal Mapping';
+    elseif (request()->routeIs('psychological-assessments*')) $pageTitle = 'Asesmen Psikologis';
+    elseif (request()->routeIs('family-mapping*')) $pageTitle = 'Family Mapping';
+    elseif (request()->routeIs('subjects*')) $pageTitle = 'Daftar Subjek';
+    elseif (request()->routeIs('services*')) $pageTitle = 'Layanan';
+    elseif (request()->routeIs('school-profile*')) $pageTitle = 'Profil Sekolah';
+    elseif (request()->routeIs('admin-management*')) $pageTitle = 'Kelola Admin';
 @endphp
 
 <div>
@@ -18,7 +88,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
                     </svg>
                 </div>
-                <span class="text-lg font-semibold text-gray-900 dark:text-white">SAYS-APP</span>
+                <span class="text-lg font-semibold text-gray-900 dark:text-white">{{ $pageTitle }}</span>
             </a>
 
             <!-- Right Side (User/Theme) - Optional, can keep or move to bottom -->
@@ -58,21 +128,22 @@
         <div class="w-full h-16 bg-white dark:bg-gray-800 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]"
              style="-webkit-mask-image: radial-gradient(circle at 50% 0, transparent 32px, black 33px); mask-image: radial-gradient(circle at 50% 0, transparent 32px, black 33px);">
             <div class="grid grid-cols-5 h-full items-center px-2">
-                <!-- Dashboard -->
-                <a href="{{ route('dashboard') }}" class="flex flex-col items-center justify-center text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 {{ request()->routeIs('dashboard') ? 'text-blue-600 dark:text-blue-400' : '' }}">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
-                    </svg>
-                    <span class="text-[10px] mt-1 font-medium">Beranda</span>
-                </a>
+                <!-- Dynamic Menu Items -->
+                @foreach($bottomNavItems as $item)
+                    <a href="{{ $item['route'] }}" class="flex flex-col items-center justify-center w-full h-full {{ $item['active_check'] ? 'text-blue-600 dark:text-blue-400' : 'text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400' }}">
+                        <div class="p-1 rounded-xl transition-colors duration-200 {{ $item['active_check'] ? 'bg-blue-50 dark:bg-blue-900/20' : '' }}">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ $item['icon_path'] }}"></path>
+                            </svg>
+                        </div>
+                        <span class="text-[10px] mt-0.5 font-medium">{{ $item['label'] }}</span>
+                    </a>
+                @endforeach
 
-                <!-- Invoice -->
-                <a href="{{ route('invoices.index') }}" class="flex flex-col items-center justify-center text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400 {{ request()->routeIs('invoices.*') ? 'text-blue-600 dark:text-blue-400' : '' }}">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                    </svg>
-                    <span class="text-[10px] mt-1 font-medium">Invoice</span>
-                </a>
+                <!-- Fill empty slots if less than 2 items -->
+                @for($i = count($bottomNavItems); $i < 2; $i++)
+                    <div></div>
+                @endfor
 
                 <!-- Center Spacer (Empty because button is absolute) -->
                 <div class="pointer-events-none"></div>
