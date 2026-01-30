@@ -59,6 +59,10 @@
         @endif
     </div>
     
+    @auth
+        <x-admin-chat />
+    @endauth
+
     @stack('scripts')
 </body>
 </html>

@@ -28,6 +28,12 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/{admin}', [\App\Http\Controllers\AdminManagementController::class, 'destroy'])->name('destroy');
     });
 
+    // Chat Routes (Accessible by all authenticated users, assuming all are admins/staff)
+    Route::get('/chat/messages', [\App\Http\Controllers\ChatController::class, 'index'])->name('chat.index');
+    Route::post('/chat/messages', [\App\Http\Controllers\ChatController::class, 'store'])->name('chat.store');
+    Route::post('/chat/mark-read', [\App\Http\Controllers\ChatController::class, 'markAsRead'])->name('chat.mark-read');
+    Route::post('/chat/typing', [\App\Http\Controllers\ChatController::class, 'typing'])->name('chat.typing');
+
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])
         ->name('dashboard')
