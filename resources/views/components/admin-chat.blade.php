@@ -253,11 +253,10 @@ function adminChat(isStudent, currentUserId) {
         initChat() {
             if (localStorage.getItem('adminChatOpen') === 'true') {
                 this.isOpen = true;
-                // If there was a selected user persisted, we could restore it, 
-                // but for now let's default to contacts list for safety
                 this.startPolling();
             } else {
-                this.startPolling();
+                // Just fetch once to get initial unread count, then don't poll
+                this.fetchContacts();
             }
         },
         
@@ -266,12 +265,15 @@ function adminChat(isStudent, currentUserId) {
             localStorage.setItem('adminChatOpen', this.isOpen);
             
             if (this.isOpen) {
+                this.startPolling();
                 if (this.view === 'chat' && this.selectedUser) {
                     this.markAsRead();
                     this.$nextTick(() => this.scrollToBottom());
                 } else {
                     this.fetchContacts();
                 }
+            } else {
+                this.stopPolling();
             }
         },
         
@@ -284,18 +286,31 @@ function adminChat(isStudent, currentUserId) {
         },
         
         startPolling() {
-            // Poll everything every 3 seconds
+            // Only poll if the chat window is open
             if (this.intervalId) clearInterval(this.intervalId);
+            
             this.intervalId = setInterval(() => {
-                this.fetchContacts(); // Always fetch contacts to update unread counts and online status
+                if (!this.isOpen) {
+                    this.stopPolling();
+                    return;
+                }
+
+                this.fetchContacts();
                 
-                if (this.isOpen && this.view === 'chat' && this.selectedUser) {
+                if (this.view === 'chat' && this.selectedUser) {
                     this.fetchMessages();
                 }
             }, 3000);
             
             // Initial fetch
             this.fetchContacts();
+        },
+
+        stopPolling() {
+            if (this.intervalId) {
+                clearInterval(this.intervalId);
+                this.intervalId = null;
+            }
         },
         
         fetchContacts() {
