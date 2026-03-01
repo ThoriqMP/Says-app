@@ -44,8 +44,16 @@ class AdminManagementController extends Controller
         if (!in_array($role, ['admin', 'guru'])) {
             $role = 'admin';
         }
+        
         $permissions = $this->permissions;
-        return view('admin-management.create', compact('permissions', 'role'));
+        
+        // Default permissions for guru
+        $defaultPermissions = [];
+        if ($role === 'guru') {
+            $defaultPermissions = ['dashboard', 'reports.manage', 'students.index'];
+        }
+        
+        return view('admin-management.create', compact('permissions', 'role', 'defaultPermissions'));
     }
 
     public function store(Request $request)

@@ -91,6 +91,14 @@ class User extends Authenticatable
     }
 
     /**
+     * Cek apakah user adalah guru
+     */
+    public function isGuru()
+    {
+        return $this->role === 'guru';
+    }
+
+    /**
      * Cek apakah user memiliki akses ke permission tertentu
      */
     public function hasPermission($permission)
@@ -99,7 +107,7 @@ class User extends Authenticatable
             return true;
         }
 
-        if ($this->role !== 'admin') {
+        if (!in_array($this->role, ['admin', 'guru'])) {
             return false;
         }
 
