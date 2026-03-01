@@ -1,0 +1,10 @@
+JENIS: LAPORAN PENILAIAN PROGRAM DINIYAH
+HEADER: Nama, Kelas, Semester, Tahun Pelajaran.
+BAGIAN A: HAFALAN SURAT PILIHAN
+TABEL:
+1. Nama Surat (Contoh: Al-Infitar, Abasa, Al-Fajr)
+2. Ayat (Rentang ayat yang dihafal, contoh: 1-19)
+3. Mutu (Predikat huruf, contoh: B, B-)
+4. Keterangan (Contoh: "Mampu menghafal dengan baik")
+FOOTER: Tanda tangan penguji/ustadz.
+[cite: 9]

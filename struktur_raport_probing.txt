@@ -1,0 +1,8 @@
+JENIS: RAPORT PERKEMBANGAN (PROBING)
+HEADER: Nama Siswa, NIS, Kelas, Periode, Kategori, Tanggal Cetak.
+KONTEN DINAMIS (PER AKTIVITAS):
+- Foto/Gambar Aktivitas (Upload field)
+- Judul Aktivitas (Contoh: "Month Of History Project")
+- Deskripsi/Narasi: Penjelasan performa siswa (Contoh: "Siswa mampu berkontribusi dengan baik dalam tim")
+FOOTER: Catatan Guru / Pembimbing (Textarea), Tanda tangan Kepala Sekolah / Wali Kelas.
+[cite: 7]

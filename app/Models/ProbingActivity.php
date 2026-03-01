@@ -6,7 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class ProbingActivity extends Model
 {
-    protected $fillable = ['student_report_id', 'activity_name', 'description', 'image_path'];
+    protected $fillable = [
+        'student_report_id', 
+        'activity_name', 
+        'activity_title', 
+        'description', 
+        'image_path'
+    ];
 
     public function report()
     {

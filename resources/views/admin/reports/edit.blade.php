@@ -2,16 +2,38 @@
 
 @section('content')
 <div class="py-12" x-data="{ 
-    activeTab: '{{ $report->category->name === 'Probing' ? 'probing' : 'akademik' }}', 
-    categories: {{ $categories->toJson() }},
-    selectedAcademicCategory: '{{ $report->report_category_id }}',
-    probingCategoryId: '{{ $categories->where('name', 'Probing')->first()->id ?? '' }}',
+    activeTab: '{{ $report->category->name === 'Probing' ? 'probing' : ($report->category->name === 'Akademik' ? 'akademik' : ($report->category->name === 'Diniyah' ? 'diniyah' : 'ibadah')) }}', 
+    isProbing: {{ $report->category->name === 'Probing' ? 'true' : 'false' }},
+    isAkademik: {{ $report->category->name === 'Akademik' ? 'true' : 'false' }},
+    isDiniyah: {{ $report->category->name === 'Diniyah' ? 'true' : 'false' }},
+    isIbadah: {{ $report->category->name === 'Praktek Ibadah' ? 'true' : 'false' }},
     newSubjects: [],
     
-    get currentSubjects() {
-        if (!this.selectedAcademicCategory) return [];
-        const cat = this.categories.find(c => c.id == this.selectedAcademicCategory);
-        return cat ? cat.subjects : [];
+    calculateAverage(row) {
+        let values = [
+            parseFloat(row.pts) || 0,
+            parseFloat(row.pas) || 0,
+            parseFloat(row.rem) || 0,
+            parseFloat(row.harian) || 0
+        ].filter(v => v > 0);
+        
+        if (values.length === 0) {
+            row.score = '';
+            row.pred = '-';
+            return;
+        }
+        
+        let avg = values.reduce((a, b) => a + b, 0) / values.length;
+        row.score = avg.toFixed(2);
+        row.pred = this.calculatePredicate(row.score);
+    },
+    calculatePredicate(score) {
+        if (!score) return '-';
+        score = parseFloat(score);
+        if (score >= 93) return 'A';
+        if (score >= 84) return 'B';
+        if (score >= 75) return 'C';
+        return 'D';
     }
 }">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -19,10 +41,10 @@
             <div class="flex justify-between items-center mb-8">
                 <div>
                     <h2 class="text-3xl font-extrabold text-gray-900 dark:text-gray-100">Edit Raport {{ $report->category->name }}</h2>
-                    <p class="text-gray-500 dark:text-gray-400 mt-1">Memperbarui laporan periode {{ $report->period }}.</p>
+                    <p class="text-gray-500 dark:text-gray-400 mt-1">Memperbarui laporan perkembangan siswa sesuai standar Sayyidah School.</p>
                 </div>
-                <a href="{{ route('students.show', $report->siswa_id) }}" class="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 px-5 py-2.5 rounded-xl font-semibold hover:bg-gray-200 transition">
-                    Kembali ke Profil
+                <a href="{{ route('admin.reports.index') }}" class="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 px-5 py-2.5 rounded-xl font-semibold hover:bg-gray-200 transition">
+                    Kembali
                 </a>
             </div>
 
@@ -39,12 +61,13 @@
             <form action="{{ route('admin.reports.update', $report) }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
+                <input type="hidden" name="siswa_id" value="{{ $report->siswa_id }}">
+                <input type="hidden" name="report_category_id" value="{{ $report->report_category_id }}">
                 
-                <!-- Common Fields -->
+                <!-- Info Section -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10 p-6 bg-gray-50 dark:bg-gray-900/50 rounded-2xl border border-gray-100 dark:border-gray-800">
                     <div>
                         <label class="block text-sm font-bold text-gray-400 uppercase tracking-wider mb-2">Siswa</label>
-                        <input type="hidden" name="siswa_id" value="{{ $report->siswa_id }}">
                         <div class="text-xl font-bold text-gray-900 dark:text-gray-100">
                             {{ $report->student->nama_siswa }}
                         </div>
@@ -55,112 +78,216 @@
                     </div>
                 </div>
 
-                <!-- Akademik Tab Content -->
-                <div x-show="activeTab === 'akademik'" class="space-y-8">
-                    <input type="hidden" name="report_category_id" value="{{ $report->report_category_id }}">
-                    
-                    <div class="space-y-4">
+                <!-- Academic Form -->
+                <template x-if="isAkademik">
+                    <div class="space-y-6">
                         <div class="flex justify-between items-center border-l-4 border-blue-500 pl-4 mb-6">
-                            <h3 class="text-xl font-bold text-gray-800 dark:text-gray-200">Daftar Nilai Subjek</h3>
+                            <h3 class="text-xl font-bold text-gray-800 dark:text-gray-200">Nilai Akademik (KKM: 75)</h3>
                             <button type="button" @click="newSubjects.push({ id: Date.now(), name: '' })" class="text-blue-600 hover:text-blue-800 text-sm font-bold flex items-center gap-1">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-                                Tambah Subjek Baru
+                                Tambah Mata Pelajaran
                             </button>
                         </div>
 
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="bg-gray-50 dark:bg-gray-900/50">
+                                        <th class="p-4 text-xs font-black text-gray-400 uppercase tracking-widest border-b border-gray-100 dark:border-gray-800">Mata Pelajaran</th>
+                                        <th class="p-4 text-xs font-black text-gray-400 uppercase tracking-widest border-b border-gray-100 dark:border-gray-800">PTS</th>
+                                        <th class="p-4 text-xs font-black text-gray-400 uppercase tracking-widest border-b border-gray-100 dark:border-gray-800">PAS</th>
+                                        <th class="p-4 text-xs font-black text-gray-400 uppercase tracking-widest border-b border-gray-100 dark:border-gray-800">Remedial</th>
+                                        <th class="p-4 text-xs font-black text-gray-400 uppercase tracking-widest border-b border-gray-100 dark:border-gray-800">Harian</th>
+                                        <th class="p-4 text-xs font-black text-gray-400 uppercase tracking-widest border-b border-gray-100 dark:border-gray-800">Akhir</th>
+                                        <th class="p-4 text-xs font-black text-gray-400 uppercase tracking-widest border-b border-gray-100 dark:border-gray-800 text-center">Predikat</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
+                                        @foreach($report->category->subjects as $subject)
+                                            @php $grade = $report->grades->where('report_subject_id', $subject->id)->first(); @endphp
+                                            <tr x-data="{ score: '{{ $grade->score ?? '' }}', pts: '{{ $grade->score_pts ?? '' }}', pas: '{{ $grade->score_pas ?? '' }}', rem: '{{ $grade->score_remedial ?? '' }}', harian: '{{ $grade->score_harian ?? '' }}', pred: '{{ $grade->predicate ?? '-' }}' }" 
+                                                x-init="$watch('pts', () => calculateAverage($data)); $watch('pas', () => calculateAverage($data)); $watch('rem', () => calculateAverage($data)); $watch('harian', () => calculateAverage($data))"
+                                                class="hover:bg-gray-50/50 dark:hover:bg-gray-900/20 transition">
+                                                <td class="p-4 font-bold text-gray-700 dark:text-gray-300">{{ $subject->name }}</td>
+                                                <td class="p-2"><input type="number" name="grades[{{ $subject->id }}][score_pts]" x-model="pts" step="0.01" class="w-20 rounded-lg border-gray-200 dark:bg-gray-700 dark:border-gray-600 text-sm font-bold"></td>
+                                                <td class="p-2"><input type="number" name="grades[{{ $subject->id }}][score_pas]" x-model="pas" step="0.01" class="w-20 rounded-lg border-gray-200 dark:bg-gray-700 dark:border-gray-600 text-sm font-bold"></td>
+                                                <td class="p-2"><input type="number" name="grades[{{ $subject->id }}][score_remedial]" x-model="rem" step="0.01" class="w-20 rounded-lg border-gray-200 dark:bg-gray-700 dark:border-gray-600 text-sm font-bold"></td>
+                                                <td class="p-2"><input type="number" name="grades[{{ $subject->id }}][score_harian]" x-model="harian" step="0.01" class="w-20 rounded-lg border-gray-200 dark:bg-gray-700 dark:border-gray-600 text-sm font-bold"></td>
+                                                <td class="p-2"><input type="number" name="grades[{{ $subject->id }}][score]" x-model="score" step="0.01" class="w-20 rounded-lg border-blue-200 dark:bg-gray-700 dark:border-gray-600 text-sm font-black text-blue-600" readonly></td>
+                                                <td class="p-4 text-center">
+                                                    <input type="hidden" name="grades[{{ $subject->id }}][predicate]" :value="pred">
+                                                <span class="px-3 py-1 rounded-full text-xs font-black" :class="{
+                                                    'bg-green-100 text-green-700': pred === 'A',
+                                                    'bg-blue-100 text-blue-700': pred === 'B',
+                                                    'bg-yellow-100 text-yellow-700': pred === 'C',
+                                                    'bg-red-100 text-red-700': pred === 'D',
+                                                    'bg-gray-100 text-gray-500': pred === '-'
+                                                }" x-text="pred"></span>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                    <template x-for="(sub, index) in newSubjects" :key="sub.id">
+                                        <tr x-data="{ score: '', pts: '', pas: '', rem: '', harian: '', pred: '-' }" 
+                                            x-init="$watch('pts', () => calculateAverage($data)); $watch('pas', () => calculateAverage($data)); $watch('rem', () => calculateAverage($data)); $watch('harian', () => calculateAverage($data))"
+                                            class="bg-blue-50/30 dark:bg-blue-900/10">
+                                            <td class="p-2"><input type="text" :name="`new_subjects[${index}][name]`" placeholder="Nama Mapel" class="w-full rounded-lg border-gray-200 dark:bg-gray-700 text-sm font-bold"></td>
+                                            <td class="p-2"><input type="number" :name="`new_subjects[${index}][score_pts]`" x-model="pts" class="w-20 rounded-lg border-gray-200 dark:bg-gray-700 text-sm font-bold"></td>
+                                            <td class="p-2"><input type="number" :name="`new_subjects[${index}][score_pas]`" x-model="pas" class="w-20 rounded-lg border-gray-200 dark:bg-gray-700 text-sm font-bold"></td>
+                                            <td class="p-2"><input type="number" :name="`new_subjects[${index}][score_remedial]`" x-model="rem" class="w-20 rounded-lg border-gray-200 dark:bg-gray-700 text-sm font-bold"></td>
+                                            <td class="p-2"><input type="number" :name="`new_subjects[${index}][score_harian]`" x-model="harian" class="w-20 rounded-lg border-gray-200 dark:bg-gray-700 text-sm font-bold"></td>
+                                            <td class="p-2"><input type="number" :name="`new_subjects[${index}][score]`" x-model="score" class="w-20 rounded-lg border-blue-200 dark:bg-gray-700 text-sm font-black text-blue-600" readonly></td>
+                                            <td class="p-4 text-center">
+                                                <input type="hidden" :name="`new_subjects[${index}][predicate]`" :value="pred">
+                                                <span class="px-3 py-1 rounded-full text-xs font-black" :class="{
+                                                    'bg-green-100 text-green-700': pred === 'A',
+                                                    'bg-blue-100 text-blue-700': pred === 'B',
+                                                    'bg-yellow-100 text-yellow-700': pred === 'C',
+                                                    'bg-red-100 text-red-700': pred === 'D',
+                                                    'bg-gray-100 text-gray-500': pred === '-'
+                                                }" x-text="pred"></span>
+                                            </td>
+                                        </tr>
+                                    </template>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </template>
+
+                <!-- Diniyah Form -->
+                <template x-if="isDiniyah">
+                    <div class="space-y-6">
+                        <div class="border-l-4 border-emerald-500 pl-4 mb-6">
+                            <h3 class="text-xl font-bold text-gray-800 dark:text-gray-200">Tahfidz & Diniyah</h3>
+                        </div>
                         <div class="grid grid-cols-1 gap-4">
                             @foreach($report->category->subjects as $subject)
                                 @php $grade = $report->grades->where('report_subject_id', $subject->id)->first(); @endphp
-                                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-center p-5 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl shadow-sm hover:border-blue-200 transition">
+                                <div class="p-6 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl shadow-sm grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
                                     <div class="font-bold text-gray-700 dark:text-gray-300">{{ $subject->name }}</div>
-                                    <div>
-                                        <input type="number" name="grades[{{ $subject->id }}][score]" value="{{ $grade->score ?? '' }}" step="0.01" min="0" max="100" placeholder="Nilai (0-100)" class="w-full rounded-xl border-gray-300 dark:bg-gray-700 dark:text-white text-sm font-bold">
+                                    <div class="md:col-span-1">
+                                        <input type="text" name="grades[{{ $subject->id }}][ayat_range]" value="{{ $grade->ayat_range ?? '' }}" placeholder="Rentang Ayat (mis: 1-10)" class="w-full rounded-xl border-gray-300 dark:bg-gray-700 text-sm font-bold">
                                     </div>
-                                    <div>
-                                        <input type="text" name="grades[{{ $subject->id }}][description]" value="{{ $grade->description ?? '' }}" placeholder="Keterangan / Catatan" class="w-full rounded-xl border-gray-300 dark:bg-gray-700 dark:text-white text-sm">
+                                    <div class="md:col-span-1">
+                                        <select name="grades[{{ $subject->id }}][predicate]" class="w-full rounded-xl border-gray-300 dark:bg-gray-700 text-sm font-bold">
+                                            <option value="">Pilih Mutu</option>
+                                            <option value="Mumtaz" {{ ($grade->predicate ?? '') === 'Mumtaz' ? 'selected' : '' }}>Mumtaz (A)</option>
+                                            <option value="Jayyid Jiddan" {{ ($grade->predicate ?? '') === 'Jayyid Jiddan' ? 'selected' : '' }}>Jayyid Jiddan (B)</option>
+                                            <option value="Jayyid" {{ ($grade->predicate ?? '') === 'Jayyid' ? 'selected' : '' }}>Jayyid (C)</option>
+                                            <option value="Maqbul" {{ ($grade->predicate ?? '') === 'Maqbul' ? 'selected' : '' }}>Maqbul (D)</option>
+                                        </select>
+                                    </div>
+                                    <div class="md:col-span-1">
+                                        <input type="text" name="grades[{{ $subject->id }}][description]" value="{{ $grade->description ?? '' }}" placeholder="Keterangan" class="w-full rounded-xl border-gray-300 dark:bg-gray-700 text-sm">
                                     </div>
                                 </div>
                             @endforeach
-
-                            <!-- Dynamic New Subjects -->
-                            <template x-for="(sub, index) in newSubjects" :key="sub.id">
-                                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 items-center p-5 bg-blue-50/50 dark:bg-blue-900/10 border border-blue-100 dark:border-blue-900/30 rounded-2xl shadow-sm">
-                                    <div class="md:col-span-1">
-                                        <input type="text" :name="`new_subjects[${index}][name]`" placeholder="Nama Subjek Baru" required class="w-full rounded-xl border-gray-300 dark:bg-gray-700 dark:text-white text-sm font-bold">
-                                    </div>
-                                    <div class="md:col-span-1">
-                                        <input type="number" :name="`new_subjects[${index}][score]`" step="0.01" min="0" max="100" placeholder="Nilai" class="w-full rounded-xl border-gray-300 dark:bg-gray-700 dark:text-white text-sm font-bold">
-                                    </div>
-                                    <div class="md:col-span-1">
-                                        <input type="text" :name="`new_subjects[${index}][description]`" placeholder="Keterangan" class="w-full rounded-xl border-gray-300 dark:bg-gray-700 dark:text-white text-sm">
-                                    </div>
-                                    <div class="md:col-span-1 flex justify-end">
-                                        <button type="button" @click="newSubjects = newSubjects.filter(s => s.id !== sub.id)" class="text-red-500 hover:text-red-700 p-2">
-                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                                        </button>
-                                    </div>
-                                </div>
-                            </template>
                         </div>
                     </div>
-                </div>
+                </template>
 
-                <!-- Probing Tab Content -->
-                <div x-show="activeTab === 'probing'" x-data="{ activities: {{ $report->probingActivities->map(function($a) { return ['id' => $a->id, 'name' => $a->activity_name, 'desc' => $a->description, 'img' => $a->image_path]; })->toJson() }} }">
-                    <input type="hidden" name="report_category_id" value="{{ $report->report_category_id }}">
-                    
+                <!-- Ibadah Form -->
+                <template x-if="isIbadah">
                     <div class="space-y-6">
-                        <div class="flex justify-between items-center border-l-4 border-green-500 pl-4 mb-6">
-                            <h3 class="text-xl font-bold text-gray-800 dark:text-gray-200">Aktivitas Probing</h3>
+                        <div class="border-l-4 border-indigo-500 pl-4 mb-6">
+                            <h3 class="text-xl font-bold text-gray-800 dark:text-gray-200">Praktek Ibadah & Shalat</h3>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            @foreach($report->category->subjects as $subject)
+                                @php $grade = $report->grades->where('report_subject_id', $subject->id)->first(); @endphp
+                                <div class="p-5 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl shadow-sm flex items-center justify-between">
+                                    <span class="font-bold text-gray-700 dark:text-gray-300">{{ $subject->name }}</span>
+                                    <select name="grades[{{ $subject->id }}][predicate]" class="rounded-xl border-gray-300 dark:bg-gray-700 text-sm font-black">
+                                        <option value="Lancar" {{ ($grade->predicate ?? '') === 'Lancar' ? 'selected' : '' }}>Lancar</option>
+                                        <option value="Cukup Lancar" {{ ($grade->predicate ?? '') === 'Cukup Lancar' ? 'selected' : '' }}>Cukup Lancar</option>
+                                        <option value="Perlu Bimbingan" {{ ($grade->predicate ?? '') === 'Perlu Bimbingan' ? 'selected' : '' }}>Perlu Bimbingan</option>
+                                        <option value="Belum Hafal" {{ ($grade->predicate ?? '') === 'Belum Hafal' ? 'selected' : '' }}>Belum Hafal</option>
+                                    </select>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                </template>
+
+                <!-- Probing Form -->
+                <template x-if="isProbing">
+                    <div x-data="{ 
+                        activities: {{ $report->probingActivities->map(function($a) { 
+                            return [
+                                'id' => $a->id, 
+                                'title' => $a->activity_title, 
+                                'desc' => $a->description, 
+                                'preview' => $a->image_path ? asset('storage/' . $a->image_path) : null
+                            ]; 
+                        })->toJson() }},
+                        handleFile(index, event) {
+                            const file = event.target.files[0];
+                            if (file) {
+                                this.activities[index].preview = URL.createObjectURL(file);
+                            }
+                        }
+                    }">
+                        <div class="flex justify-between items-center border-l-4 border-amber-500 pl-4 mb-6">
+                            <h3 class="text-xl font-bold text-gray-800 dark:text-gray-200">Aktivitas Probing (Dokumentasi)</h3>
                         </div>
                         
-                        <div class="space-y-6">
+                        <div class="space-y-8">
                             <template x-for="(activity, index) in activities" :key="activity.id">
-                                <div class="p-8 border border-gray-200 dark:border-gray-700 rounded-[24px] bg-gray-50 dark:bg-gray-900/30 relative shadow-sm">
-                                    <button type="button" @click="activities = activities.filter(a => a.id !== activity.id)" class="absolute top-6 right-6 text-red-400 hover:text-red-600 transition">
-                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                <div class="p-8 border border-gray-200 dark:border-gray-700 rounded-[32px] bg-gray-50 dark:bg-gray-900/30 relative shadow-sm transition hover:shadow-md">
+                                    <button type="button" @click="activities = activities.filter(a => a.id !== activity.id)" class="absolute top-6 right-6 text-red-400 hover:text-red-600 transition p-2 hover:bg-red-50 rounded-full">
+                                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                                     </button>
                                     
-                                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                        <div>
-                                            <label class="block text-sm font-bold text-gray-400 uppercase tracking-wider mb-2">Nama Aktivitas</label>
-                                            <input type="text" :name="`probing[${index}][name]`" :value="activity.name" required class="w-full rounded-xl border-gray-300 focus:ring-blue-500 dark:bg-gray-700 dark:text-white font-bold">
+                                    <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+                                        <div class="md:col-span-4">
+                                            <label class="block text-xs font-black text-gray-400 uppercase tracking-widest mb-4">Foto Aktivitas</label>
+                                            <div class="relative group aspect-square rounded-3xl overflow-hidden bg-gray-200 dark:bg-gray-800 border-2 border-dashed border-gray-300 dark:border-gray-600 flex items-center justify-center">
+                                                <template x-if="!activity.preview">
+                                                    <div class="text-center p-4">
+                                                        <svg class="w-12 h-12 text-gray-400 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                                        <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest">Klik untuk ganti foto</p>
+                                                    </div>
+                                                </template>
+                                                <template x-if="activity.preview">
+                                                    <img :src="activity.preview" class="w-full h-full object-cover">
+                                                </template>
+                                                <input type="file" :name="`probing[${index}][image]`" @change="handleFile(index, $event)" accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer">
+                                            </div>
                                         </div>
-                                        <div>
-                                            <label class="block text-sm font-bold text-gray-400 uppercase tracking-wider mb-2">Ganti Foto (Kosongkan jika tidak ingin ganti)</label>
-                                            <input type="file" :name="`probing[${index}][image]`" accept="image/*" class="w-full text-sm text-gray-500 file:mr-4 file:py-2.5 file:px-5 file:rounded-xl file:border-0 file:text-sm file:font-bold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 transition">
-                                            <template x-if="activity.img">
-                                                <p class="mt-2 text-xs text-gray-500 italic">Sudah ada foto terunggah.</p>
-                                            </template>
-                                        </div>
-                                        <div class="md:col-span-2">
-                                            <label class="block text-sm font-bold text-gray-400 uppercase tracking-wider mb-2">Deskripsi Detail</label>
-                                            <textarea :name="`probing[${index}][description]`" x-text="activity.desc" rows="4" class="w-full rounded-xl border-gray-300 focus:ring-blue-500 dark:bg-gray-700 dark:text-white p-5"></textarea>
+                                        <div class="md:col-span-8 space-y-6">
+                                            <div>
+                                                <label class="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Judul Aktivitas</label>
+                                                <input type="text" :name="`probing[${index}][title]`" x-model="activity.title" required placeholder="Contoh: Praktek Memasak di Dapur" class="w-full rounded-2xl border-gray-300 focus:ring-blue-500 dark:bg-gray-700 dark:text-white font-bold text-lg p-4">
+                                            </div>
+                                            <div>
+                                                <label class="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Narasi Deskripsi</label>
+                                                <textarea :name="`probing[${index}][description]`" x-model="activity.desc" rows="6" class="w-full rounded-2xl border-gray-300 focus:ring-blue-500 dark:bg-gray-700 dark:text-white p-4" placeholder="Ceritakan detail aktivitas siswa, apa yang dipelajari, dan bagaimana perkembangannya..."></textarea>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </template>
 
-                            <button type="button" @click="activities.push({ id: Date.now(), name: '', desc: '', img: '' })" class="w-full py-6 border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-[24px] text-gray-500 hover:text-blue-600 flex items-center justify-center gap-2 font-bold text-lg transition hover:border-blue-400 hover:bg-blue-50">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                Tambah Aktivitas Lainnya
+                            <button type="button" @click="activities.push({ id: Date.now(), title: '', desc: '', preview: null })" class="w-full py-8 border-2 border-dashed border-gray-300 dark:border-gray-700 rounded-[32px] text-gray-400 hover:text-blue-600 hover:border-blue-400 hover:bg-blue-50 transition-all flex items-center justify-center gap-3 font-black text-xl active:scale-[0.98]">
+                                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                                TAMBAH AKTIVITAS BARU
                             </button>
                         </div>
                     </div>
-                </div>
+                </template>
 
                 <!-- Summary Notes -->
-                <div class="mt-12">
-                    <label class="block text-sm font-bold text-gray-400 uppercase tracking-wider mb-3">Catatan Perkembangan Umum (Kesimpulan)</label>
-                    <textarea name="summary_notes" rows="4" class="w-full rounded-2xl border-gray-300 focus:ring-blue-500 dark:bg-gray-700 dark:text-white p-5">{{ old('summary_notes', $report->summary_notes) }}</textarea>
+                <div class="mt-12 bg-gray-50 dark:bg-gray-900/50 p-8 rounded-[32px] border border-gray-100 dark:border-gray-800">
+                    <label class="block text-xs font-black text-gray-400 uppercase tracking-widest mb-4 ml-1">Catatan Kesimpulan (Wali Kelas)</label>
+                    <textarea name="summary_notes" rows="5" class="w-full rounded-2xl border-gray-200 focus:ring-blue-500 dark:bg-gray-700 dark:text-white p-6 text-lg" placeholder="Berikan gambaran umum perkembangan siswa selama periode ini...">{{ old('summary_notes', $report->summary_notes) }}</textarea>
                 </div>
 
                 <div class="mt-12 pt-8 border-t border-gray-100 dark:border-gray-700 flex justify-between">
-                    <button type="button" onclick="if(confirm('Hapus raport ini?')) document.getElementById('delete-form').submit();" class="text-red-600 hover:text-red-800 font-extrabold transition">
+                    <button type="button" onclick="if(confirm('Hapus raport ini?')) document.getElementById('delete-form').submit();" class="text-red-600 hover:text-red-800 font-extrabold transition px-6">
                         Hapus Raport
                     </button>
-                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-10 py-4 rounded-2xl font-extrabold shadow-xl shadow-blue-600/30 transition transform active:scale-95 text-lg">
-                        Simpan Perubahan
+                    <button type="submit" class="bg-gray-900 dark:bg-white text-white dark:text-gray-900 px-12 py-5 rounded-[24px] font-black shadow-2xl transition transform hover:-translate-y-1 active:scale-95 text-xl tracking-widest uppercase">
+                        SIMPAN PERUBAHAN
                     </button>
                 </div>
             </form>

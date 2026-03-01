@@ -1,0 +1,20 @@
+JENIS: RAPORT PERKEMBANGAN AKADEMIK
+HEADER: Nama, Kelas, Semester, Tahun Pelajaran.
+TABEL UTAMA:
+1. No (Auto-increment)
+2. Mata Pelajaran:
+   - Pendidikan Agama
+   - Pendidikan Pancasila dan Kewarganegaraan (PPKn)
+   - Bahasa Indonesia
+   - Bahasa Inggris
+   - Matematika
+   - Ilmu Pengetahuan Alam (IPA)
+   - Ilmu Pengetahuan Sosial (IPS)
+   - Seni Budaya dan Keterampilan
+3. Penilaian Tengah Semester (Angka 0-100)
+4. Remedial (Optional)
+5. Penilaian Harian (Angka 0-100)
+6. Nilai Akhir (Kalkulasi/Input)
+7. Predikat (A, B, C, D)
+FOOTER: Tabel interval predikat berdasarkan KKM, Tanda tangan Fasilitator dan Psikolog.
+[cite: 8]

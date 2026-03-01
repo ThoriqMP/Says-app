@@ -159,6 +159,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/dashboard', [\App\Http\Controllers\Student\StudentPortalController::class, 'dashboard'])->name('dashboard');
         Route::get('/invoices', [\App\Http\Controllers\Student\StudentPortalController::class, 'invoices'])->name('invoices');
         Route::get('/invoices/{invoice}', [\App\Http\Controllers\Student\StudentPortalController::class, 'invoiceDetail'])->name('invoices.show');
+        Route::post('/invoices/{invoice}/payment-proof', [\App\Http\Controllers\Student\StudentPortalController::class, 'uploadPaymentProof'])->name('invoices.upload-payment-proof');
         Route::get('/invoices/{invoice}/pdf', [\App\Http\Controllers\Student\StudentPortalController::class, 'downloadInvoicePdf'])->name('invoices.pdf');
         Route::get('/reports', [\App\Http\Controllers\Student\StudentPortalController::class, 'reports'])->name('reports');
         Route::get('/reports/{report}', [\App\Http\Controllers\Student\StudentPortalController::class, 'reportDetail'])->name('reports.show');

@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Helpers\ReportHelper;
 use App\Http\Controllers\Controller;
+use App\Models\ProfilSekolah;
 use App\Models\ProbingActivity;
 use App\Models\ReportCategory;
 use App\Models\ReportGrade;
@@ -36,8 +38,11 @@ class ReportManagementController extends Controller
 
         $reports = $query->latest()->paginate(12)->withQueryString();
         $categories = ReportCategory::orderBy('name')->get();
+        
+        // Fetch all students for the modal list
+        $allStudents = Siswa::orderBy('nama_siswa')->get(['id', 'nama_siswa', 'nis', 'class']);
 
-        return view('admin.reports.index', compact('reports', 'categories'));
+        return view('admin.reports.index', compact('reports', 'categories', 'allStudents'));
     }
 
     public function create(Request $request)
@@ -78,7 +83,8 @@ class ReportManagementController extends Controller
     public function downloadPdf(StudentReport $report)
     {
         $report->load(['student', 'category', 'grades.subject', 'probingActivities', 'teacher']);
-        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('student.reports.pdf', compact('report'));
+        $school = ProfilSekolah::first();
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('student.reports.pdf', compact('report', 'school'));
         return $pdf->download("Raport_{$report->student->nama_siswa}_{$report->period}.pdf");
     }
 
@@ -101,11 +107,17 @@ class ReportManagementController extends Controller
             'summary_notes' => 'nullable|string',
             'grades' => 'array',
             'grades.*.score' => 'nullable|numeric|min:0|max:100',
+            'grades.*.score_pts' => 'nullable|numeric|min:0|max:100',
+            'grades.*.score_pas' => 'nullable|numeric|min:0|max:100',
+            'grades.*.score_remedial' => 'nullable|numeric|min:0|max:100',
+            'grades.*.score_harian' => 'nullable|numeric|min:0|max:100',
+            'grades.*.predicate' => 'nullable|string|max:10',
+            'grades.*.ayat_range' => 'nullable|string|max:255',
             'grades.*.description' => 'nullable|string|max:255',
             'probing' => 'array',
-            'probing.*.name' => 'required_with:probing|string|max:255',
+            'probing.*.title' => 'required_with:probing|string|max:255',
             'probing.*.description' => 'nullable|string',
-            'probing.*.image' => 'nullable|image|mimes:jpg,jpeg,png|max:5120',
+            'probing.*.image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
         DB::beginTransaction();
@@ -121,12 +133,22 @@ class ReportManagementController extends Controller
             // Handle Existing Grades
             if ($request->has('grades')) {
                 foreach ($request->grades as $subjectId => $data) {
-                    if (isset($data['score']) && $data['score'] !== '') {
-                        ReportGrade::updateOrCreate(
-                            ['student_report_id' => $report->id, 'report_subject_id' => $subjectId],
-                            ['score' => $data['score'], 'description' => $data['description'] ?? null]
-                        );
-                    }
+                    $score = $data['score'] ?? null;
+                    $predicate = $data['predicate'] ?? ReportHelper::calculatePredicate($score);
+
+                    ReportGrade::updateOrCreate(
+                        ['student_report_id' => $report->id, 'report_subject_id' => $subjectId],
+                        [
+                            'score' => $score,
+                            'score_pts' => $data['score_pts'] ?? null,
+                            'score_pas' => $data['score_pas'] ?? null,
+                            'score_remedial' => $data['score_remedial'] ?? null,
+                            'score_harian' => $data['score_harian'] ?? null,
+                            'predicate' => $predicate,
+                            'ayat_range' => $data['ayat_range'] ?? null,
+                            'description' => $data['description'] ?? null
+                        ]
+                    );
                 }
             }
 
@@ -140,31 +162,38 @@ class ReportManagementController extends Controller
                         'name' => $newSubject['name'],
                     ]);
 
-                    if (isset($newSubject['score']) && $newSubject['score'] !== '') {
-                        ReportGrade::create([
-                            'student_report_id' => $report->id,
-                            'report_subject_id' => $subject->id,
-                            'score' => $newSubject['score'],
-                            'description' => $newSubject['description'] ?? null,
-                        ]);
-                    }
+                    $score = $newSubject['score'] ?? null;
+                    $predicate = $newSubject['predicate'] ?? ReportHelper::calculatePredicate($score);
+
+                    ReportGrade::create([
+                        'student_report_id' => $report->id,
+                        'report_subject_id' => $subject->id,
+                        'score' => $score,
+                        'score_pts' => $newSubject['score_pts'] ?? null,
+                        'score_pas' => $newSubject['score_pas'] ?? null,
+                        'score_remedial' => $newSubject['score_remedial'] ?? null,
+                        'score_harian' => $newSubject['score_harian'] ?? null,
+                        'predicate' => $predicate,
+                        'ayat_range' => $newSubject['ayat_range'] ?? null,
+                        'description' => $newSubject['description'] ?? null,
+                    ]);
                 }
             }
 
             // Handle Probing (Keep old images if not replaced)
             if ($request->has('probing')) {
-                // If we want to replace all, we should delete old activities.
-                // But typically we might want to keep some. For simplicity, let's replace all.
-                // In a real app, we might want to track IDs.
+                // For Probing, we might want to be more specific about updates.
+                // But let's follow the previous logic of replacing for simplicity, 
+                // OR better: track by index/ID.
                 
-                // Let's delete old ones.
+                // For now, let's keep the "replace all" but update fields.
                 foreach($report->probingActivities as $old) {
                     if ($old->image_path) Storage::disk('public')->delete($old->image_path);
                     $old->delete();
                 }
 
                 foreach ($request->probing as $activity) {
-                    if (empty($activity['name'])) continue;
+                    if (empty($activity['title'])) continue;
 
                     $imagePath = null;
                     if (isset($activity['image']) && $activity['image'] instanceof \Illuminate\Http\UploadedFile) {
@@ -173,7 +202,8 @@ class ReportManagementController extends Controller
 
                     ProbingActivity::create([
                         'student_report_id' => $report->id,
-                        'activity_name' => $activity['name'],
+                        'activity_name' => $activity['title'], // activity_name is used as title in some places
+                        'activity_title' => $activity['title'],
                         'description' => $activity['description'] ?? null,
                         'image_path' => $imagePath,
                     ]);
@@ -217,15 +247,26 @@ class ReportManagementController extends Controller
             'summary_notes' => 'nullable|string',
             'grades' => 'array',
             'grades.*.score' => 'nullable|numeric|min:0|max:100',
+            'grades.*.score_pts' => 'nullable|numeric|min:0|max:100',
+            'grades.*.score_remedial' => 'nullable|numeric|min:0|max:100',
+            'grades.*.score_harian' => 'nullable|numeric|min:0|max:100',
+            'grades.*.predicate' => 'nullable|string|max:10',
+            'grades.*.ayat_range' => 'nullable|string|max:255',
             'grades.*.description' => 'nullable|string|max:255',
             'new_subjects' => 'array',
             'new_subjects.*.name' => 'required_with:new_subjects|string|max:255',
             'new_subjects.*.score' => 'nullable|numeric|min:0|max:100',
+            'new_subjects.*.score_pts' => 'nullable|numeric|min:0|max:100',
+            'new_subjects.*.score_pas' => 'nullable|numeric|min:0|max:100',
+            'new_subjects.*.score_remedial' => 'nullable|numeric|min:0|max:100',
+            'new_subjects.*.score_harian' => 'nullable|numeric|min:0|max:100',
+            'new_subjects.*.predicate' => 'nullable|string|max:10',
+            'new_subjects.*.ayat_range' => 'nullable|string|max:255',
             'new_subjects.*.description' => 'nullable|string|max:255',
             'probing' => 'array',
-            'probing.*.name' => 'required_with:probing|string|max:255',
+            'probing.*.title' => 'required_with:probing|string|max:255',
             'probing.*.description' => 'nullable|string',
-            'probing.*.image' => 'nullable|image|mimes:jpg,jpeg,png|max:5120', // 5MB max
+            'probing.*.image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
         DB::beginTransaction();
@@ -242,14 +283,21 @@ class ReportManagementController extends Controller
             // Handle Existing Grades
             if ($request->has('grades')) {
                 foreach ($request->grades as $subjectId => $data) {
-                    if (isset($data['score']) && $data['score'] !== '') {
-                        ReportGrade::create([
-                            'student_report_id' => $report->id,
-                            'report_subject_id' => $subjectId,
-                            'score' => $data['score'],
-                            'description' => $data['description'] ?? null,
-                        ]);
-                    }
+                    $score = $data['score'] ?? null;
+                    $predicate = $data['predicate'] ?? ReportHelper::calculatePredicate($score);
+
+                    ReportGrade::create([
+                        'student_report_id' => $report->id,
+                        'report_subject_id' => $subjectId,
+                        'score' => $score,
+                        'score_pts' => $data['score_pts'] ?? null,
+                        'score_pas' => $data['score_pas'] ?? null,
+                        'score_remedial' => $data['score_remedial'] ?? null,
+                        'score_harian' => $data['score_harian'] ?? null,
+                        'predicate' => $predicate,
+                        'ayat_range' => $data['ayat_range'] ?? null,
+                        'description' => $data['description'] ?? null,
+                    ]);
                 }
             }
 
@@ -263,21 +311,28 @@ class ReportManagementController extends Controller
                         'name' => $newSubject['name'],
                     ]);
 
-                    if (isset($newSubject['score']) && $newSubject['score'] !== '') {
-                        ReportGrade::create([
-                            'student_report_id' => $report->id,
-                            'report_subject_id' => $subject->id,
-                            'score' => $newSubject['score'],
-                            'description' => $newSubject['description'] ?? null,
-                        ]);
-                    }
+                    $score = $newSubject['score'] ?? null;
+                    $predicate = $newSubject['predicate'] ?? ReportHelper::calculatePredicate($score);
+
+                    ReportGrade::create([
+                        'student_report_id' => $report->id,
+                        'report_subject_id' => $subject->id,
+                        'score' => $score,
+                        'score_pts' => $newSubject['score_pts'] ?? null,
+                        'score_pas' => $newSubject['score_pas'] ?? null,
+                        'score_remedial' => $newSubject['score_remedial'] ?? null,
+                        'score_harian' => $newSubject['score_harian'] ?? null,
+                        'predicate' => $predicate,
+                        'ayat_range' => $newSubject['ayat_range'] ?? null,
+                        'description' => $newSubject['description'] ?? null,
+                    ]);
                 }
             }
 
             // Handle Probing Activities
             if ($request->has('probing')) {
                 foreach ($request->probing as $activity) {
-                    if (empty($activity['name'])) continue;
+                    if (empty($activity['title'])) continue;
 
                     $imagePath = null;
                     if (isset($activity['image']) && $activity['image'] instanceof \Illuminate\Http\UploadedFile) {
@@ -286,7 +341,8 @@ class ReportManagementController extends Controller
 
                     ProbingActivity::create([
                         'student_report_id' => $report->id,
-                        'activity_name' => $activity['name'],
+                        'activity_name' => $activity['title'],
+                        'activity_title' => $activity['title'],
                         'description' => $activity['description'] ?? null,
                         'image_path' => $imagePath,
                     ]);

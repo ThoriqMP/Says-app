@@ -16,11 +16,14 @@ class Invoice extends Model
         'id_sekolah',
         'status',
         'grand_total',
+        'payment_proof',
+        'payment_date',
     ];
 
     protected $casts = [
         'tanggal_invoice' => 'date',
         'jatuh_tempo' => 'date',
+        'payment_date' => 'datetime',
         'grand_total' => 'decimal:2',
     ];
 

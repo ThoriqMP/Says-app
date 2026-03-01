@@ -1,0 +1,16 @@
+JENIS: LAPORAN PENILAIAN PRAKTEK IBADAH
+HEADER: Nama, Kelas, Semester, Tahun Pelajaran.
+TABEL UTAMA:
+1. Bacaan Shalat / Gerakan:
+   - Niat Shalat (Subuh, Dzuhur, Asar, Magrib, Isya)
+   - Doa Iftitah
+   - Surat Al-Fatihah
+   - Surat Pendek
+   - Rukuk
+   - I'tidal
+   - Sujud
+   - Duduk di antara 2 sujud
+   - Duduk Tasyahud Awal & Akhir
+2. Mutu (Predikat huruf: A, B, C)
+3. Keterangan (Contoh: "Mampu menghafal dengan sangat baik")
+[cite: 10]

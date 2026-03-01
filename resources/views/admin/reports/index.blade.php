@@ -26,7 +26,6 @@
                 <div class="relative mb-6">
                     <input type="text" 
                            x-model="searchQuery" 
-                           @input.debounce.300ms="fetchStudents()"
                            placeholder="Ketik nama atau NIS siswa..." 
                            class="w-full pl-12 pr-6 py-4 bg-gray-50 dark:bg-gray-900 border-none rounded-2xl focus:ring-2 focus:ring-blue-500 dark:text-white font-bold placeholder-gray-400">
                     <svg class="w-6 h-6 text-gray-400 absolute left-4 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -35,7 +34,7 @@
                 </div>
 
                 <div class="max-h-64 overflow-y-auto space-y-2 mb-8 custom-scrollbar">
-                    <template x-for="student in students" :key="student.id">
+                    <template x-for="student in filteredStudents" :key="student.id">
                         <button @click="selectStudent(student)" 
                                 class="w-full flex items-center justify-between p-4 rounded-2xl hover:bg-blue-50 dark:hover:bg-blue-900/20 border-2 border-transparent hover:border-blue-600 transition-all text-left group">
                             <div class="flex items-center gap-4">
@@ -52,11 +51,8 @@
                             </svg>
                         </button>
                     </template>
-                    <div x-show="students.length === 0 && searchQuery.length >= 2" class="py-10 text-center text-gray-400 font-bold">
+                    <div x-show="filteredStudents.length === 0" class="py-10 text-center text-gray-400 font-bold">
                         Siswa tidak ditemukan...
-                    </div>
-                    <div x-show="searchQuery.length < 2" class="py-10 text-center text-gray-400 font-bold">
-                        Mulai mengetik untuk mencari...
                     </div>
                 </div>
 
@@ -238,29 +234,29 @@ function reportFlow() {
         showModal: false,
         step: 1,
         searchQuery: '',
-        students: [],
+        allStudents: @json($allStudents),
         selectedStudent: null,
         
+        get filteredStudents() {
+            if (this.searchQuery.trim() === '') {
+                return this.allStudents;
+            }
+            const query = this.searchQuery.toLowerCase();
+            return this.allStudents.filter(s => 
+                s.nama_siswa.toLowerCase().includes(query) || 
+                (s.nis && s.nis.toLowerCase().includes(query))
+            );
+        },
+
         resetModal() {
             this.showModal = false;
             this.step = 1;
             this.searchQuery = '';
-            this.students = [];
             this.selectedStudent = null;
         },
         
         async fetchStudents() {
-            if (this.searchQuery.length < 2) {
-                this.students = [];
-                return;
-            }
-            
-            try {
-                const response = await fetch(`{{ route('admin.reports.search-students') }}?query=${this.searchQuery}`);
-                this.students = await response.json();
-            } catch (error) {
-                console.error('Error fetching students:', error);
-            }
+            // No longer needed as we use computed filteredStudents
         },
         
         selectStudent(student) {
