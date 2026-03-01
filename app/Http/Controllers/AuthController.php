@@ -62,6 +62,11 @@ class AuthController extends Controller
             return route('dashboard');
         }
 
+        // Student always goes to student dashboard
+        if ($user->isStudent()) {
+            return route('student.dashboard');
+        }
+
         // Check permissions in priority order
         $permissions = [
             'dashboard' => 'dashboard',

@@ -11,6 +11,14 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
+        $middleware->redirectGuestsTo('/login');
+        $middleware->redirectUsersTo(function ($request) {
+            $user = $request->user();
+            if ($user && $user->role === 'student') {
+                return route('student.dashboard');
+            }
+            return route('dashboard');
+        });
         $middleware->alias([
             'pimpinan' => \App\Http\Middleware\EnsureUserIsPimpinan::class,
             'permission' => \App\Http\Middleware\CheckPermission::class,

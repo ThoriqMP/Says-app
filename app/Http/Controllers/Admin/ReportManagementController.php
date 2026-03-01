@@ -25,9 +25,12 @@ class ReportManagementController extends Controller
     public function create(Request $request)
     {
         $selectedStudentId = $request->student_id;
+        $selectedCategoryId = $request->category_id;
         $students = Siswa::orderBy('nama_siswa')->get();
         $categories = ReportCategory::with('subjects')->get();
-        return view('admin.reports.create', compact('students', 'categories', 'selectedStudentId'));
+        $selectedCategory = ReportCategory::with('subjects')->find($selectedCategoryId);
+
+        return view('admin.reports.create', compact('students', 'categories', 'selectedStudentId', 'selectedCategoryId', 'selectedCategory'));
     }
 
     public function show(StudentReport $report)
@@ -71,16 +74,34 @@ class ReportManagementController extends Controller
                 'summary_notes' => $request->summary_notes,
             ]);
 
-            // Handle Grades (Replace old)
-            $report->grades()->delete();
+            // Handle Existing Grades
             if ($request->has('grades')) {
                 foreach ($request->grades as $subjectId => $data) {
                     if (isset($data['score']) && $data['score'] !== '') {
+                        ReportGrade::updateOrCreate(
+                            ['student_report_id' => $report->id, 'report_subject_id' => $subjectId],
+                            ['score' => $data['score'], 'description' => $data['description'] ?? null]
+                        );
+                    }
+                }
+            }
+
+            // Handle New Subjects
+            if ($request->has('new_subjects')) {
+                foreach ($request->new_subjects as $newSubject) {
+                    if (empty($newSubject['name'])) continue;
+
+                    $subject = ReportSubject::create([
+                        'report_category_id' => $request->report_category_id,
+                        'name' => $newSubject['name'],
+                    ]);
+
+                    if (isset($newSubject['score']) && $newSubject['score'] !== '') {
                         ReportGrade::create([
                             'student_report_id' => $report->id,
-                            'report_subject_id' => $subjectId,
-                            'score' => $data['score'],
-                            'description' => $data['description'] ?? null,
+                            'report_subject_id' => $subject->id,
+                            'score' => $newSubject['score'],
+                            'description' => $newSubject['description'] ?? null,
                         ]);
                     }
                 }
@@ -153,6 +174,10 @@ class ReportManagementController extends Controller
             'grades' => 'array',
             'grades.*.score' => 'nullable|numeric|min:0|max:100',
             'grades.*.description' => 'nullable|string|max:255',
+            'new_subjects' => 'array',
+            'new_subjects.*.name' => 'required_with:new_subjects|string|max:255',
+            'new_subjects.*.score' => 'nullable|numeric|min:0|max:100',
+            'new_subjects.*.description' => 'nullable|string|max:255',
             'probing' => 'array',
             'probing.*.name' => 'required_with:probing|string|max:255',
             'probing.*.description' => 'nullable|string',
@@ -169,7 +194,7 @@ class ReportManagementController extends Controller
             ]);
             Log::info('Report created: ' . $report->id);
 
-            // Handle Grades for Academic/Diniyah/Ibadah
+            // Handle Existing Grades
             if ($request->has('grades')) {
                 foreach ($request->grades as $subjectId => $data) {
                     if (isset($data['score']) && $data['score'] !== '') {
@@ -178,6 +203,27 @@ class ReportManagementController extends Controller
                             'report_subject_id' => $subjectId,
                             'score' => $data['score'],
                             'description' => $data['description'] ?? null,
+                        ]);
+                    }
+                }
+            }
+
+            // Handle New Subjects
+            if ($request->has('new_subjects')) {
+                foreach ($request->new_subjects as $newSubject) {
+                    if (empty($newSubject['name'])) continue;
+
+                    $subject = ReportSubject::create([
+                        'report_category_id' => $request->report_category_id,
+                        'name' => $newSubject['name'],
+                    ]);
+
+                    if (isset($newSubject['score']) && $newSubject['score'] !== '') {
+                        ReportGrade::create([
+                            'student_report_id' => $report->id,
+                            'report_subject_id' => $subject->id,
+                            'score' => $newSubject['score'],
+                            'description' => $newSubject['description'] ?? null,
                         ]);
                     }
                 }

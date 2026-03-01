@@ -38,7 +38,8 @@ class StudentManagementController extends Controller
     public function show(Siswa $student)
     {
         $student->load(['user', 'reports.category', 'reports.grades', 'reports.probingActivities']);
-        return view('students.show', compact('student'));
+        $categories = \App\Models\ReportCategory::all();
+        return view('students.show', compact('student', 'categories'));
     }
 
     public function store(Request $request)

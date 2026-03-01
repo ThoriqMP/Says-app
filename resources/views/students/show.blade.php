@@ -3,7 +3,7 @@
 @section('title', 'Profil Siswa')
 
 @section('content')
-<div class="py-12">
+<div class="py-12" x-data="{ showCategoryModal: false }">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <!-- Student Header -->
         <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-[20px] border border-gray-200 dark:border-gray-700 mb-8">
@@ -19,12 +19,12 @@
                         </div>
                     </div>
                     <div class="flex flex-wrap gap-3">
-                        <a href="{{ route('admin.reports.create', ['student_id' => $student->id]) }}" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl font-semibold shadow-lg shadow-blue-600/20 transition flex items-center gap-2">
+                        <button @click="showCategoryModal = true" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl font-semibold shadow-lg shadow-blue-600/20 transition flex items-center gap-2">
                             <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                             </svg>
                             Tambah Raport
-                        </a>
+                        </button>
                         <a href="{{ route('students.edit', $student) }}" class="bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-600 px-5 py-2.5 rounded-xl font-semibold hover:bg-gray-50 dark:hover:bg-gray-600 transition">
                             Edit Profil
                         </a>
@@ -106,11 +106,71 @@
                     </div>
                     <h4 class="text-lg font-bold text-gray-900 dark:text-gray-100 mb-2">Belum ada raport</h4>
                     <p class="text-gray-500 dark:text-gray-400 mb-6 max-w-sm mx-auto">Siswa ini belum memiliki data raport yang tersimpan di sistem.</p>
-                    <a href="{{ route('admin.reports.create', ['student_id' => $student->id]) }}" class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-xl font-bold transition">
+                    <button @click="showCategoryModal = true" class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-xl font-bold transition">
                         Buat Raport Pertama
-                    </a>
+                    </button>
                 </div>
             @endif
+        </div>
+    </div>
+
+    <!-- Category Selection Modal -->
+    <div x-show="showCategoryModal" 
+         class="fixed inset-0 z-50 overflow-y-auto" 
+         x-cloak
+         style="display: none;">
+        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+            <div x-show="showCategoryModal" 
+                 x-transition:enter="ease-out duration-300" 
+                 x-transition:enter-start="opacity-0" 
+                 x-transition:enter-end="opacity-100" 
+                 x-transition:leave="ease-in duration-200" 
+                 x-transition:leave-start="opacity-100" 
+                 x-transition:leave-end="opacity-0" 
+                 class="fixed inset-0 transition-opacity" 
+                 @click="showCategoryModal = false">
+                <div class="absolute inset-0 bg-gray-500 dark:bg-gray-900 opacity-75"></div>
+            </div>
+
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen">&#8203;</span>
+
+            <div x-show="showCategoryModal" 
+                 x-transition:enter="ease-out duration-300" 
+                 x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" 
+                 x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100" 
+                 x-transition:leave="ease-in duration-200" 
+                 x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100" 
+                 x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" 
+                 class="inline-block align-bottom bg-white dark:bg-gray-800 rounded-[20px] text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full border border-gray-200 dark:border-gray-700">
+                
+                <div class="p-8">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-2xl font-bold text-gray-900 dark:text-gray-100">Pilih Kategori Raport</h3>
+                        <button @click="showCategoryModal = false" class="text-gray-400 hover:text-gray-600 transition">
+                            <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 gap-4">
+                        @foreach($categories as $category)
+                            <a href="{{ route('admin.reports.create', ['student_id' => $student->id, 'category_id' => $category->id]) }}" 
+                               class="flex items-center p-4 bg-gray-50 dark:bg-gray-900/50 hover:bg-blue-50 dark:hover:bg-blue-900/20 border border-gray-200 dark:border-gray-700 rounded-2xl transition group">
+                                <div class="p-3 bg-white dark:bg-gray-800 rounded-xl shadow-sm group-hover:bg-blue-600 group-hover:text-white transition">
+                                    <svg class="h-6 w-6 text-blue-600 group-hover:text-white transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                    </svg>
+                                </div>
+                                <div class="ml-4">
+                                    <div class="text-lg font-bold text-gray-900 dark:text-gray-100">{{ $category->name }}</div>
+                                    <div class="text-sm text-gray-500 dark:text-gray-400">Input laporan untuk kategori {{ $category->name }}</div>
+                                </div>
+                            </a>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

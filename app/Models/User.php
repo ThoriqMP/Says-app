@@ -82,6 +82,14 @@ class User extends Authenticatable
     }
 
     /**
+     * Cek apakah user adalah siswa
+     */
+    public function isStudent()
+    {
+        return $this->role === 'student';
+    }
+
+    /**
      * Cek apakah user memiliki akses ke permission tertentu
      */
     public function hasPermission($permission)
