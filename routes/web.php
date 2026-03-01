@@ -143,6 +143,16 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/{report}/pdf', [\App\Http\Controllers\Admin\ReportManagementController::class, 'downloadPdf'])->name('pdf');
     });
 
+    // Report Categories
+    Route::middleware('permission:reports.manage')->prefix('admin/report-categories')->name('admin.report-categories.')->group(function () {
+        Route::get('/', [\App\Http\Controllers\Admin\ReportCategoryController::class, 'index'])->name('index');
+        Route::get('/create', [\App\Http\Controllers\Admin\ReportCategoryController::class, 'create'])->name('create');
+        Route::post('/', [\App\Http\Controllers\Admin\ReportCategoryController::class, 'store'])->name('store');
+        Route::get('/{reportCategory}/edit', [\App\Http\Controllers\Admin\ReportCategoryController::class, 'edit'])->name('edit');
+        Route::put('/{reportCategory}', [\App\Http\Controllers\Admin\ReportCategoryController::class, 'update'])->name('update');
+        Route::delete('/{reportCategory}', [\App\Http\Controllers\Admin\ReportCategoryController::class, 'destroy'])->name('destroy');
+    });
+
     // Student Portal Routes
     Route::middleware(['student'])->prefix('student')->name('student.')->group(function () {
         Route::get('/dashboard', [\App\Http\Controllers\Student\StudentPortalController::class, 'dashboard'])->name('dashboard');
