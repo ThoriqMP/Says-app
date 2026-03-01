@@ -50,9 +50,12 @@ class StudentPortalController extends Controller
 
     public function reportDetail(StudentReport $report)
     {
-        // Policy check
-        if ($report->siswa_id !== Auth::user()->siswa->id) {
-            abort(403);
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
+        // Policy check: Student can only see their own. Admin/Guru (non-student) can see all.
+        if ($user->role === 'student' && $report->siswa_id !== $user->siswa->id) {
+            abort(403, 'Anda tidak memiliki akses ke raport ini.');
         }
 
         $report->load(['category', 'grades.subject', 'probingActivities']);
@@ -61,15 +64,24 @@ class StudentPortalController extends Controller
 
     public function downloadInvoicePdf(Invoice $invoice)
     {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
+        if ($user->role === 'student' && $invoice->id_siswa !== $user->siswa->id) {
+            abort(403, 'Anda tidak memiliki akses ke invoice ini.');
+        }
+
         // Reuse existing PDF logic from InvoiceController or implement here
-        // For brevity, assuming access to PDF generation
         return redirect()->route('invoices.pdf', $invoice);
     }
 
     public function downloadReportPdf(StudentReport $report)
     {
-        if ($report->siswa_id !== Auth::user()->siswa->id) {
-            abort(403);
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
+        if ($user->role === 'student' && $report->siswa_id !== $user->siswa->id) {
+            abort(403, 'Anda tidak memiliki akses ke raport ini.');
         }
 
         $report->load(['student', 'category', 'grades.subject', 'probingActivities']);

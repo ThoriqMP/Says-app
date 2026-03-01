@@ -132,9 +132,11 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/', [\App\Http\Controllers\Admin\ReportManagementController::class, 'index'])->name('index');
         Route::get('/create', [\App\Http\Controllers\Admin\ReportManagementController::class, 'create'])->name('create');
         Route::post('/', [\App\Http\Controllers\Admin\ReportManagementController::class, 'store'])->name('store');
+        Route::get('/{report}', [\App\Http\Controllers\Admin\ReportManagementController::class, 'show'])->name('show');
         Route::get('/{report}/edit', [\App\Http\Controllers\Admin\ReportManagementController::class, 'edit'])->name('edit');
         Route::put('/{report}', [\App\Http\Controllers\Admin\ReportManagementController::class, 'update'])->name('update');
         Route::delete('/{report}', [\App\Http\Controllers\Admin\ReportManagementController::class, 'destroy'])->name('destroy');
+        Route::get('/{report}/pdf', [\App\Http\Controllers\Admin\ReportManagementController::class, 'downloadPdf'])->name('pdf');
     });
 
     // Student Portal Routes

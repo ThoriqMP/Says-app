@@ -53,7 +53,15 @@ class ReportManagementController extends Controller
     public function show(StudentReport $report)
     {
         $report->load(['student', 'category', 'grades.subject', 'probingActivities']);
-        return view('admin.reports.show', compact('report'));
+        // Use the same view as the student portal
+        return view('student.reports.show', compact('report'));
+    }
+
+    public function downloadPdf(StudentReport $report)
+    {
+        $report->load(['student', 'category', 'grades.subject', 'probingActivities']);
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('student.reports.pdf', compact('report'));
+        return $pdf->download("Raport_{$report->student->nama_siswa}_{$report->period}.pdf");
     }
 
     public function edit(StudentReport $report)

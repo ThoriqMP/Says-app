@@ -13,13 +13,20 @@ class ChatController extends Controller
     // Get list of contacts (other users)
     public function getContacts()
     {
+        /** @var \App\Models\User $currentUser */
         $currentUser = Auth::user();
         
         // Update user online status
         Cache::put('user_online_' . $currentUser->id, true, now()->addMinutes(1));
 
-        $users = User::where('id', '!=', $currentUser->id)
-            ->select('id', 'name', 'role')
+        $query = User::where('id', '!=', $currentUser->id);
+
+        // Filter: Student only see admins/pimpinan
+        if ($currentUser->role === 'student') {
+            $query->whereIn('role', ['admin', 'pimpinan']);
+        }
+
+        $users = $query->select('id', 'name', 'role')
             ->get()
             ->map(function ($user) use ($currentUser) {
                 // Count unread messages from this specific user to me
@@ -47,13 +54,24 @@ class ChatController extends Controller
     // Get messages between current user and specific user
     public function getMessages($userId)
     {
-        $currentUser = Auth::id();
+        /** @var \App\Models\User $currentUser */
+        $currentUser = Auth::user();
 
-        $messages = Message::where(function($q) use ($currentUser, $userId) {
-                $q->where('user_id', $currentUser)->where('receiver_id', $userId);
+        // Security check for students: can only chat with admin/pimpinan
+        if ($currentUser->role === 'student') {
+            $otherUser = User::find($userId);
+            if (!$otherUser || !in_array($otherUser->role, ['admin', 'pimpinan'])) {
+                return response()->json(['messages' => [], 'is_typing' => false], 403);
+            }
+        }
+
+        $currentUserId = $currentUser->id;
+
+        $messages = Message::where(function($q) use ($currentUserId, $userId) {
+                $q->where('user_id', $currentUserId)->where('receiver_id', $userId);
             })
-            ->orWhere(function($q) use ($currentUser, $userId) {
-                $q->where('user_id', $userId)->where('receiver_id', $currentUser);
+            ->orWhere(function($q) use ($currentUserId, $userId) {
+                $q->where('user_id', $userId)->where('receiver_id', $currentUserId);
             })
             ->with('user:id,name,role')
             ->latest()
@@ -73,13 +91,24 @@ class ChatController extends Controller
 
     public function store(Request $request)
     {
+        /** @var \App\Models\User $currentUser */
+        $currentUser = Auth::user();
+
         $request->validate([
             'message' => 'required|string|max:1000',
             'receiver_id' => 'required|exists:users,id'
         ]);
 
+        // Security check for students: can only chat with admin/pimpinan
+        if ($currentUser->role === 'student') {
+            $receiver = User::find($request->receiver_id);
+            if (!$receiver || !in_array($receiver->role, ['admin', 'pimpinan'])) {
+                return response()->json(['error' => 'Forbidden'], 403);
+            }
+        }
+
         $message = Message::create([
-            'user_id' => Auth::id(),
+            'user_id' => $currentUser->id,
             'receiver_id' => $request->receiver_id,
             'message' => $request->message,
             'is_read' => false,
@@ -90,12 +119,23 @@ class ChatController extends Controller
 
     public function markAsRead(Request $request)
     {
+        /** @var \App\Models\User $currentUser */
+        $currentUser = Auth::user();
+
         $request->validate([
             'sender_id' => 'required|exists:users,id'
         ]);
 
+        // Security check for students: can only mark messages from admin/pimpinan as read
+        if ($currentUser->role === 'student') {
+            $sender = User::find($request->sender_id);
+            if (!$sender || !in_array($sender->role, ['admin', 'pimpinan'])) {
+                return response()->json(['error' => 'Forbidden'], 403);
+            }
+        }
+
         Message::where('user_id', $request->sender_id)
-            ->where('receiver_id', Auth::id())
+            ->where('receiver_id', $currentUser->id)
             ->where('is_read', false)
             ->update(['is_read' => true]);
 

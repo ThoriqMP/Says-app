@@ -1,4 +1,4 @@
-<div x-data="adminChat()" x-init="initChat()" @toggle-admin-chat.window="toggleChat"
+<div x-data="adminChat({{ auth()->user()->role === 'student' ? 'true' : 'false' }}, {{ auth()->id() }})" x-init="initChat()" @toggle-admin-chat.window="toggleChat"
      class="fixed z-50 pointer-events-none
             w-full h-full lg:w-auto lg:h-auto
             bottom-0 left-0 lg:bottom-4 lg:right-4 lg:left-auto
@@ -28,7 +28,7 @@
                 </button>
                 
                 <div class="flex flex-col">
-                    <h3 class="font-semibold text-sm" x-text="view === 'contacts' ? 'Admin Chat' : selectedUser.name"></h3>
+                    <h3 class="font-semibold text-sm" x-text="view === 'contacts' ? (isStudent ? 'Hubungi Admin' : 'Admin Chat') : selectedUser.name"></h3>
                     <template x-if="view === 'chat' && isTyping">
                         <span class="text-[10px] opacity-90 animate-pulse">sedang mengetik...</span>
                     </template>
@@ -61,8 +61,7 @@
                     </div>
                 </div>
             </template>
-            <div x-show="contacts.length === 0" class="p-4 text-center text-gray-500 text-sm">
-                Tidak ada admin lain.
+            <div x-show="contacts.length === 0" class="p-4 text-center text-gray-500 text-sm" x-text="isStudent ? 'Tidak ada admin yang online.' : 'Tidak ada admin lain.'">
             </div>
         </div>
 
@@ -79,7 +78,7 @@
                 </div>
 
                 <template x-for="msg in messages" :key="msg.id">
-                    <div class="flex flex-col w-full" :class="msg.user_id === {{ auth()->id() }} ? 'items-end' : 'items-start'">
+                    <div class="flex flex-col w-full" :class="msg.user_id === currentUserId ? 'items-end' : 'items-start'">
                         
                         <!-- Message Wrapper with Swipe Logic -->
                         <div x-data="{ 
@@ -89,9 +88,9 @@
                                 isSwiping: false
                              }"
                              class="relative flex items-center w-full transition-all"
-                             :class="msg.user_id === {{ auth()->id() }} ? 'justify-end' : 'justify-start'"
+                             :class="msg.user_id === currentUserId ? 'justify-end' : 'justify-start'"
                              @touchstart="
-                                if(msg.user_id !== {{ auth()->id() }}) return;
+                                if(msg.user_id !== currentUserId) return;
                                 startX = $event.touches[0].clientX; 
                                 startOffset = offset;
                                 isSwiping = true;
@@ -116,7 +115,7 @@
                              "
                         >
                             <!-- Mobile Swipe Delete Button (Behind Bubble) -->
-                            <template x-if="msg.user_id === {{ auth()->id() }}">
+                            <template x-if="msg.user_id === currentUserId">
                                 <div class="absolute right-0 h-full flex items-center justify-center w-[60px]" 
                                      x-show="offset < 0"
                                      style="z-index: 0;">
@@ -132,14 +131,14 @@
                             <!-- Message Bubble -->
                             <div class="max-w-[85%] rounded-lg p-2.5 text-sm shadow-sm relative group z-10"
                                 :style="`transform: translateX(${offset}px); transition: ${isSwiping ? 'none' : 'transform 0.2s ease-out'}`"
-                                :class="msg.user_id === {{ auth()->id() }} 
+                                :class="msg.user_id === currentUserId 
                                     ? 'bg-blue-600 text-white rounded-br-none' 
                                     : 'bg-white dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-bl-none border border-gray-200 dark:border-gray-600'">
                                 
                                 <span x-text="msg.message" class="break-words"></span>
                                 
                                 <!-- Desktop Hover Delete Button (Hidden on touch devices usually, but kept for desktop) -->
-                                <template x-if="msg.user_id === {{ auth()->id() }}">
+                                <template x-if="msg.user_id === currentUserId">
                                     <button @click="deleteMessage(msg.id)" 
                                             class="absolute -left-8 top-2 text-gray-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity p-1 hidden sm:block">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -149,7 +148,7 @@
                                 </template>
 
                                 <!-- Message Status -->
-                                <template x-if="msg.user_id === {{ auth()->id() }}">
+                                <template x-if="msg.user_id === currentUserId">
                                     <div class="flex justify-end mt-1 space-x-0.5">
                                         <!-- 1 Check (Sent/Saved) -->
                                         <svg x-show="!msg.is_read" class="w-3 h-3 text-blue-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -235,10 +234,12 @@
 </div>
 
 <script>
-function adminChat() {
+function adminChat(isStudent, currentUserId) {
     return {
         isOpen: false,
         view: 'contacts', // 'contacts' or 'chat'
+        isStudent: isStudent,
+        currentUserId: currentUserId,
         contacts: [],
         selectedUser: null,
         messages: [],
