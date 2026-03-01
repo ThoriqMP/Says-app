@@ -11,8 +11,8 @@
                 </a>
                 <span class="px-4 py-1.5 bg-blue-50 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 rounded-full text-[10px] font-black uppercase tracking-widest">Detail Tagihan</span>
             </div>
-            <h2 class="text-4xl font-black text-gray-900 dark:text-white mb-2">Invoice #{{ $invoice->invoice_number }}</h2>
-            <p class="text-gray-500 dark:text-gray-400 text-lg font-bold">Diterbitkan pada {{ $invoice->tanggal_tagihan->format('d M Y') }}</p>
+            <h2 class="text-4xl font-black text-gray-900 dark:text-white mb-2">Invoice #{{ $invoice->no_invoice }}</h2>
+            <p class="text-gray-500 dark:text-gray-400 text-lg font-bold">Diterbitkan pada {{ $invoice->tanggal_invoice ? $invoice->tanggal_invoice->format('d M Y') : '-' }}</p>
         </div>
         
         <div class="flex items-center gap-3">
@@ -44,24 +44,29 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-50 dark:divide-gray-700">
-                            @foreach($invoice->items as $item)
+                            @foreach($invoice->invoiceDetails as $item)
                                 <tr class="hover:bg-blue-50/30 dark:hover:bg-blue-900/10 transition-colors">
                                     <td class="px-10 py-8">
                                         <div class="flex items-center gap-4">
                                             <div class="h-10 w-10 bg-blue-50 dark:bg-blue-900/40 rounded-xl flex items-center justify-center text-blue-600 dark:text-blue-400 font-bold">
-                                                {{ substr($item->deskripsi, 0, 1) }}
+                                                {{ substr($item->layanan->nama_layanan ?? 'L', 0, 1) }}
                                             </div>
-                                            <span class="text-lg font-black text-gray-900 dark:text-white">{{ $item->deskripsi }}</span>
+                                            <div>
+                                                <span class="text-lg font-black text-gray-900 dark:text-white block">{{ $item->layanan->nama_layanan ?? 'Layanan' }}</span>
+                                                @if($item->deskripsi_tambahan)
+                                                    <span class="text-xs text-gray-500">{{ $item->deskripsi_tambahan }}</span>
+                                                @endif
+                                            </div>
                                         </div>
                                     </td>
                                     <td class="px-10 py-8 text-right text-gray-600 dark:text-gray-400 font-bold">
                                         Rp {{ number_format($item->harga_satuan, 0, ',', '.') }}
                                     </td>
                                     <td class="px-10 py-8 text-center text-gray-900 dark:text-white font-black">
-                                        {{ $item->jumlah }}
+                                        {{ $item->kuantitas }}
                                     </td>
                                     <td class="px-10 py-8 text-right text-gray-900 dark:text-white font-black text-lg">
-                                        Rp {{ number_format($item->subtotal, 0, ',', '.') }}
+                                        Rp {{ number_format($item->total_biaya, 0, ',', '.') }}
                                     </td>
                                 </tr>
                             @endforeach
@@ -91,7 +96,7 @@
                     <div class="text-4xl font-black mb-2 uppercase tracking-tighter">
                         {{ $invoice->status === 'paid' ? 'LUNAS' : 'BELUM BAYAR' }}
                     </div>
-                    <p class="text-white/80 font-bold text-lg">Jatuh Tempo: {{ $invoice->jatuh_tempo->format('d M Y') }}</p>
+                    <p class="text-white/80 font-bold text-lg">Jatuh Tempo: {{ $invoice->jatuh_tempo ? $invoice->jatuh_tempo->format('d M Y') : '-' }}</p>
                 </div>
                 <!-- Decorative Elements -->
                 <div class="absolute -top-24 -right-24 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
@@ -102,24 +107,20 @@
             <div class="bg-white dark:bg-gray-800 rounded-[40px] p-10 border border-gray-100 dark:border-gray-700 shadow-sm">
                 <h4 class="text-xl font-black text-gray-900 dark:text-white mb-6">Metode Pembayaran</h4>
                 <div class="space-y-4">
-                    <div class="p-4 bg-gray-50 dark:bg-gray-900/50 rounded-2xl border border-gray-100 dark:border-gray-700 flex items-center gap-4">
-                        <div class="h-10 w-10 bg-white dark:bg-gray-800 rounded-lg flex items-center justify-center shadow-sm">
-                            <span class="font-black text-blue-600">BCA</span>
+                    @if($schoolProfile && $schoolProfile->no_rekening)
+                        <div class="p-4 bg-gray-50 dark:bg-gray-900/50 rounded-2xl border border-gray-100 dark:border-gray-700 flex items-center gap-4">
+                            <div class="h-10 w-10 bg-white dark:bg-gray-800 rounded-lg flex items-center justify-center shadow-sm">
+                                <span class="font-black text-blue-600">{{ $schoolProfile->bank_nama ?? 'BANK' }}</span>
+                            </div>
+                            <div>
+                                <p class="text-xs font-bold text-gray-400 uppercase">Transfer Bank</p>
+                                <p class="font-black text-gray-900 dark:text-white">{{ $schoolProfile->no_rekening }}</p>
+                                <p class="text-[10px] text-gray-500 uppercase font-bold">a.n {{ $schoolProfile->atas_nama }}</p>
+                            </div>
                         </div>
-                        <div>
-                            <p class="text-xs font-bold text-gray-400 uppercase">Transfer Bank</p>
-                            <p class="font-black text-gray-900 dark:text-white">1234567890</p>
-                        </div>
-                    </div>
-                    <div class="p-4 bg-gray-50 dark:bg-gray-900/50 rounded-2xl border border-gray-100 dark:border-gray-700 flex items-center gap-4">
-                        <div class="h-10 w-10 bg-white dark:bg-gray-800 rounded-lg flex items-center justify-center shadow-sm">
-                            <span class="font-black text-blue-600">MAN</span>
-                        </div>
-                        <div>
-                            <p class="text-xs font-bold text-gray-400 uppercase">Mandiri</p>
-                            <p class="font-black text-gray-900 dark:text-white">0987654321</p>
-                        </div>
-                    </div>
+                    @else
+                        <p class="text-sm text-gray-500 italic">Informasi rekening pembayaran belum tersedia. Silakan hubungi admin.</p>
+                    @endif
                 </div>
                 <p class="mt-8 text-sm text-gray-500 font-medium italic">Silakan hubungi admin setelah melakukan pembayaran untuk konfirmasi.</p>
             </div>

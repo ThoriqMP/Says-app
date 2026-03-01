@@ -33,12 +33,16 @@ class StudentPortalController extends Controller
 
     public function invoiceDetail(Invoice $invoice)
     {
-        if ($invoice->id_siswa !== Auth::user()->siswa->id) {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
+        if ($user->role === 'student' && $invoice->id_siswa !== $user->siswa->id) {
             abort(403);
         }
 
-        $invoice->load(['student', 'items']);
-        return view('student.invoices.show', compact('invoice'));
+        $invoice->load(['siswa', 'invoiceDetails.layanan']);
+        $schoolProfile = \App\Models\ProfilSekolah::first();
+        return view('student.invoices.show', compact('invoice', 'schoolProfile'));
     }
 
     public function reports()
@@ -58,7 +62,7 @@ class StudentPortalController extends Controller
             abort(403, 'Anda tidak memiliki akses ke raport ini.');
         }
 
-        $report->load(['category', 'grades.subject', 'probingActivities']);
+        $report->load(['category', 'grades.subject', 'probingActivities', 'teacher']);
         return view('student.reports.show', compact('report'));
     }
 
@@ -84,7 +88,7 @@ class StudentPortalController extends Controller
             abort(403, 'Anda tidak memiliki akses ke raport ini.');
         }
 
-        $report->load(['student', 'category', 'grades.subject', 'probingActivities']);
+        $report->load(['student', 'category', 'grades.subject', 'probingActivities', 'teacher']);
         $pdf = Pdf::loadView('student.reports.pdf', compact('report'));
         return $pdf->download("Raport_{$report->student->nama_siswa}_{$report->period}.pdf");
     }

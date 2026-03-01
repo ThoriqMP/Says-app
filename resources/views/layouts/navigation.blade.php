@@ -214,6 +214,10 @@
         </nav>
 
         <div class="px-4 py-4 border-t border-gray-200 dark:border-gray-700 space-y-3">
+            <a href="{{ route('profile.edit') }}" class="w-full flex items-center justify-between px-3 py-2 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
+                <span class="text-sm font-medium">Update Profil</span>
+                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+            </a>
             <button type="button" @click="toggle()" class="w-full flex items-center justify-between px-3 py-2 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700">
                 <span class="text-sm font-medium" x-show="!dark">Mode Gelap</span>
                 <span class="text-sm font-medium" x-show="dark">Mode Terang</span>

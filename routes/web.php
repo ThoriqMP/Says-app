@@ -127,6 +127,10 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/family-mapping/pdf', [FamilyMappingController::class, 'pdf'])->name('family-mapping.pdf');
     });
 
+    // Profile Routes
+    Route::get('/profile', [\App\Http\Controllers\ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile', [\App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
+
     // Admin Report Management
     Route::middleware('permission:reports.manage')->prefix('admin/reports')->name('admin.reports.')->group(function () {
         Route::get('/', [\App\Http\Controllers\Admin\ReportManagementController::class, 'index'])->name('index');

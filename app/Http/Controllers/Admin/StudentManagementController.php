@@ -105,16 +105,47 @@ class StudentManagementController extends Controller
             'alamat_tagihan' => 'required|string',
             'nis' => 'nullable|string|max:50',
             'class' => 'nullable|string|max:50',
+            'email' => 'nullable|email|unique:users,email,' . ($student->user_id ?? 'NULL'),
+            'password' => 'nullable|min:6',
         ]);
 
         if ($validator->fails()) {
             return back()->withErrors($validator)->withInput();
         }
 
-        $student->update($request->all());
+        DB::beginTransaction();
+        try {
+            if ($request->filled('email')) {
+                if ($student->user) {
+                    $userData = [
+                        'name' => $request->nama_siswa,
+                        'email' => $request->email,
+                    ];
+                    if ($request->filled('password')) {
+                        $userData['password'] = bcrypt($request->password);
+                    }
+                    $student->user->update($userData);
+                } else {
+                    $user = User::create([
+                        'name' => $request->nama_siswa,
+                        'email' => $request->email,
+                        'password' => bcrypt($request->password ?? 'password123'),
+                        'role' => 'student',
+                    ]);
+                    $student->user_id = $user->id;
+                }
+            }
 
-        return redirect()->route('students.index')
-            ->with('success', 'Data siswa berhasil diperbarui.');
+            $student->update($request->only(['nama_siswa', 'nama_orang_tua', 'alamat_tagihan', 'nis', 'class', 'user_id']));
+
+            DB::commit();
+            return redirect()->route('students.show', $student->id)
+                ->with('success', 'Data siswa berhasil diperbarui.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Gagal memperbarui siswa: ' . $e->getMessage());
+            return back()->with('error', 'Gagal memperbarui siswa: ' . $e->getMessage())->withInput();
+        }
     }
 
     public function destroy(Siswa $student)

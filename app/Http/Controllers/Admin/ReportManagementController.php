@@ -10,6 +10,7 @@ use App\Models\ReportSubject;
 use App\Models\Siswa;
 use App\Models\StudentReport;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -52,14 +53,14 @@ class ReportManagementController extends Controller
 
     public function show(StudentReport $report)
     {
-        $report->load(['student', 'category', 'grades.subject', 'probingActivities']);
+        $report->load(['student', 'category', 'grades.subject', 'probingActivities', 'teacher']);
         // Use the same view as the student portal
         return view('student.reports.show', compact('report'));
     }
 
     public function downloadPdf(StudentReport $report)
     {
-        $report->load(['student', 'category', 'grades.subject', 'probingActivities']);
+        $report->load(['student', 'category', 'grades.subject', 'probingActivities', 'teacher']);
         $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('student.reports.pdf', compact('report'));
         return $pdf->download("Raport_{$report->student->nama_siswa}_{$report->period}.pdf");
     }
@@ -95,6 +96,7 @@ class ReportManagementController extends Controller
             $report->update([
                 'siswa_id' => $request->siswa_id,
                 'report_category_id' => $request->report_category_id,
+                'teacher_id' => Auth::id(), // Update teacher to last editor
                 'period' => $request->period,
                 'summary_notes' => $request->summary_notes,
             ]);
@@ -214,6 +216,7 @@ class ReportManagementController extends Controller
             $report = StudentReport::create([
                 'siswa_id' => $request->siswa_id,
                 'report_category_id' => $request->report_category_id,
+                'teacher_id' => Auth::id(),
                 'period' => $request->period,
                 'summary_notes' => $request->summary_notes,
             ]);

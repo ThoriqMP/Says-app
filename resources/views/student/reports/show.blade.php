@@ -100,13 +100,20 @@
                         "{{ $report->summary_notes ?? 'Teruslah semangat dalam belajar dan kembangkan potensimu!' }}"
                     </div>
                     
-                    <div class="mt-10 pt-8 border-t border-white/10 flex items-center gap-4">
-                        <div class="h-12 w-12 bg-white rounded-2xl flex items-center justify-center text-indigo-900 font-black">
-                            S
-                        </div>
-                        <div>
-                            <p class="font-black">Admin Sekolah</p>
-                            <p class="text-xs text-indigo-300 font-bold uppercase tracking-widest">SAYS-APP SYSTEM</p>
+                    <div class="mt-10 pt-8 border-t border-white/10">
+                        <div class="flex flex-col gap-4">
+                            @if($report->teacher && $report->teacher->signature_path)
+                                <img src="{{ Storage::url($report->teacher->signature_path) }}" alt="Tanda Tangan Guru" class="h-16 w-auto object-contain bg-white/10 rounded-lg p-1">
+                            @endif
+                            <div class="flex items-center gap-4">
+                                <div class="h-12 w-12 bg-white rounded-2xl flex items-center justify-center text-indigo-900 font-black">
+                                    {{ substr($report->teacher->name ?? 'A', 0, 1) }}
+                                </div>
+                                <div>
+                                    <p class="font-black">{{ $report->teacher->name ?? 'Admin Sekolah' }}</p>
+                                    <p class="text-xs text-indigo-300 font-bold uppercase tracking-widest">{{ $report->teacher->role ?? 'OFFICER' }}</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

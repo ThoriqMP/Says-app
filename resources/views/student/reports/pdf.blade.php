@@ -101,14 +101,21 @@
         <p>{{ $report->summary_notes ?? 'Tidak ada catatan tambahan.' }}</p>
     </div>
 
-    <div style="margin-top: 50px;">
+    <div style="margin-top: 50px; page-break-inside: avoid;">
         <table width="100%">
             <tr>
-                <td width="70%"></td>
-                <td width="30%" style="text-align: center;">
-                    <p>Mengetahui,</p>
-                    <p style="margin-top: 60px;"><strong>(....................................)</strong></p>
-                    <p style="font-size: 11px; margin-top: 5px;">Kepala Sekolah / Wali Kelas</p>
+                <td width="60%"></td>
+                <td width="40%" style="text-align: center;">
+                    <p style="margin-bottom: 5px;">Mengetahui,</p>
+                    <div style="height: 80px; margin-bottom: 5px; position: relative; display: flex; align-items: center; justify-content: center;">
+                        @if($report->teacher && $report->teacher->signature_path)
+                            <img src="{{ public_path('storage/' . $report->teacher->signature_path) }}" style="max-height: 80px; max-width: 150px;">
+                        @else
+                            <div style="height: 60px;"></div>
+                        @endif
+                    </div>
+                    <p style="margin-top: 0; margin-bottom: 2px;"><strong>({{ $report->teacher->name ?? '....................................' }})</strong></p>
+                    <p style="font-size: 11px; margin-top: 0;">{{ $report->teacher->role ?? 'Kepala Sekolah / Wali Kelas' }}</p>
                 </td>
             </tr>
         </table>

@@ -6,11 +6,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class StudentReport extends Model
 {
-    protected $fillable = ['siswa_id', 'report_category_id', 'period', 'summary_notes'];
+    protected $fillable = ['siswa_id', 'report_category_id', 'teacher_id', 'period', 'summary_notes'];
 
     public function student()
     {
         return $this->belongsTo(Siswa::class, 'siswa_id');
+    }
+
+    public function teacher()
+    {
+        return $this->belongsTo(User::class, 'teacher_id');
     }
 
     public function category()

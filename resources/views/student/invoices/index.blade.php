@@ -18,12 +18,12 @@
                             </div>
                             <div>
                                 <div class="flex items-center gap-3 mb-1">
-                                    <h3 class="text-xl font-black text-gray-900 dark:text-white">Invoice #{{ $invoice->invoice_number }}</h3>
-                                    <span class="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest {{ $invoice->status === 'paid' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
-                                        {{ $invoice->status }}
+                                    <h3 class="text-xl font-black text-gray-900 dark:text-white">Invoice #{{ $invoice->no_invoice }}</h3>
+                                    <span class="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest {{ $invoice->status === 'paid' ? 'bg-green-100/80 text-green-700 dark:bg-green-500/20 dark:text-green-400' : 'bg-red-100/80 text-red-700 dark:bg-red-500/20 dark:text-red-400' }}">
+                                        {{ $invoice->status === 'paid' ? 'Lunas' : 'Belum Bayar' }}
                                     </span>
                                 </div>
-                                <p class="text-gray-500 dark:text-gray-400 font-medium">Diterbitkan pada {{ $invoice->tanggal_tagihan->format('d M Y') }}</p>
+                                <p class="text-gray-500 dark:text-gray-400 font-medium">Diterbitkan pada {{ $invoice->tanggal_invoice ? $invoice->tanggal_invoice->format('d M Y') : '-' }}</p>
                             </div>
                         </div>
 
@@ -34,7 +34,7 @@
                             </div>
                             <div class="hidden lg:block">
                                 <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Jatuh Tempo</p>
-                                <p class="text-sm font-bold text-gray-700 dark:text-gray-300">{{ $invoice->jatuh_tempo->format('d M Y') }}</p>
+                                <p class="text-sm font-bold text-gray-700 dark:text-gray-300">{{ $invoice->jatuh_tempo ? $invoice->jatuh_tempo->format('d M Y') : '-' }}</p>
                             </div>
                             <div class="col-span-2 lg:col-span-1 flex gap-2">
                                 <a href="{{ route('student.invoices.show', $invoice) }}" class="flex-1 lg:flex-none px-6 py-3 bg-gray-900 dark:bg-gray-700 text-white rounded-2xl font-black text-sm text-center hover:bg-blue-600 transition-colors active:scale-95">

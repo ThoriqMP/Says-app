@@ -113,10 +113,10 @@
                                 <span class="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest {{ $latestInvoice->status === 'paid' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
                                     {{ $latestInvoice->status }}
                                 </span>
-                                <span class="text-xs text-gray-500 font-medium">Jatuh Tempo: {{ $latestInvoice->jatuh_tempo->format('d/m/Y') }}</span>
+                                <span class="text-xs text-gray-500 font-medium">Jatuh Tempo: {{ $latestInvoice->jatuh_tempo ? $latestInvoice->jatuh_tempo->format('d/m/Y') : '-' }}</span>
                             </div>
                         </div>
-                        <a href="{{ route('student.invoices') }}" class="block w-full py-4 bg-blue-600 text-white rounded-2xl font-bold text-center shadow-lg shadow-blue-600/20 hover:bg-blue-700 transition active:scale-95">
+                        <a href="{{ route('student.invoices.show', $latestInvoice) }}" class="block w-full py-4 bg-blue-600 text-white rounded-2xl font-bold text-center shadow-lg shadow-blue-600/20 hover:bg-blue-700 transition active:scale-95">
                             Lihat Rincian Tagihan
                         </a>
                     </div>

@@ -48,12 +48,43 @@
                             <input type="text" id="nama_orang_tua" name="nama_orang_tua" value="{{ old('nama_orang_tua', $student->nama_orang_tua) }}" required
                                    class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
                         </div>
+
+                        <div>
+                            <label for="nis" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">NIS</label>
+                            <input type="text" id="nis" name="nis" value="{{ old('nis', $student->nis) }}"
+                                   class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+                        </div>
+
+                        <div>
+                            <label for="class" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Kelas</label>
+                            <input type="text" id="class" name="class" value="{{ old('class', $student->class) }}"
+                                   class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+                        </div>
                     </div>
 
                     <div class="mb-8">
                         <label for="alamat_tagihan" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Alamat Tagihan</label>
                         <textarea id="alamat_tagihan" name="alamat_tagihan" rows="3" required
                                   class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">{{ old('alamat_tagihan', $student->alamat_tagihan) }}</textarea>
+                    </div>
+
+                    <div class="mb-8 border-t border-gray-100 dark:border-gray-700 pt-8">
+                        <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">Akun Login Siswa</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Email</label>
+                                <input type="email" id="email" name="email" value="{{ old('email', $student->user->email ?? '') }}"
+                                       class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+                                <p class="mt-1 text-xs text-gray-500">Isi email untuk membuat atau memperbarui akun login siswa.</p>
+                            </div>
+                            
+                            <div>
+                                <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Password</label>
+                                <input type="password" id="password" name="password" placeholder="Kosongkan jika tidak ingin mengubah password"
+                                       class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+                                <p class="mt-1 text-xs text-gray-500">Minimal 6 karakter. Jika membuat akun baru, default password adalah 'password123'.</p>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="flex justify-end space-x-3">
