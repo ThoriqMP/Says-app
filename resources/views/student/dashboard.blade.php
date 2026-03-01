@@ -81,8 +81,16 @@
                                 </div>
                                 <span class="text-xs font-bold text-gray-400 bg-gray-50 dark:bg-gray-700 px-3 py-1 rounded-full uppercase tracking-widest">{{ $report->created_at->format('d M Y') }}</span>
                             </div>
-                            <h4 class="text-xl font-bold text-gray-900 dark:text-white mb-1">{{ $report->category->name }}</h4>
-                            <p class="text-gray-500 dark:text-gray-400 text-sm mb-6">{{ $report->period }}</p>
+                            <div class="flex-1">
+                                <h4 class="text-lg font-black text-gray-900 dark:text-white line-clamp-1">{{ $report->category->name }}</h4>
+                                <p class="text-xs text-gray-500 font-bold mb-2">{{ $report->period }}</p>
+                                <div class="flex items-center gap-1.5 mb-6">
+                                    <div class="h-5 w-5 rounded-md bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center text-blue-600 dark:text-blue-400 font-black text-[8px]">
+                                        {{ substr($report->teacher->name ?? 'A', 0, 1) }}
+                                    </div>
+                                    <p class="text-[10px] font-bold text-gray-400 truncate max-w-[120px]">{{ $report->teacher->name ?? 'Admin' }}</p>
+                                </div>
+                            </div>
                             <div class="flex gap-2">
                                 <a href="{{ route('student.reports.show', $report) }}" class="flex-1 text-center py-3 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white rounded-2xl font-bold hover:bg-blue-600 hover:text-white transition">Detail</a>
                                 <a href="{{ route('student.reports.pdf', $report) }}" class="p-3 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-2xl hover:bg-blue-600 hover:text-white transition">

@@ -12,6 +12,7 @@ class AdminManagementController extends Controller
     private $permissions = [
         'dashboard' => 'Dashboard',
         'invoices.index' => 'Invoice',
+        'reports.manage' => 'Manajemen Raport',
         'assessments.index' => 'Personal Mapping',
         'psychological-assessments.index' => 'Asesmen Psikologis',
         'family-mapping.index' => 'Family Mapping',
@@ -23,7 +24,7 @@ class AdminManagementController extends Controller
 
     public function index(Request $request)
     {
-        $query = User::where('role', 'admin')->latest();
+        $query = User::whereIn('role', ['admin', 'guru'])->latest();
 
         if ($request->filled('search')) {
             $search = $request->search;
@@ -37,10 +38,14 @@ class AdminManagementController extends Controller
         return view('admin-management.index', compact('admins'));
     }
 
-    public function create()
+    public function create(Request $request)
     {
+        $role = $request->query('role', 'admin');
+        if (!in_array($role, ['admin', 'guru'])) {
+            $role = 'admin';
+        }
         $permissions = $this->permissions;
-        return view('admin-management.create', compact('permissions'));
+        return view('admin-management.create', compact('permissions', 'role'));
     }
 
     public function store(Request $request)
@@ -49,6 +54,7 @@ class AdminManagementController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
+            'role' => 'required|in:admin,guru',
             'permissions' => 'array',
             'permissions.*' => 'string',
         ]);
@@ -57,17 +63,17 @@ class AdminManagementController extends Controller
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
-            'role' => 'admin',
+            'role' => $validated['role'],
             'permissions' => $validated['permissions'] ?? [],
         ]);
 
         return redirect()->route('admin-management.index')
-            ->with('success', 'Admin berhasil ditambahkan.');
+            ->with('success', ucfirst($validated['role']) . ' berhasil ditambahkan.');
     }
 
     public function edit(User $admin)
     {
-        if ($admin->role !== 'admin') {
+        if (!in_array($admin->role, ['admin', 'guru'])) {
             abort(404);
         }
         $permissions = $this->permissions;
@@ -76,7 +82,7 @@ class AdminManagementController extends Controller
 
     public function update(Request $request, User $admin)
     {
-        if ($admin->role !== 'admin') {
+        if (!in_array($admin->role, ['admin', 'guru'])) {
             abort(404);
         }
 
@@ -84,6 +90,7 @@ class AdminManagementController extends Controller
             'name' => 'required|string|max:255',
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($admin->id)],
             'password' => 'nullable|string|min:8|confirmed',
+            'role' => 'required|in:admin,guru',
             'permissions' => 'array',
             'permissions.*' => 'string',
         ]);
@@ -91,6 +98,7 @@ class AdminManagementController extends Controller
         $data = [
             'name' => $validated['name'],
             'email' => $validated['email'],
+            'role' => $validated['role'],
             'permissions' => $validated['permissions'] ?? [],
         ];
 

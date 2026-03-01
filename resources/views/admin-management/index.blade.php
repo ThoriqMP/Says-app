@@ -3,12 +3,59 @@
 @section('title', 'Manajemen Admin')
 
 @section('content')
-<div class="py-12">
+<div class="py-12" x-data="{ showRoleModal: false }">
+    <!-- Role Selection Modal -->
+    <div x-show="showRoleModal" 
+         class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0"
+         x-transition:enter-end="opacity-100"
+         x-transition:leave="transition ease-in duration-200"
+         x-transition:leave-start="opacity-100"
+         x-transition:leave-end="opacity-0"
+         @click.away="showRoleModal = false"
+         style="display: none;">
+        <div class="bg-white dark:bg-gray-800 rounded-[32px] p-8 max-w-md w-full shadow-2xl transform transition-all"
+             x-show="showRoleModal"
+             x-transition:enter="transition ease-out duration-300"
+             x-transition:enter-start="opacity-0 scale-95"
+             x-transition:enter-end="opacity-100 scale-100">
+            <h3 class="text-2xl font-black text-gray-900 dark:text-white mb-2 text-center">Tambah Pengguna Baru</h3>
+            <p class="text-gray-500 dark:text-gray-400 text-center mb-8 font-medium">Pilih peran untuk akun baru yang akan dibuat.</p>
+            
+            <div class="grid grid-cols-1 gap-4">
+                <a :href="`{{ route('admin-management.create') }}?role=admin`" 
+                   class="group flex items-center gap-4 p-5 bg-blue-50 dark:bg-blue-900/20 border-2 border-transparent hover:border-blue-600 rounded-2xl transition-all">
+                    <div class="h-12 w-12 bg-blue-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-blue-600/20">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                    </div>
+                    <div class="text-left">
+                        <p class="font-black text-gray-900 dark:text-white">Admin</p>
+                        <p class="text-xs text-gray-500 font-bold uppercase tracking-widest">Akses Manajemen Penuh</p>
+                    </div>
+                </a>
+
+                <a :href="`{{ route('admin-management.create') }}?role=guru`" 
+                   class="group flex items-center gap-4 p-5 bg-indigo-50 dark:bg-indigo-900/20 border-2 border-transparent hover:border-indigo-600 rounded-2xl transition-all">
+                    <div class="h-12 w-12 bg-indigo-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-indigo-600/20">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5S19.832 5.477 21 6.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                    </div>
+                    <div class="text-left">
+                        <p class="font-black text-gray-900 dark:text-white">Guru</p>
+                        <p class="text-xs text-gray-500 font-bold uppercase tracking-widest">Manajemen Siswa & Raport</p>
+                    </div>
+                </a>
+            </div>
+
+            <button @click="showRoleModal = false" class="mt-8 w-full py-4 text-gray-400 font-black text-sm uppercase tracking-widest hover:text-gray-600 transition">Batal</button>
+        </div>
+    </div>
+
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
             <div class="p-6 text-gray-900 dark:text-gray-100">
                 <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
-                    <h2 class="text-2xl font-semibold text-gray-800 dark:text-gray-200">Manajemen Admin</h2>
+                    <h2 class="text-2xl font-semibold text-gray-800 dark:text-gray-200">Manajemen Pengguna</h2>
                     
                     <div class="flex flex-col md:flex-row gap-3 w-full md:w-auto">
                         <form action="{{ route('admin-management.index') }}" method="GET" class="w-full md:w-64 relative">
@@ -21,15 +68,15 @@
                                    name="search" 
                                    value="{{ request('search') }}"
                                    class="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition dark:bg-gray-700 dark:text-gray-300 dark:placeholder-gray-400" 
-                                   placeholder="Cari admin...">
+                                   placeholder="Cari pengguna...">
                         </form>
 
-                        <a href="{{ route('admin-management.create') }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition flex items-center justify-center whitespace-nowrap">
+                        <button @click="showRoleModal = true" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition flex items-center justify-center whitespace-nowrap">
                             <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                             </svg>
-                            Tambah Admin
-                        </a>
+                            Tambah Pengguna
+                        </button>
                     </div>
                 </div>
 

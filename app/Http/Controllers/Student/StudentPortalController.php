@@ -19,7 +19,7 @@ class StudentPortalController extends Controller
         }
 
         $latestInvoice = Invoice::where('id_siswa', $student->id)->latest()->first();
-        $latestReports = StudentReport::with('category')->where('siswa_id', $student->id)->latest()->take(4)->get();
+        $latestReports = StudentReport::with(['category', 'teacher'])->where('siswa_id', $student->id)->latest()->take(4)->get();
 
         return view('student.dashboard', compact('student', 'latestInvoice', 'latestReports'));
     }
@@ -48,7 +48,7 @@ class StudentPortalController extends Controller
     public function reports()
     {
         $student = Auth::user()->siswa;
-        $reports = StudentReport::with('category')->where('siswa_id', $student->id)->latest()->get();
+        $reports = StudentReport::with(['category', 'teacher'])->where('siswa_id', $student->id)->latest()->get();
         return view('student.reports.index', compact('reports'));
     }
 

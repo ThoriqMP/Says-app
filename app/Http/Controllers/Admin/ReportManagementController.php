@@ -19,7 +19,7 @@ class ReportManagementController extends Controller
 {
     public function index(Request $request)
     {
-        $query = StudentReport::with(['student', 'category']);
+        $query = StudentReport::with(['student', 'category', 'teacher']);
 
         // Filter by Student Name
         if ($request->filled('search')) {

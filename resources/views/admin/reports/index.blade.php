@@ -84,7 +84,18 @@
                                     {{ $report->category->name }}
                                 </span>
                             </div>
-                            <p class="text-sm font-bold text-gray-500 dark:text-gray-400 italic">"{{ $report->period }}"</p>
+                            <p class="text-sm font-bold text-gray-500 dark:text-gray-400 italic mb-4">"{{ $report->period }}"</p>
+                            
+                            <!-- Teacher Info -->
+                            <div class="flex items-center gap-2 p-3 bg-gray-50 dark:bg-gray-900/50 rounded-2xl border border-gray-100 dark:border-gray-800">
+                                <div class="h-8 w-8 rounded-lg bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center text-blue-600 dark:text-blue-400 font-black text-xs">
+                                    {{ substr($report->teacher->name ?? 'A', 0, 1) }}
+                                </div>
+                                <div class="min-w-0">
+                                    <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest leading-none mb-1">Dibuat Oleh</p>
+                                    <p class="text-[11px] font-bold text-gray-700 dark:text-gray-300 truncate">{{ $report->teacher->name ?? 'Admin Sekolah' }}</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
 

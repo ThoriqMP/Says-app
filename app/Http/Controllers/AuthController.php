@@ -71,6 +71,7 @@ class AuthController extends Controller
         $permissions = [
             'dashboard' => 'dashboard',
             'invoices.index' => 'invoices.index',
+            'reports.manage' => 'admin.reports.index',
             'assessments.index' => 'assessments.index',
             'psychological-assessments.index' => 'psychological-assessments.index',
             'family-mapping.index' => 'family-mapping.index',

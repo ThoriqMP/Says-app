@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Tambah Admin')
+@section('title', 'Tambah ' . ucfirst($role))
 
 @section('content')
 <div class="py-12">
@@ -8,7 +8,16 @@
         <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
             <div class="p-6 text-gray-900 dark:text-gray-100">
                 <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-2xl font-semibold text-gray-800 dark:text-gray-200">Tambah Admin</h2>
+                    <div class="flex items-center gap-3">
+                        <div class="h-10 w-10 {{ $role === 'admin' ? 'bg-blue-600' : 'bg-indigo-600' }} rounded-xl flex items-center justify-center text-white">
+                            @if($role === 'admin')
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                            @else
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5S19.832 5.477 21 6.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                            @endif
+                        </div>
+                        <h2 class="text-2xl font-semibold text-gray-800 dark:text-gray-200">Tambah {{ ucfirst($role) }} Baru</h2>
+                    </div>
                     <a href="{{ route('admin-management.index') }}" class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 flex items-center">
                         <svg class="h-5 w-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
@@ -19,6 +28,7 @@
 
                 <form action="{{ route('admin-management.store') }}" method="POST">
                     @csrf
+                    <input type="hidden" name="role" value="{{ $role }}">
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <!-- Name -->
