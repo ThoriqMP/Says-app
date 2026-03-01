@@ -158,55 +158,55 @@
         @endif
 
         <!-- Reports Grid (Cards) -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+        <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-8">
             @forelse($reports as $report)
-                <div class="bg-white dark:bg-gray-800 rounded-[32px] border border-gray-100 dark:border-gray-700 shadow-sm hover:shadow-xl transition-all duration-300 group overflow-hidden flex flex-col">
-                    <div class="p-8 flex-1">
-                        <div class="flex justify-between items-start mb-6">
-                            <div class="p-4 bg-blue-50 dark:bg-blue-900/40 rounded-2xl text-blue-600 dark:text-blue-400 group-hover:bg-blue-600 group-hover:text-white transition-colors duration-300">
-                                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                <div class="bg-white dark:bg-gray-800 rounded-[24px] md:rounded-[32px] border border-gray-100 dark:border-gray-700 shadow-sm hover:shadow-xl transition-all duration-300 group overflow-hidden flex flex-col">
+                    <div class="p-4 md:p-8 flex-1">
+                        <div class="flex justify-between items-start mb-4 md:mb-6">
+                            <div class="p-3 md:p-4 bg-blue-50 dark:bg-blue-900/40 rounded-xl md:rounded-2xl text-blue-600 dark:text-blue-400 group-hover:bg-blue-600 group-hover:text-white transition-colors duration-300">
+                                <svg class="w-6 h-6 md:w-8 md:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                             </div>
-                            <span class="px-4 py-1.5 bg-gray-50 dark:bg-gray-700 text-gray-500 dark:text-gray-400 rounded-full text-[10px] font-black uppercase tracking-widest">{{ $report->created_at->format('d M Y') }}</span>
+                            <span class="px-2 md:px-4 py-1 md:py-1.5 bg-gray-50 dark:bg-gray-700 text-gray-500 dark:text-gray-400 rounded-full text-[8px] md:text-[10px] font-black uppercase tracking-widest">{{ $report->created_at->format('d M Y') }}</span>
                         </div>
                         
-                        <div class="mb-6">
-                            <h3 class="text-xl font-black text-gray-900 dark:text-white line-clamp-1 mb-1">{{ $report->student->nama_siswa }}</h3>
-                            <p class="text-xs font-bold text-gray-400 uppercase tracking-widest">NIS: {{ $report->student->nis ?? '-' }}</p>
+                        <div class="mb-4 md:mb-6">
+                            <h3 class="text-sm md:text-xl font-black text-gray-900 dark:text-white line-clamp-1 mb-1">{{ $report->student->nama_siswa }}</h3>
+                            <p class="text-[9px] md:text-xs font-bold text-gray-400 uppercase tracking-widest">NIS: {{ $report->student->nis ?? '-' }}</p>
                         </div>
 
-                        <div class="space-y-3 mb-8">
+                        <div class="space-y-2 md:space-y-3 mb-4 md:mb-8">
                             <div class="flex items-center gap-2">
-                                <span class="px-3 py-1 bg-indigo-50 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400 rounded-lg text-[10px] font-black uppercase tracking-widest">
+                                <span class="px-2 md:px-3 py-1 bg-indigo-50 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400 rounded-lg text-[8px] md:text-[10px] font-black uppercase tracking-widest">
                                     {{ $report->category->name }}
                                 </span>
                             </div>
-                            <p class="text-sm font-bold text-gray-500 dark:text-gray-400 italic mb-4">"{{ $report->period }}"</p>
+                            <p class="text-[10px] md:text-sm font-bold text-gray-500 dark:text-gray-400 italic mb-2 md:mb-4 line-clamp-1">"{{ $report->period }}"</p>
                             
                             <!-- Teacher Info -->
-                            <div class="flex items-center gap-2 p-3 bg-gray-50 dark:bg-gray-900/50 rounded-2xl border border-gray-100 dark:border-gray-800">
-                                <div class="h-8 w-8 rounded-lg bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center text-blue-600 dark:text-blue-400 font-black text-xs">
+                            <div class="flex items-center gap-2 p-2 md:p-3 bg-gray-50 dark:bg-gray-900/50 rounded-xl md:rounded-2xl border border-gray-100 dark:border-gray-800">
+                                <div class="h-6 w-6 md:h-8 md:w-8 rounded-lg bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center text-blue-600 dark:text-blue-400 font-black text-[10px] md:text-xs">
                                     {{ substr($report->teacher->name ?? 'A', 0, 1) }}
                                 </div>
                                 <div class="min-w-0">
-                                    <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest leading-none mb-1">Dibuat Oleh</p>
-                                    <p class="text-[11px] font-bold text-gray-700 dark:text-gray-300 truncate">{{ $report->teacher->name ?? 'Admin Sekolah' }}</p>
+                                    <p class="text-[8px] md:text-[10px] font-black text-gray-400 uppercase tracking-widest leading-none mb-1">Dibuat Oleh</p>
+                                    <p class="text-[9px] md:text-[11px] font-bold text-gray-700 dark:text-gray-300 truncate">{{ $report->teacher->name ?? 'Admin Sekolah' }}</p>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="p-6 pt-0 space-y-3">
+                    <div class="p-4 md:p-6 pt-0 space-y-2 md:space-y-3">
                         <div class="flex gap-2">
-                            <a href="{{ route('admin.reports.show', $report) }}" class="flex-1 py-3.5 bg-gray-900 dark:bg-gray-700 text-white rounded-2xl font-black text-sm text-center hover:bg-blue-600 transition-colors active:scale-95">
+                            <a href="{{ route('admin.reports.show', $report) }}" class="flex-1 py-2 md:py-3.5 bg-gray-900 dark:bg-gray-700 text-white rounded-xl md:rounded-2xl font-black text-[10px] md:text-sm text-center hover:bg-blue-600 transition-colors active:scale-95">
                                 Detail
                             </a>
-                            <a href="{{ route('admin.reports.edit', $report) }}" class="p-3.5 bg-amber-50 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400 rounded-2xl hover:bg-amber-100 transition-colors active:scale-95">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 00-2 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                            <a href="{{ route('admin.reports.edit', $report) }}" class="p-2 md:p-3.5 bg-amber-50 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400 rounded-xl md:rounded-2xl hover:bg-amber-100 transition-colors active:scale-95">
+                                <svg class="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 00-2 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                             </a>
                         </div>
-                        <a href="{{ route('admin.reports.pdf', $report) }}" class="flex items-center justify-center gap-2 w-full py-3.5 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 rounded-2xl font-black text-sm hover:bg-blue-100 transition-colors active:scale-95">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                            Unduh PDF
+                        <a href="{{ route('admin.reports.pdf', $report) }}" class="flex items-center justify-center gap-1.5 md:gap-2 w-full py-2 md:py-3.5 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 rounded-xl md:rounded-2xl font-black text-[10px] md:text-sm hover:bg-blue-100 transition-colors active:scale-95">
+                            <svg class="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                            PDF
                         </a>
                     </div>
                 </div>

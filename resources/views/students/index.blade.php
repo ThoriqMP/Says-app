@@ -52,70 +52,49 @@
                 @endif
 
                 <!-- Grid Cards -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6">
                     @forelse($students as $student)
-                        <div class="bg-white dark:bg-gray-800 rounded-[20px] border border-gray-200 dark:border-gray-700 p-6 shadow-sm hover:shadow-md transition duration-200 flex flex-col">
-                            <div class="flex justify-between items-start mb-4">
+                        <div class="bg-white dark:bg-gray-800 rounded-[16px] md:rounded-[20px] border border-gray-200 dark:border-gray-700 p-3 md:p-6 shadow-sm hover:shadow-md transition duration-200 flex flex-col">
+                            <div class="flex justify-between items-start mb-2 md:mb-4">
                                 <div>
-                                    <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 line-clamp-1" title="{{ $student->nama_siswa }}">
+                                    <h3 class="text-xs md:text-lg font-bold text-gray-900 dark:text-gray-100 line-clamp-1" title="{{ $student->nama_siswa }}">
                                         {{ $student->nama_siswa }}
                                     </h3>
-                                    <div class="flex items-center text-sm text-gray-500 dark:text-gray-400 mt-1">
-                                        <svg class="h-4 w-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <div class="flex items-center text-[10px] md:text-sm text-gray-500 dark:text-gray-400 mt-0.5 md:mt-1">
+                                        <svg class="h-3 w-3 md:h-4 md:w-4 mr-1 md:mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
                                         </svg>
-                                        {{ $student->nama_orang_tua }}
+                                        <span class="truncate">{{ $student->nama_orang_tua }}</span>
                                     </div>
                                 </div>
-                                <div class="flex space-x-2">
+                                <div class="flex space-x-1 md:space-x-2">
                                     <a href="{{ route('students.edit', $student) }}" 
-                                       class="p-2 text-gray-400 hover:text-blue-600 transition rounded-full hover:bg-blue-50">
-                                        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                       class="p-1 md:p-2 text-gray-400 hover:text-blue-600 transition rounded-full hover:bg-blue-50">
+                                        <svg class="h-4 w-4 md:h-5 md:w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 00-2 2h11a2 2 0 00 2-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                                         </svg>
                                     </a>
-                                    <form action="{{ route('students.destroy', $student) }}" method="POST" class="inline"
-                                          onsubmit="return confirm('Apakah Anda yakin ingin menghapus siswa ini?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="p-2 text-gray-400 hover:text-red-600 transition rounded-full hover:bg-red-50">
-                                            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                                            </svg>
-                                        </button>
-                                    </form>
                                 </div>
                             </div>
 
-                            <div class="space-y-3 mb-6 flex-grow">
-                                <div class="flex items-start text-sm">
-                                    <svg class="h-5 w-5 text-gray-400 mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div class="space-y-1 md:space-y-3 mb-2 md:mb-6 flex-grow">
+                                <div class="flex items-start text-[10px] md:text-sm">
+                                    <svg class="h-3 w-3 md:h-5 md:w-5 text-gray-400 mr-1.5 md:mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
                                     </svg>
-                                    <span class="text-gray-600 dark:text-gray-300 line-clamp-2">
+                                    <span class="text-gray-600 dark:text-gray-300 line-clamp-1 md:line-clamp-2">
                                         {{ $student->sekolah ?? '-' }}
                                     </span>
                                 </div>
-                                
-                                <div class="flex items-start text-sm">
-                                    <svg class="h-5 w-5 text-gray-400 mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
-                                    </svg>
-                                    <span class="text-gray-600 dark:text-gray-300 line-clamp-2">
-                                        {{ $student->alamat_tagihan ?? '-' }}
-                                    </span>
-                                </div>
                             </div>
 
-                            <div class="pt-4 border-t border-gray-100 dark:border-gray-700 flex justify-between items-center">
-                                <a href="{{ route('students.show', $student) }}" class="text-blue-600 hover:text-blue-800 text-sm font-bold flex items-center gap-1 group">
-                                    Lihat Profil
-                                    <svg class="h-4 w-4 transform group-hover:translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div class="pt-2 md:pt-4 border-t border-gray-100 dark:border-gray-700 flex justify-between items-center">
+                                <a href="{{ route('students.show', $student) }}" class="text-blue-600 hover:text-blue-800 text-[10px] md:text-sm font-bold flex items-center gap-1 group">
+                                    Profil
+                                    <svg class="h-3 w-3 md:h-4 md:w-4 transform group-hover:translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
                                     </svg>
                                 </a>
-                                <span class="text-xs text-gray-500 dark:text-gray-400">Dibuat {{ $student->created_at->format('d M Y') }}</span>
                             </div>
                         </div>
                     @empty

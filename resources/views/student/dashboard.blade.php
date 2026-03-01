@@ -72,29 +72,29 @@
                     <h3 class="text-2xl font-black text-gray-900 dark:text-white">Raport Terbaru</h3>
                     <a href="{{ route('student.reports') }}" class="text-blue-600 font-bold hover:underline">Lihat Semua &rarr;</a>
                 </div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div class="grid grid-cols-2 sm:grid-cols-2 gap-3 md:gap-6">
                     @forelse($latestReports as $report)
-                        <div class="bg-white dark:bg-gray-800 p-6 rounded-[28px] border border-gray-100 dark:border-gray-700 shadow-sm hover:shadow-md transition group">
-                            <div class="flex justify-between items-start mb-4">
-                                <div class="p-3 bg-blue-50 dark:bg-blue-900/40 rounded-2xl text-blue-600 dark:text-blue-400 group-hover:bg-blue-600 group-hover:text-white transition">
-                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                        <div class="bg-white dark:bg-gray-800 p-4 md:p-6 rounded-[24px] md:rounded-[28px] border border-gray-100 dark:border-gray-700 shadow-sm hover:shadow-md transition group">
+                            <div class="flex justify-between items-start mb-3 md:mb-4">
+                                <div class="p-2 md:p-3 bg-blue-50 dark:bg-blue-900/40 rounded-xl md:rounded-2xl text-blue-600 dark:text-blue-400 group-hover:bg-blue-600 group-hover:text-white transition">
+                                    <svg class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                                 </div>
-                                <span class="text-xs font-bold text-gray-400 bg-gray-50 dark:bg-gray-700 px-3 py-1 rounded-full uppercase tracking-widest">{{ $report->created_at->format('d M Y') }}</span>
+                                <span class="text-[8px] md:text-xs font-bold text-gray-400 bg-gray-50 dark:bg-gray-700 px-2 py-0.5 md:px-3 md:py-1 rounded-full uppercase tracking-widest">{{ $report->created_at->format('d/m/y') }}</span>
                             </div>
                             <div class="flex-1">
-                                <h4 class="text-lg font-black text-gray-900 dark:text-white line-clamp-1">{{ $report->category->name }}</h4>
-                                <p class="text-xs text-gray-500 font-bold mb-2">{{ $report->period }}</p>
-                                <div class="flex items-center gap-1.5 mb-6">
-                                    <div class="h-5 w-5 rounded-md bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center text-blue-600 dark:text-blue-400 font-black text-[8px]">
+                                <h4 class="text-sm md:text-lg font-black text-gray-900 dark:text-white line-clamp-1">{{ $report->category->name }}</h4>
+                                <p class="text-[10px] md:text-xs text-gray-500 font-bold mb-2 line-clamp-1">{{ $report->period }}</p>
+                                <div class="flex items-center gap-1.5 mb-4 md:mb-6">
+                                    <div class="h-4 w-4 md:h-5 md:w-5 rounded-md bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center text-blue-600 dark:text-blue-400 font-black text-[7px] md:text-[8px]">
                                         {{ substr($report->teacher->name ?? 'A', 0, 1) }}
                                     </div>
-                                    <p class="text-[10px] font-bold text-gray-400 truncate max-w-[120px]">{{ $report->teacher->name ?? 'Admin' }}</p>
+                                    <p class="text-[8px] md:text-[10px] font-bold text-gray-400 truncate max-w-[80px] md:max-w-[120px]">{{ $report->teacher->name ?? 'Admin' }}</p>
                                 </div>
                             </div>
-                            <div class="flex gap-2">
-                                <a href="{{ route('student.reports.show', $report) }}" class="flex-1 text-center py-3 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white rounded-2xl font-bold hover:bg-blue-600 hover:text-white transition">Detail</a>
-                                <a href="{{ route('student.reports.pdf', $report) }}" class="p-3 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-2xl hover:bg-blue-600 hover:text-white transition">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+                            <div class="flex gap-1.5 md:gap-2">
+                                <a href="{{ route('student.reports.show', $report) }}" class="flex-1 text-center py-2 md:py-3 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white rounded-xl md:rounded-2xl font-bold text-[10px] md:text-sm hover:bg-blue-600 hover:text-white transition">Detail</a>
+                                <a href="{{ route('student.reports.pdf', $report) }}" class="p-2 md:p-3 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-xl md:rounded-2xl hover:bg-blue-600 hover:text-white transition">
+                                    <svg class="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
                                 </a>
                             </div>
                         </div>

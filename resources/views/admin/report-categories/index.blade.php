@@ -30,29 +30,29 @@
         @endif
 
         <!-- Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-8">
             @foreach($categories as $category)
-                <div class="bg-white dark:bg-gray-800 rounded-[32px] border border-gray-100 dark:border-gray-700 p-8 shadow-sm hover:shadow-xl transition-all duration-300 group">
-                    <div class="flex justify-between items-start mb-6">
-                        <div class="p-4 bg-blue-50 dark:bg-blue-900/40 rounded-2xl text-blue-600 dark:text-blue-400 group-hover:bg-blue-600 group-hover:text-white transition-colors duration-300">
-                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                <div class="bg-white dark:bg-gray-800 rounded-[24px] md:rounded-[32px] border border-gray-100 dark:border-gray-700 p-4 md:p-8 shadow-sm hover:shadow-xl transition-all duration-300 group">
+                    <div class="flex justify-between items-start mb-4 md:mb-6">
+                        <div class="p-3 md:p-4 bg-blue-50 dark:bg-blue-900/40 rounded-xl md:rounded-2xl text-blue-600 dark:text-blue-400 group-hover:bg-blue-600 group-hover:text-white transition-colors duration-300">
+                            <svg class="w-6 h-6 md:w-8 md:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
                         </div>
-                        <div class="flex gap-2">
-                            <a href="{{ route('admin.report-categories.edit', $category) }}" class="p-2 text-gray-400 hover:text-blue-600 transition-colors">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 00-2 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                        <div class="flex gap-1 md:gap-2">
+                            <a href="{{ route('admin.report-categories.edit', $category) }}" class="p-1.5 md:p-2 text-gray-400 hover:text-blue-600 transition-colors">
+                                <svg class="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 00-2 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                             </a>
                             <form action="{{ route('admin.report-categories.destroy', $category) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus kategori ini?')">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="p-2 text-gray-400 hover:text-red-600 transition-colors">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                <button type="submit" class="p-1.5 md:p-2 text-gray-400 hover:text-red-600 transition-colors">
+                                    <svg class="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                                 </button>
                             </form>
                         </div>
                     </div>
-                    <h3 class="text-xl font-black text-gray-900 dark:text-white mb-2">{{ $category->name }}</h3>
-                    <p class="text-gray-500 dark:text-gray-400 font-bold text-sm">
-                        {{ $category->subjects_count }} Subjek Nilai
+                    <h3 class="text-sm md:text-xl font-black text-gray-900 dark:text-white mb-1 md:mb-2 line-clamp-1">{{ $category->name }}</h3>
+                    <p class="text-gray-500 dark:text-gray-400 font-bold text-[10px] md:text-sm">
+                        {{ $category->subjects_count }} Subjek
                     </p>
                 </div>
             @endforeach

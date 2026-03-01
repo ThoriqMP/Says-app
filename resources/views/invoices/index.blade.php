@@ -110,11 +110,11 @@
                 @endif
 
                 <!-- Grid Cards -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6">
                     @forelse($invoices as $invoice)
-                        <div class="bg-white dark:bg-gray-800 rounded-[20px] border border-gray-200 dark:border-gray-700 p-6 shadow-sm hover:shadow-md transition duration-200 flex flex-col relative overflow-hidden">
+                        <div class="bg-white dark:bg-gray-800 rounded-[16px] md:rounded-[20px] border border-gray-200 dark:border-gray-700 p-3 md:p-6 shadow-sm hover:shadow-md transition duration-200 flex flex-col relative overflow-hidden">
                             <!-- Status Stripe -->
-                            <div class="absolute top-0 left-0 w-1.5 h-full 
+                            <div class="absolute top-0 left-0 w-1 md:w-1.5 h-full 
                                 @if($invoice->status == 'paid') bg-green-500
                                 @elseif($invoice->status == 'sent') bg-blue-500
                                 @elseif($invoice->status == 'overdue') bg-red-500
@@ -122,20 +122,20 @@
                                 @endif">
                             </div>
 
-                            <div class="pl-3">
-                                <div class="flex justify-between items-start mb-4">
-                                    <div>
-                                        <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">
+                            <div class="pl-2 md:pl-3 h-full flex flex-col">
+                                <div class="flex justify-between items-start mb-2 md:mb-4">
+                                    <div class="min-w-0 flex-1">
+                                        <div class="text-[8px] md:text-xs font-semibold text-gray-500 uppercase tracking-wider mb-0.5 md:mb-1 truncate">
                                             {{ $invoice->no_invoice }}
                                         </div>
-                                        <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 line-clamp-1" title="{{ $invoice->siswa->nama_siswa }}">
+                                        <h3 class="text-xs md:text-lg font-bold text-gray-900 dark:text-gray-100 line-clamp-1" title="{{ $invoice->siswa->nama_siswa }}">
                                             {{ $invoice->siswa->nama_siswa }}
                                         </h3>
-                                        <div class="text-sm text-gray-500 dark:text-gray-400 mt-0.5">
+                                        <div class="text-[10px] md:text-sm text-gray-500 dark:text-gray-400 mt-0.5 truncate">
                                             {{ $invoice->siswa->nama_orang_tua }}
                                         </div>
                                     </div>
-                                    <span class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wide
+                                    <span class="px-1.5 py-0.5 md:px-2.5 md:py-1 rounded-full text-[8px] md:text-[10px] font-bold uppercase tracking-wide
                                         @if($invoice->status == 'paid') bg-green-50 text-green-700 border border-green-200
                                         @elseif($invoice->status == 'sent') bg-blue-50 text-blue-700 border border-blue-200
                                         @elseif($invoice->status == 'overdue') bg-red-50 text-red-700 border border-red-200
@@ -145,71 +145,48 @@
                                     </span>
                                 </div>
 
-                                <div class="space-y-3 mb-6">
-                                    <div class="flex justify-between text-sm">
+                                <div class="space-y-1.5 md:space-y-3 mb-3 md:mb-6 flex-grow">
+                                    <div class="flex justify-between text-[10px] md:text-sm">
                                         <span class="text-gray-500">Tanggal</span>
                                         <span class="font-medium text-gray-900 dark:text-gray-100">{{ $invoice->tanggal_invoice->format('d/m/Y') }}</span>
                                     </div>
-                                    <div class="flex justify-between text-sm">
-                                        <span class="text-gray-500">Jatuh Tempo</span>
-                                        <span class="font-medium 
-                                            @if($invoice->status != 'paid' && $invoice->jatuh_tempo < now()) text-red-600 font-bold
-                                            @else text-gray-900 dark:text-gray-100
-                                            @endif">
-                                            {{ $invoice->jatuh_tempo->format('d/m/Y') }}
-                                        </span>
-                                    </div>
-                                    <div class="pt-3 border-t border-dashed border-gray-200 dark:border-gray-700 flex justify-between items-center">
-                                        <span class="text-gray-500 font-medium">Total</span>
-                                        <span class="text-lg font-bold text-gray-900 dark:text-gray-100">
+                                    <div class="flex justify-between text-[10px] md:text-sm">
+                                        <span class="text-gray-500">Total</span>
+                                        <span class="font-bold text-gray-900 dark:text-gray-100">
                                             Rp {{ number_format($invoice->grand_total, 0, ',', '.') }}
                                         </span>
                                     </div>
                                 </div>
 
-                                <div class="flex items-center justify-between gap-2 pt-2">
+                                <div class="flex flex-wrap items-center justify-between gap-1 md:gap-2 pt-2 border-t border-gray-100 dark:border-gray-700">
                                     <div class="flex gap-1">
                                         <a href="{{ route('invoices.show', $invoice) }}" 
-                                           class="p-2 text-gray-500 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-full transition" title="Lihat Detail">
-                                            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                           class="p-1.5 md:p-2 text-gray-500 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-full transition" title="Lihat Detail">
+                                            <svg class="h-4 w-4 md:h-5 md:w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
                                             </svg>
                                         </a>
                                         <button type="button" 
                                            @click="showPreviewModal = true; previewUrl = '{{ route('invoices.preview', $invoice) }}'"
-                                           class="p-2 text-gray-500 hover:text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 rounded-full transition" title="Preview PDF">
-                                            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                           class="p-1.5 md:p-2 text-gray-500 hover:text-indigo-600 hover:bg-indigo-50 dark:hover:bg-indigo-900/30 rounded-full transition" title="Preview PDF">
+                                            <svg class="h-4 w-4 md:h-5 md:w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
                                             </svg>
                                         </button>
-                                        <a href="{{ route('invoices.pdf', $invoice) }}" 
-                                           class="p-2 text-gray-500 hover:text-green-600 hover:bg-green-50 dark:hover:bg-green-900/30 rounded-full transition" title="Download PDF">
-                                            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
-                                            </svg>
-                                        </a>
                                     </div>
                                     
-                                    <div class="flex gap-1 border-l border-gray-200 dark:border-gray-700 pl-2 ml-auto">
+                                    <div class="flex gap-1 border-l border-gray-200 dark:border-gray-700 pl-1 md:pl-2">
                                         <a href="{{ route('invoices.edit', $invoice) }}" 
-                                           class="p-2 text-gray-400 hover:text-yellow-600 hover:bg-yellow-50 dark:hover:bg-yellow-900/30 rounded-full transition" title="Edit">
-                                            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                           class="p-1.5 md:p-2 text-gray-400 hover:text-yellow-600 hover:bg-yellow-50 dark:hover:bg-yellow-900/30 rounded-full transition" title="Edit">
+                                            <svg class="h-4 w-4 md:h-5 md:w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
                                             </svg>
                                         </a>
-                                        <form action="{{ route('invoices.destroy', $invoice) }}" method="POST" class="inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus invoice ini?')">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-full transition" title="Hapus">
-                                                <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-                                                </svg>
-                                            </button>
-                                        </form>
                                     </div>
                                 </div>
                             </div>
+                        </div>
                         </div>
                     @empty
                         <div class="col-span-full flex flex-col items-center justify-center py-12 px-4 text-center">
