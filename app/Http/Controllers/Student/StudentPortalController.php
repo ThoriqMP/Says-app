@@ -31,6 +31,16 @@ class StudentPortalController extends Controller
         return view('student.invoices.index', compact('invoices'));
     }
 
+    public function invoiceDetail(Invoice $invoice)
+    {
+        if ($invoice->id_siswa !== Auth::user()->siswa->id) {
+            abort(403);
+        }
+
+        $invoice->load(['student', 'items']);
+        return view('student.invoices.show', compact('invoice'));
+    }
+
     public function reports()
     {
         $student = Auth::user()->siswa;

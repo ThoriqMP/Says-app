@@ -16,10 +16,27 @@ use Illuminate\Support\Facades\Storage;
 
 class ReportManagementController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $reports = StudentReport::with(['student', 'category'])->latest()->paginate(10);
-        return view('admin.reports.index', compact('reports'));
+        $query = StudentReport::with(['student', 'category']);
+
+        // Filter by Student Name
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->whereHas('student', function($q) use ($search) {
+                $q->where('nama_siswa', 'like', "%{$search}%");
+            });
+        }
+
+        // Filter by Category
+        if ($request->filled('category_id')) {
+            $query->where('report_category_id', $request->category_id);
+        }
+
+        $reports = $query->latest()->paginate(12)->withQueryString();
+        $categories = ReportCategory::orderBy('name')->get();
+
+        return view('admin.reports.index', compact('reports', 'categories'));
     }
 
     public function create(Request $request)

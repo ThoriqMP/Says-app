@@ -1,54 +1,64 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="py-12">
-    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6">
-            <h2 class="text-2xl font-bold mb-6 text-gray-900 dark:text-gray-100">Daftar Tagihan Saya</h2>
+<div class="py-8 px-4 sm:px-6 lg:px-8">
+    <div class="mb-8">
+        <h2 class="text-3xl font-black text-gray-900 dark:text-white mb-2">Tagihan & Pembayaran</h2>
+        <p class="text-gray-500 dark:text-gray-400 font-medium">Pantau status pembayaran uang sekolah dan layanan lainnya.</p>
+    </div>
 
-            <div class="overflow-x-auto">
-                <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                    <thead class="bg-gray-50 dark:bg-gray-900">
-                        <tr>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No. Invoice</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Jatuh Tempo</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
-                        @forelse($invoices as $invoice)
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">{{ $invoice->no_invoice }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{{ $invoice->tanggal_invoice->format('d/m/Y') }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">{{ $invoice->jatuh_tempo->format('d/m/Y') }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-gray-900 dark:text-gray-100">Rp {{ number_format($invoice->grand_total, 0, ',', '.') }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $invoice->status === 'paid' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
-                                        {{ strtoupper($invoice->status) }}
+    <div class="space-y-6">
+        @forelse($invoices as $invoice)
+            <div class="bg-white dark:bg-gray-800 rounded-[32px] border border-gray-100 dark:border-gray-700 shadow-sm overflow-hidden hover:shadow-md transition-shadow duration-300">
+                <div class="p-8">
+                    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+                        <div class="flex items-start gap-5">
+                            <div class="h-16 w-16 bg-blue-50 dark:bg-blue-900/40 rounded-2xl flex items-center justify-center text-blue-600 dark:text-blue-400 shrink-0">
+                                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                            </div>
+                            <div>
+                                <div class="flex items-center gap-3 mb-1">
+                                    <h3 class="text-xl font-black text-gray-900 dark:text-white">Invoice #{{ $invoice->invoice_number }}</h3>
+                                    <span class="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest {{ $invoice->status === 'paid' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700' }}">
+                                        {{ $invoice->status }}
                                     </span>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                    <a href="{{ route('student.invoices.pdf', $invoice) }}" class="text-blue-600 hover:text-blue-900 flex items-center gap-1">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                                        Unduh PDF
-                                    </a>
-                                </td>
-                            </tr>
-                        @empty
-                            <tr>
-                                <td colspan="6" class="px-6 py-4 text-center text-sm text-gray-500">Belum ada data tagihan.</td>
-                            </tr>
-                        @endforelse
-                    </tbody>
-                </table>
+                                </div>
+                                <p class="text-gray-500 dark:text-gray-400 font-medium">Diterbitkan pada {{ $invoice->tanggal_tagihan->format('d M Y') }}</p>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 lg:grid-cols-3 gap-8 items-center">
+                            <div>
+                                <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Total Tagihan</p>
+                                <p class="text-xl font-black text-gray-900 dark:text-white">Rp {{ number_format($invoice->grand_total, 0, ',', '.') }}</p>
+                            </div>
+                            <div class="hidden lg:block">
+                                <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Jatuh Tempo</p>
+                                <p class="text-sm font-bold text-gray-700 dark:text-gray-300">{{ $invoice->jatuh_tempo->format('d M Y') }}</p>
+                            </div>
+                            <div class="col-span-2 lg:col-span-1 flex gap-2">
+                                <a href="{{ route('student.invoices.show', $invoice) }}" class="flex-1 lg:flex-none px-6 py-3 bg-gray-900 dark:bg-gray-700 text-white rounded-2xl font-black text-sm text-center hover:bg-blue-600 transition-colors active:scale-95">
+                                    Detail
+                                </a>
+                                @if($invoice->status !== 'paid')
+                                    <button class="flex-1 lg:flex-none px-6 py-3 bg-blue-600 text-white rounded-2xl font-black text-sm text-center hover:bg-blue-700 transition-colors shadow-lg shadow-blue-600/20 active:scale-95">
+                                        Bayar
+                                    </button>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="mt-4">
-                {{ $invoices->links() }}
+        @empty
+            <div class="bg-gray-50 dark:bg-gray-900/50 rounded-[40px] border-2 border-dashed border-gray-200 dark:border-gray-700 p-20 text-center">
+                <div class="h-24 w-24 bg-white dark:bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm">
+                    <svg class="w-12 h-12 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                </div>
+                <h3 class="text-2xl font-black text-gray-900 dark:text-white mb-2">Tidak Ada Tagihan</h3>
+                <p class="text-gray-500 dark:text-gray-400 max-w-sm mx-auto font-medium">Semua tagihan Anda sudah terbayar atau belum ada tagihan baru untuk periode ini.</p>
             </div>
-        </div>
+        @endforelse
     </div>
 </div>
 @endsection
