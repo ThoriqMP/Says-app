@@ -1,7 +1,103 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="py-8 px-4 sm:px-6 lg:px-8">
+<div class="py-8 px-4 sm:px-6 lg:px-8" x-data="reportFlow()">
+    <!-- Flow Modal -->
+    <div x-show="showModal" 
+         class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0"
+         x-transition:enter-end="opacity-100"
+         x-transition:leave="transition ease-in duration-200"
+         x-transition:leave-start="opacity-100"
+         x-transition:leave-end="opacity-0"
+         style="display: none;">
+        
+        <div class="bg-white dark:bg-gray-800 rounded-[40px] w-full max-w-2xl shadow-2xl overflow-hidden transform transition-all"
+             @click.away="resetModal()">
+            
+            <!-- Step 1: Pilih Siswa -->
+            <div x-show="step === 1" class="p-10">
+                <div class="mb-8">
+                    <h3 class="text-3xl font-black text-gray-900 dark:text-white mb-2">Pilih Siswa</h3>
+                    <p class="text-gray-500 dark:text-gray-400 font-medium">Cari dan pilih siswa yang ingin dibuatkan raport.</p>
+                </div>
+
+                <div class="relative mb-6">
+                    <input type="text" 
+                           x-model="searchQuery" 
+                           @input.debounce.300ms="fetchStudents()"
+                           placeholder="Ketik nama atau NIS siswa..." 
+                           class="w-full pl-12 pr-6 py-4 bg-gray-50 dark:bg-gray-900 border-none rounded-2xl focus:ring-2 focus:ring-blue-500 dark:text-white font-bold placeholder-gray-400">
+                    <svg class="w-6 h-6 text-gray-400 absolute left-4 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                </div>
+
+                <div class="max-h-64 overflow-y-auto space-y-2 mb-8 custom-scrollbar">
+                    <template x-for="student in students" :key="student.id">
+                        <button @click="selectStudent(student)" 
+                                class="w-full flex items-center justify-between p-4 rounded-2xl hover:bg-blue-50 dark:hover:bg-blue-900/20 border-2 border-transparent hover:border-blue-600 transition-all text-left group">
+                            <div class="flex items-center gap-4">
+                                <div class="h-10 w-10 bg-blue-100 dark:bg-blue-900/40 rounded-xl flex items-center justify-center text-blue-600 dark:text-blue-400 font-black">
+                                    <span x-text="student.nama_siswa.charAt(0)"></span>
+                                </div>
+                                <div>
+                                    <p class="font-black text-gray-900 dark:text-white" x-text="student.nama_siswa"></p>
+                                    <p class="text-xs font-bold text-gray-400 uppercase tracking-widest" x-text="'NIS: ' + (student.nis || '-') + ' • Kelas: ' + (student.class || '-')"></p>
+                                </div>
+                            </div>
+                            <svg class="w-5 h-5 text-gray-300 group-hover:text-blue-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </button>
+                    </template>
+                    <div x-show="students.length === 0 && searchQuery.length >= 2" class="py-10 text-center text-gray-400 font-bold">
+                        Siswa tidak ditemukan...
+                    </div>
+                    <div x-show="searchQuery.length < 2" class="py-10 text-center text-gray-400 font-bold">
+                        Mulai mengetik untuk mencari...
+                    </div>
+                </div>
+
+                <div class="flex justify-end">
+                    <button @click="resetModal()" class="px-8 py-4 text-gray-400 font-black uppercase tracking-widest hover:text-gray-600 transition">Batal</button>
+                </div>
+            </div>
+
+            <!-- Step 2: Pilih Kategori -->
+            <div x-show="step === 2" class="p-10">
+                <div class="mb-8">
+                    <button @click="step = 1" class="flex items-center gap-2 text-blue-600 font-black text-xs uppercase tracking-widest mb-4 hover:gap-3 transition-all">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                        Kembali ke Siswa
+                    </button>
+                    <h3 class="text-3xl font-black text-gray-900 dark:text-white mb-2">Pilih Kategori</h3>
+                    <p class="text-gray-500 dark:text-gray-400 font-medium" x-text="'Membuat raport untuk ' + selectedStudent?.nama_siswa"></p>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+                    @foreach($categories as $category)
+                        <button @click="selectCategory('{{ $category->id }}')" 
+                                class="flex items-center gap-4 p-6 bg-gray-50 dark:bg-gray-900 border-2 border-transparent hover:border-blue-600 rounded-[24px] transition-all group text-left">
+                            <div class="h-12 w-12 bg-white dark:bg-gray-800 rounded-2xl flex items-center justify-center text-blue-600 shadow-sm group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                            </div>
+                            <div>
+                                <p class="font-black text-gray-900 dark:text-white">{{ $category->name }}</p>
+                                <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest">{{ $category->subjects_count }} Subjek</p>
+                            </div>
+                        </button>
+                    @endforeach
+                </div>
+
+                <div class="flex justify-end">
+                    <button @click="resetModal()" class="px-8 py-4 text-gray-400 font-black uppercase tracking-widest hover:text-gray-600 transition">Batal</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="max-w-7xl mx-auto">
         <!-- Header -->
         <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-10">
@@ -9,10 +105,10 @@
                 <h2 class="text-3xl font-black text-gray-900 dark:text-white">Manajemen Raport</h2>
                 <p class="text-gray-500 dark:text-gray-400 font-medium mt-1">Kelola, lihat, dan unduh laporan perkembangan siswa.</p>
             </div>
-            <a href="{{ route('students.index') }}" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-2xl font-black shadow-lg shadow-blue-600/20 transition-all active:scale-95 flex items-center gap-2">
+            <button @click="showModal = true" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-2xl font-black shadow-lg shadow-blue-600/20 transition-all active:scale-95 flex items-center gap-2">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
                 Buat Raport Baru
-            </a>
+            </button>
         </div>
 
         <!-- Filters -->
@@ -134,3 +230,48 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+<script>
+function reportFlow() {
+    return {
+        showModal: false,
+        step: 1,
+        searchQuery: '',
+        students: [],
+        selectedStudent: null,
+        
+        resetModal() {
+            this.showModal = false;
+            this.step = 1;
+            this.searchQuery = '';
+            this.students = [];
+            this.selectedStudent = null;
+        },
+        
+        async fetchStudents() {
+            if (this.searchQuery.length < 2) {
+                this.students = [];
+                return;
+            }
+            
+            try {
+                const response = await fetch(`{{ route('admin.reports.search-students') }}?query=${this.searchQuery}`);
+                this.students = await response.json();
+            } catch (error) {
+                console.error('Error fetching students:', error);
+            }
+        },
+        
+        selectStudent(student) {
+            this.selectedStudent = student;
+            this.step = 2;
+        },
+        
+        selectCategory(categoryId) {
+            window.location.href = `{{ route('admin.reports.create') }}?student_id=${this.selectedStudent.id}&category_id=${categoryId}`;
+        }
+    }
+}
+</script>
+@endpush

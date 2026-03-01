@@ -46,9 +46,26 @@ class ReportManagementController extends Controller
         $selectedCategoryId = $request->category_id;
         $students = Siswa::orderBy('nama_siswa')->get();
         $categories = ReportCategory::with('subjects')->get();
+        
+        // If we don't have student or category yet, we just show the index or handle via modal
+        if (!$selectedStudentId || !$selectedCategoryId) {
+            return redirect()->route('admin.reports.index')->with('error', 'Silakan pilih siswa dan kategori raport terlebih dahulu.');
+        }
+
         $selectedCategory = ReportCategory::with('subjects')->find($selectedCategoryId);
 
         return view('admin.reports.create', compact('students', 'categories', 'selectedStudentId', 'selectedCategoryId', 'selectedCategory'));
+    }
+
+    public function searchStudents(Request $request)
+    {
+        $search = $request->get('query');
+        $students = Siswa::where('nama_siswa', 'like', "%{$search}%")
+            ->orWhere('nis', 'like', "%{$search}%")
+            ->limit(10)
+            ->get(['id', 'nama_siswa', 'nis', 'class']);
+            
+        return response()->json($students);
     }
 
     public function show(StudentReport $report)

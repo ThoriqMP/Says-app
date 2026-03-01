@@ -134,6 +134,7 @@ Route::middleware(['auth'])->group(function () {
     // Admin Report Management
     Route::middleware('permission:reports.manage')->prefix('admin/reports')->name('admin.reports.')->group(function () {
         Route::get('/', [\App\Http\Controllers\Admin\ReportManagementController::class, 'index'])->name('index');
+        Route::get('/search-students', [\App\Http\Controllers\Admin\ReportManagementController::class, 'searchStudents'])->name('search-students');
         Route::get('/create', [\App\Http\Controllers\Admin\ReportManagementController::class, 'create'])->name('create');
         Route::post('/', [\App\Http\Controllers\Admin\ReportManagementController::class, 'store'])->name('store');
         Route::get('/{report}', [\App\Http\Controllers\Admin\ReportManagementController::class, 'show'])->name('show');
