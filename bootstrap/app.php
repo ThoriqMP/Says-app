@@ -14,6 +14,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'pimpinan' => \App\Http\Middleware\EnsureUserIsPimpinan::class,
             'permission' => \App\Http\Middleware\CheckPermission::class,
+            'student' => \App\Http\Middleware\EnsureUserIsStudent::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

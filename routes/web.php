@@ -61,12 +61,13 @@ Route::middleware(['auth'])->group(function () {
 
     // Student Routes
     Route::middleware('permission:students.index')->group(function () {
-        Route::get('/students', [StudentController::class, 'index'])->name('students.index');
-        Route::get('/students/create', [StudentController::class, 'create'])->name('students.create');
-        Route::post('/students', [StudentController::class, 'store'])->name('students.store');
-        Route::get('/students/{student}/edit', [StudentController::class, 'edit'])->name('students.edit');
-        Route::put('/students/{student}', [StudentController::class, 'update'])->name('students.update');
-        Route::delete('/students/{student}', [StudentController::class, 'destroy'])->name('students.destroy');
+        Route::get('/students', [\App\Http\Controllers\Admin\StudentManagementController::class, 'index'])->name('students.index');
+        Route::get('/students/create', [\App\Http\Controllers\Admin\StudentManagementController::class, 'create'])->name('students.create');
+        Route::post('/students', [\App\Http\Controllers\Admin\StudentManagementController::class, 'store'])->name('students.store');
+        Route::get('/students/{student}', [\App\Http\Controllers\Admin\StudentManagementController::class, 'show'])->name('students.show');
+        Route::get('/students/{student}/edit', [\App\Http\Controllers\Admin\StudentManagementController::class, 'edit'])->name('students.edit');
+        Route::put('/students/{student}', [\App\Http\Controllers\Admin\StudentManagementController::class, 'update'])->name('students.update');
+        Route::delete('/students/{student}', [\App\Http\Controllers\Admin\StudentManagementController::class, 'destroy'])->name('students.destroy');
     });
 
     // Subjects Routes
@@ -124,6 +125,25 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware('permission:family-mapping.index')->group(function () {
         Route::get('/family-mapping', [FamilyMappingController::class, 'index'])->name('family-mapping.index');
         Route::get('/family-mapping/pdf', [FamilyMappingController::class, 'pdf'])->name('family-mapping.pdf');
+    });
+
+    // Admin Report Management
+    Route::middleware('permission:reports.manage')->prefix('admin/reports')->name('admin.reports.')->group(function () {
+        Route::get('/', [\App\Http\Controllers\Admin\ReportManagementController::class, 'index'])->name('index');
+        Route::get('/create', [\App\Http\Controllers\Admin\ReportManagementController::class, 'create'])->name('create');
+        Route::post('/', [\App\Http\Controllers\Admin\ReportManagementController::class, 'store'])->name('store');
+        Route::get('/{report}/edit', [\App\Http\Controllers\Admin\ReportManagementController::class, 'edit'])->name('edit');
+        Route::put('/{report}', [\App\Http\Controllers\Admin\ReportManagementController::class, 'update'])->name('update');
+        Route::delete('/{report}', [\App\Http\Controllers\Admin\ReportManagementController::class, 'destroy'])->name('destroy');
+    });
+
+    // Student Portal Routes
+    Route::middleware(['student'])->prefix('student')->name('student.')->group(function () {
+        Route::get('/dashboard', [\App\Http\Controllers\Student\StudentPortalController::class, 'dashboard'])->name('dashboard');
+        Route::get('/invoices', [\App\Http\Controllers\Student\StudentPortalController::class, 'invoices'])->name('invoices');
+        Route::get('/reports', [\App\Http\Controllers\Student\StudentPortalController::class, 'reports'])->name('reports');
+        Route::get('/reports/{report}', [\App\Http\Controllers\Student\StudentPortalController::class, 'reportDetail'])->name('reports.show');
+        Route::get('/reports/{report}/pdf', [\App\Http\Controllers\Student\StudentPortalController::class, 'downloadReportPdf'])->name('reports.pdf');
     });
 });
 

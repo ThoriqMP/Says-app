@@ -12,7 +12,26 @@ class Siswa extends Model
         'nama_siswa',
         'nama_orang_tua',
         'alamat_tagihan',
+        'user_id',
+        'nis',
+        'class',
     ];
+
+    /**
+     * Relasi ke user
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Relasi ke raport
+     */
+    public function reports()
+    {
+        return $this->hasMany(StudentReport::class, 'siswa_id');
+    }
 
     /**
      * Relasi ke invoice

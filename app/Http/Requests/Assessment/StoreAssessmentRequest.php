@@ -16,7 +16,7 @@ class StoreAssessmentRequest extends FormRequest
         return [
             'subject_id' => 'nullable|exists:subjects,id',
             'new_subject_name' => 'nullable|string|max:255',
-            'new_subject_age' => 'nullable|integer|min:0|max:120',
+            'new_subject_dob' => 'nullable|date',
             'new_subject_gender' => 'nullable|in:male,female',
             'new_subject_phone' => 'nullable|string|max:50',
             'test_date' => 'required|date',

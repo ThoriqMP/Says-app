@@ -42,17 +42,66 @@ class InitialDataSeeder extends Seeder
             'pimpinan_nama' => 'Dr. Siti Rahayu, M.Pd',
         ]);
 
-        // Create sample students
+        // Create sample students with accounts
         $students = [
-            ['nama_siswa' => 'Ahmad Fauzan', 'nama_orang_tua' => 'Bapak Fauzan', 'alamat_tagihan' => 'Jl. Merdeka No. 45, Jakarta'],
-            ['nama_siswa' => 'Fatimah Azzahra', 'nama_orang_tua' => 'Ibu Siti Nurhalimah', 'alamat_tagihan' => 'Jl. Sudirman No. 78, Jakarta'],
-            ['nama_siswa' => 'Muhammad Rizki', 'nama_orang_tua' => 'Bapak Rizki Pratama', 'alamat_tagihan' => 'Jl. Thamrin No. 23, Jakarta'],
-            ['nama_siswa' => 'Sarah Maulidia', 'nama_orang_tua' => 'Ibu Sarah Dewi', 'alamat_tagihan' => 'Jl. Gatot Subroto No. 56, Jakarta'],
-            ['nama_siswa' => 'Ali bin Abi Thalib', 'nama_orang_tua' => 'Bapak Ali Hasan', 'alamat_tagihan' => 'Jl. Rasuna Said No. 89, Jakarta'],
+            [
+                'nama_siswa' => 'Ahmad Fauzan',
+                'nama_orang_tua' => 'Bapak Fauzan',
+                'alamat_tagihan' => 'Jl. Merdeka No. 45, Jakarta',
+                'email' => 'fauzan@student.com',
+                'nis' => '10001',
+                'class' => '7A'
+            ],
+            [
+                'nama_siswa' => 'Fatimah Azzahra',
+                'nama_orang_tua' => 'Ibu Siti Nurhalimah',
+                'alamat_tagihan' => 'Jl. Sudirman No. 78, Jakarta',
+                'email' => 'fatimah@student.com',
+                'nis' => '10002',
+                'class' => '7B'
+            ],
+            [
+                'nama_siswa' => 'Muhammad Rizki',
+                'nama_orang_tua' => 'Bapak Rizki Pratama',
+                'alamat_tagihan' => 'Jl. Thamrin No. 23, Jakarta',
+                'email' => 'rizki@student.com',
+                'nis' => '10003',
+                'class' => '8A'
+            ],
+            [
+                'nama_siswa' => 'Sarah Maulidia',
+                'nama_orang_tua' => 'Ibu Sarah Dewi',
+                'alamat_tagihan' => 'Jl. Gatot Subroto No. 56, Jakarta',
+                'email' => 'sarah@student.com',
+                'nis' => '10004',
+                'class' => '8B'
+            ],
+            [
+                'nama_siswa' => 'Ali bin Abi Thalib',
+                'nama_orang_tua' => 'Bapak Ali Hasan',
+                'alamat_tagihan' => 'Jl. Rasuna Said No. 89, Jakarta',
+                'email' => 'ali@student.com',
+                'nis' => '10005',
+                'class' => '9A'
+            ],
         ];
 
-        foreach ($students as $student) {
-            Siswa::create($student);
+        foreach ($students as $data) {
+            $user = User::create([
+                'name' => $data['nama_siswa'],
+                'email' => $data['email'],
+                'password' => Hash::make('password123'),
+                'role' => 'student',
+            ]);
+
+            Siswa::create([
+                'nama_siswa' => $data['nama_siswa'],
+                'nama_orang_tua' => $data['nama_orang_tua'],
+                'alamat_tagihan' => $data['alamat_tagihan'],
+                'user_id' => $user->id,
+                'nis' => $data['nis'],
+                'class' => $data['class'],
+            ]);
         }
 
         // Create sample services

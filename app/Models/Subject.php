@@ -18,6 +18,11 @@ class Subject extends Model
         'date_of_birth' => 'date',
     ];
 
+    public function getAgeAttribute($value)
+    {
+        return $this->date_of_birth ? $this->date_of_birth->age : $value;
+    }
+
     public function assessments()
     {
         return $this->hasMany(Assessment::class);

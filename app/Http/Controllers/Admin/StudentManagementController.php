@@ -1,28 +1,27 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\Siswa;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
-class StudentController extends Controller
+class StudentManagementController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index(Request $request)
     {
-        $query = Siswa::latest();
+        $query = Siswa::with('user')->latest();
 
         if ($request->filled('search')) {
             $search = $request->search;
             $query->where(function($q) use ($search) {
                 $q->where('nama_siswa', 'like', "%{$search}%")
                   ->orWhere('nama_orang_tua', 'like', "%{$search}%")
-                  ->orWhere('sekolah', 'like', "%{$search}%");
+                  ->orWhere('nis', 'like', "%{$search}%");
             });
         }
 
@@ -31,17 +30,17 @@ class StudentController extends Controller
         return view('students.index', compact('students'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         return view('students.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+    public function show(Siswa $student)
+    {
+        $student->load(['user', 'reports.category', 'reports.grades', 'reports.probingActivities']);
+        return view('students.show', compact('student'));
+    }
+
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -69,9 +68,10 @@ class StudentController extends Controller
                     'role' => 'student',
                 ]);
                 $userId = $user->id;
+                Log::info('User created: ' . $user->id);
             }
 
-            Siswa::create([
+            $siswa = Siswa::create([
                 'nama_siswa' => $request->nama_siswa,
                 'nama_orang_tua' => $request->nama_orang_tua,
                 'alamat_tagihan' => $request->alamat_tagihan,
@@ -79,33 +79,31 @@ class StudentController extends Controller
                 'nis' => $request->nis,
                 'class' => $request->class,
             ]);
+            Log::info('Siswa created: ' . $siswa->id);
 
             DB::commit();
-            return redirect()->route('students.index')
-                ->with('success', 'Siswa berhasil ditambahkan.');
+            return redirect()->route('students.show', $siswa->id)
+                ->with('success', 'Siswa dan akun login berhasil ditambahkan.');
         } catch (\Exception $e) {
             DB::rollBack();
+            Log::error('Gagal menambahkan siswa: ' . $e->getMessage());
             return back()->with('error', 'Gagal menambahkan siswa: ' . $e->getMessage())->withInput();
         }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Siswa $student)
     {
         return view('students.edit', compact('student'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Siswa $student)
     {
         $validator = Validator::make($request->all(), [
             'nama_siswa' => 'required|string|max:255',
             'nama_orang_tua' => 'required|string|max:255',
             'alamat_tagihan' => 'required|string',
+            'nis' => 'nullable|string|max:50',
+            'class' => 'nullable|string|max:50',
         ]);
 
         if ($validator->fails()) {
@@ -115,23 +113,29 @@ class StudentController extends Controller
         $student->update($request->all());
 
         return redirect()->route('students.index')
-            ->with('success', 'Siswa berhasil diperbarui.');
+            ->with('success', 'Data siswa berhasil diperbarui.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Siswa $student)
     {
-        // Cek apakah siswa memiliki invoice
         if ($student->invoices()->count() > 0) {
             return redirect()->route('students.index')
                 ->with('error', 'Siswa tidak dapat dihapus karena memiliki invoice.');
         }
 
-        $student->delete();
-
-        return redirect()->route('students.index')
-            ->with('success', 'Siswa berhasil dihapus.');
+        DB::beginTransaction();
+        try {
+            if ($student->user) {
+                $student->user->delete();
+            }
+            $student->delete();
+            DB::commit();
+            return redirect()->route('students.index')
+                ->with('success', 'Siswa berhasil dihapus.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->route('students.index')
+                ->with('error', 'Gagal menghapus siswa.');
+        }
     }
 }

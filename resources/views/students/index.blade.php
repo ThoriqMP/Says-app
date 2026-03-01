@@ -108,8 +108,14 @@
                                 </div>
                             </div>
 
-                            <div class="pt-4 border-t border-gray-100 dark:border-gray-700 flex justify-between items-center text-xs text-gray-500 dark:text-gray-400">
-                                <span>Dibuat {{ $student->created_at->format('d M Y') }}</span>
+                            <div class="pt-4 border-t border-gray-100 dark:border-gray-700 flex justify-between items-center">
+                                <a href="{{ route('students.show', $student) }}" class="text-blue-600 hover:text-blue-800 text-sm font-bold flex items-center gap-1 group">
+                                    Lihat Profil
+                                    <svg class="h-4 w-4 transform group-hover:translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                                    </svg>
+                                </a>
+                                <span class="text-xs text-gray-500 dark:text-gray-400">Dibuat {{ $student->created_at->format('d M Y') }}</span>
                             </div>
                         </div>
                     @empty
