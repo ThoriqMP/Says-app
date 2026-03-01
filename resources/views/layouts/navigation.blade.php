@@ -127,18 +127,18 @@
     </div>
 
     <!-- Mobile Bottom Nav -->
-    <div class="lg:hidden fixed bottom-6 left-0 right-0 z-40 px-6 flex items-center justify-between gap-4" x-data="{ unread: 0 }" @chat-unread-update.window="unread = $event.detail">
+    <div class="lg:hidden fixed bottom-6 left-0 right-0 z-40 px-3 sm:px-6 flex items-center justify-between gap-2 sm:gap-4" x-data="{ unread: 0 }" @chat-unread-update.window="unread = $event.detail">
         <!-- Main Nav Pill -->
-        <div class="flex-1 h-16 bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl rounded-full shadow-2xl border border-white/20 dark:border-gray-700/30 flex items-center justify-between px-2">
+        <div class="flex-1 h-14 sm:h-16 bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl rounded-full shadow-2xl border border-white/20 dark:border-gray-700/30 flex items-center justify-between px-1.5 sm:px-2">
             @foreach($pillNavItems as $item)
                 @if($item['active_check'])
-                    <a href="{{ $item['route'] }}" class="flex items-center gap-2 px-5 py-3 bg-gray-900 dark:bg-gray-100 rounded-full text-white dark:text-gray-900 transition-all duration-300 active:scale-90 shadow-lg shadow-gray-900/20 dark:shadow-gray-100/10">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ $item['icon_path'] }}"></path></svg>
-                        <span class="text-[10px] font-black uppercase tracking-widest">{{ $item['label'] }}</span>
+                    <a href="{{ $item['route'] }}" class="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2 sm:py-3 bg-gray-900 dark:bg-gray-100 rounded-full text-white dark:text-gray-900 transition-all duration-300 active:scale-90 shadow-lg shadow-gray-900/20 dark:shadow-gray-100/10 min-w-0 flex-shrink-0">
+                        <svg class="w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ $item['icon_path'] }}"></path></svg>
+                        <span class="text-[9px] sm:text-[10px] font-black uppercase tracking-widest truncate">{{ $item['label'] }}</span>
                     </a>
                 @else
-                    <a href="{{ $item['route'] }}" class="p-3.5 text-gray-400 dark:text-gray-500 hover:text-gray-900 dark:hover:text-white transition-all active:scale-90">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ $item['icon_path'] }}"></path></svg>
+                    <a href="{{ $item['route'] }}" class="p-2.5 sm:p-3.5 text-gray-400 dark:text-gray-500 hover:text-gray-900 dark:hover:text-white transition-all active:scale-90 flex-shrink-0">
+                        <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ $item['icon_path'] }}"></path></svg>
                     </a>
                 @endif
             @endforeach
@@ -146,18 +146,18 @@
             <!-- Menu Toggle as last item in pill -->
             <button @click="mobileOpen = !mobileOpen" 
                     :class="mobileOpen ? 'text-blue-600' : 'text-gray-400 dark:text-gray-500'"
-                    class="p-3.5 transition-all active:scale-90">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" x-show="!mobileOpen"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-                <svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" x-show="mobileOpen" style="display:none;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    class="p-2.5 sm:p-3.5 transition-all active:scale-90 flex-shrink-0">
+                <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" x-show="!mobileOpen"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                <svg class="w-5 h-5 sm:w-6 sm:h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" x-show="mobileOpen" style="display:none;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
             </button>
         </div>
 
         <!-- Separate Chat Button (Like Cart in Image) -->
-        <div class="relative">
-            <button @click="$dispatch('toggle-admin-chat')" class="w-16 h-16 bg-white dark:bg-gray-800 rounded-full shadow-2xl flex items-center justify-center border border-white/20 dark:border-gray-700/30 active:scale-90 transition-all group">
+        <div class="relative flex-shrink-0">
+            <button @click="$dispatch('toggle-admin-chat')" class="w-14 h-14 sm:w-16 sm:h-16 bg-white dark:bg-gray-800 rounded-full shadow-2xl flex items-center justify-center border border-white/20 dark:border-gray-700/30 active:scale-90 transition-all group">
                 <div class="absolute inset-0 bg-blue-600 rounded-full opacity-0 group-active:opacity-10 transition-opacity"></div>
-                <svg class="w-7 h-7 text-gray-700 dark:text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
-                <span x-show="unread > 0" class="absolute -top-1 -right-1 bg-red-500 text-[10px] px-1.5 py-0.5 rounded-full border-2 border-white dark:border-gray-800 font-black text-white" x-text="unread"></span>
+                <svg class="w-6 h-6 sm:w-7 sm:h-7 text-gray-700 dark:text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
+                <span x-show="unread > 0" class="absolute -top-1 -right-1 bg-red-500 text-[9px] sm:text-[10px] px-1.5 py-0.5 rounded-full border-2 border-white dark:border-gray-800 font-black text-white" x-text="unread"></span>
             </button>
         </div>
     </div>

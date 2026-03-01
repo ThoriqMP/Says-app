@@ -1,18 +1,18 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="py-8 px-4 sm:px-6 lg:px-8">
+<div class="py-6 sm:py-8 px-3 sm:px-6 lg:px-8">
     <!-- Welcome Header -->
-    <div class="mb-8">
-        <div class="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-[32px] p-8 text-white shadow-xl relative overflow-hidden">
+    <div class="mb-6 sm:mb-8">
+        <div class="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-[24px] sm:rounded-[32px] p-5 sm:p-8 text-white shadow-xl relative overflow-hidden">
             <div class="relative z-10">
-                <h1 class="text-3xl sm:text-4xl font-extrabold mb-2">Selamat Datang, {{ $student->nama_siswa }}! 👋</h1>
-                <p class="text-blue-100 text-lg opacity-90">NIS: {{ $student->nis }} | Kelas: {{ $student->class }}</p>
-                <div class="mt-6 flex flex-wrap gap-3">
-                    <div class="bg-white/20 backdrop-blur-md px-4 py-2 rounded-2xl text-sm font-semibold border border-white/10">
+                <h1 class="text-2xl sm:text-4xl font-extrabold mb-2">Selamat Datang, {{ $student->nama_siswa }}! 👋</h1>
+                <p class="text-blue-100 text-base sm:text-lg opacity-90">NIS: {{ $student->nis }} | Kelas: {{ $student->class }}</p>
+                <div class="mt-4 sm:mt-6 flex flex-wrap gap-2 sm:gap-3">
+                    <div class="bg-white/20 backdrop-blur-md px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl sm:rounded-2xl text-xs sm:text-sm font-semibold border border-white/10">
                         Semester Genap 2024/2025
                     </div>
-                    <div class="bg-white/20 backdrop-blur-md px-4 py-2 rounded-2xl text-sm font-semibold border border-white/10">
+                    <div class="bg-white/20 backdrop-blur-md px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl sm:rounded-2xl text-xs sm:text-sm font-semibold border border-white/10">
                         Status: Aktif
                     </div>
                 </div>
@@ -24,41 +24,41 @@
     </div>
 
     <!-- Stats Overview -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-        <div class="bg-white dark:bg-gray-800 p-6 rounded-[24px] border border-gray-100 dark:border-gray-700 shadow-sm flex items-center gap-4">
-            <div class="h-12 w-12 bg-blue-50 dark:bg-blue-900/30 rounded-2xl flex items-center justify-center text-blue-600 dark:text-blue-400">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+    <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 mb-8 sm:mb-10">
+        <div class="bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-[20px] sm:rounded-[24px] border border-gray-100 dark:border-gray-700 shadow-sm flex items-center gap-3 sm:gap-4">
+            <div class="h-10 w-10 sm:h-12 sm:w-12 bg-blue-50 dark:bg-blue-900/30 rounded-xl sm:rounded-2xl flex items-center justify-center text-blue-600 dark:text-blue-400 flex-shrink-0">
+                <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
             </div>
-            <div>
-                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Total Raport</p>
-                <p class="text-2xl font-black text-gray-900 dark:text-white">{{ $latestReports->count() }}</p>
-            </div>
-        </div>
-        <div class="bg-white dark:bg-gray-800 p-6 rounded-[24px] border border-gray-100 dark:border-gray-700 shadow-sm flex items-center gap-4">
-            <div class="h-12 w-12 bg-green-50 dark:bg-green-900/30 rounded-2xl flex items-center justify-center text-green-600 dark:text-green-400">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
-            </div>
-            <div>
-                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Tagihan Terakhir</p>
-                <p class="text-xl font-black text-gray-900 dark:text-white">Rp {{ number_format($latestInvoice->grand_total ?? 0, 0, ',', '.') }}</p>
+            <div class="min-w-0">
+                <p class="text-[10px] sm:text-xs font-bold text-gray-400 uppercase tracking-wider truncate">Total Raport</p>
+                <p class="text-lg sm:text-2xl font-black text-gray-900 dark:text-white">{{ $latestReports->count() }}</p>
             </div>
         </div>
-        <div class="bg-white dark:bg-gray-800 p-6 rounded-[24px] border border-gray-100 dark:border-gray-700 shadow-sm flex items-center gap-4">
-            <div class="h-12 w-12 bg-amber-50 dark:bg-amber-900/30 rounded-2xl flex items-center justify-center text-amber-600 dark:text-amber-400">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        <div class="bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-[20px] sm:rounded-[24px] border border-gray-100 dark:border-gray-700 shadow-sm flex items-center gap-3 sm:gap-4">
+            <div class="h-10 w-10 sm:h-12 sm:w-12 bg-green-50 dark:bg-green-900/30 rounded-xl sm:rounded-2xl flex items-center justify-center text-green-600 dark:text-green-400 flex-shrink-0">
+                <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
             </div>
-            <div>
-                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider">Kehadiran</p>
-                <p class="text-2xl font-black text-gray-900 dark:text-white">98%</p>
+            <div class="min-w-0">
+                <p class="text-[10px] sm:text-xs font-bold text-gray-400 uppercase tracking-wider truncate">Tagihan</p>
+                <p class="text-sm sm:text-xl font-black text-gray-900 dark:text-white truncate">Rp {{ number_format($latestInvoice->grand_total ?? 0, 0, ',', '.') }}</p>
             </div>
         </div>
-        <div class="bg-white dark:bg-gray-800 p-6 rounded-[24px] border border-gray-100 dark:border-gray-700 shadow-sm flex items-center gap-4 text-gray-400">
-            <div class="h-12 w-12 bg-purple-50 dark:bg-purple-900/30 rounded-2xl flex items-center justify-center text-purple-600 dark:text-purple-400">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-7.714 2.143L11 21l-2.286-6.857L1 12l7.714-2.143L11 3z"></path></svg>
+        <div class="bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-[20px] sm:rounded-[24px] border border-gray-100 dark:border-gray-700 shadow-sm flex items-center gap-3 sm:gap-4">
+            <div class="h-10 w-10 sm:h-12 sm:w-12 bg-amber-50 dark:bg-amber-900/30 rounded-xl sm:rounded-2xl flex items-center justify-center text-amber-600 dark:text-amber-400 flex-shrink-0">
+                <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
             </div>
-            <div>
-                <p class="text-xs font-bold uppercase tracking-wider">Poin Karakter</p>
-                <p class="text-2xl font-black text-gray-900 dark:text-white">450</p>
+            <div class="min-w-0">
+                <p class="text-[10px] sm:text-xs font-bold text-gray-400 uppercase tracking-wider truncate">Kehadiran</p>
+                <p class="text-lg sm:text-2xl font-black text-gray-900 dark:text-white">98%</p>
+            </div>
+        </div>
+        <div class="bg-white dark:bg-gray-800 p-4 sm:p-6 rounded-[20px] sm:rounded-[24px] border border-gray-100 dark:border-gray-700 shadow-sm flex items-center gap-3 sm:gap-4 text-gray-400">
+            <div class="h-10 w-10 sm:h-12 sm:w-12 bg-purple-50 dark:bg-purple-900/30 rounded-xl sm:rounded-2xl flex items-center justify-center text-purple-600 dark:text-purple-400 flex-shrink-0">
+                <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-7.714 2.143L11 21l-2.286-6.857L1 12l7.714-2.143L11 3z"></path></svg>
+            </div>
+            <div class="min-w-0">
+                <p class="text-[10px] sm:text-xs font-bold uppercase tracking-wider truncate">Karakter</p>
+                <p class="text-lg sm:text-2xl font-black text-gray-900 dark:text-white">450</p>
             </div>
         </div>
     </div>
