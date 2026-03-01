@@ -5,51 +5,87 @@
             : 'flex items-center gap-2 px-3 py-2 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition';
     };
 
-    // Prepare Mobile Bottom Nav Items (Top 2 Priority)
-    $mobileMenuItems = [];
     $user = auth()->user();
 
-    // 1. Dashboard
-    if ($user->hasPermission('dashboard') || $user->role === 'student') {
-        $mobileMenuItems[] = [
+    // Prepare All Possible Menu Items
+    $allMenuItems = [
+        [
+            'permission' => 'dashboard',
+            'role' => ['student', 'admin', 'guru', 'pimpinan'],
             'route' => $user->role === 'student' ? route('student.dashboard') : route('dashboard'),
             'label' => 'Beranda',
             'active_check' => request()->routeIs('dashboard') || request()->routeIs('student.dashboard'),
             'icon_path' => 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6'
-        ];
-    }
-
-    // 2. Invoice / Tagihan
-    if ($user->hasPermission('invoices.index') || $user->role === 'student') {
-        $mobileMenuItems[] = [
+        ],
+        [
+            'permission' => 'reports.manage',
+            'role' => ['student', 'admin', 'guru', 'pimpinan'],
+            'route' => $user->role === 'student' ? route('student.reports') : route('admin.reports.index'),
+            'label' => 'Raport',
+            'active_check' => request()->routeIs('admin.reports*') || request()->routeIs('student.reports*'),
+            'icon_path' => 'M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z'
+        ],
+        [
+            'permission' => 'invoices.index',
+            'role' => ['student', 'admin', 'guru', 'pimpinan'],
             'route' => $user->role === 'student' ? route('student.invoices') : route('invoices.index'),
             'label' => $user->role === 'student' ? 'Tagihan' : 'Invoice',
             'active_check' => request()->routeIs('invoices*') || request()->routeIs('student.invoices*'),
             'icon_path' => 'M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z'
-        ];
-    }
-
-    // 3. Raport (Siswa)
-    if ($user->role === 'student') {
-        $mobileMenuItems[] = [
-            'route' => route('student.reports'),
-            'label' => 'Raport',
-            'active_check' => request()->routeIs('student.reports*'),
-            'icon_path' => 'M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477-4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253'
-        ];
-    }
-
-    // 4. Students (Admin)
-    if ($user->hasPermission('students.index')) {
-        $mobileMenuItems[] = [
+        ],
+        [
+            'permission' => 'students.index',
+            'role' => ['admin', 'guru', 'pimpinan'],
             'route' => route('students.index'),
             'label' => 'Siswa',
             'active_check' => request()->routeIs('students*'),
             'icon_path' => 'M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z'
-        ];
+        ],
+        [
+            'permission' => 'assessments.index',
+            'role' => ['admin', 'guru', 'pimpinan'],
+            'route' => route('assessments.index'),
+            'label' => 'Mapping',
+            'active_check' => request()->routeIs('assessments*'),
+            'icon_path' => 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01'
+        ],
+        [
+            'permission' => 'psychological-assessments.index',
+            'role' => ['admin', 'guru', 'pimpinan'],
+            'route' => route('psychological-assessments.index'),
+            'label' => 'Psikologi',
+            'active_check' => request()->routeIs('psychological-assessments*'),
+            'icon_path' => 'M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z'
+        ],
+        [
+            'permission' => 'services.index',
+            'role' => ['admin', 'guru', 'pimpinan'],
+            'route' => route('services.index'),
+            'label' => 'Layanan',
+            'active_check' => request()->routeIs('services*'),
+            'icon_path' => 'M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z'
+        ],
+        [
+            'permission' => 'school-profile.edit',
+            'role' => ['admin', 'pimpinan'],
+            'route' => route('school-profile.edit'),
+            'label' => 'Profil',
+            'active_check' => request()->routeIs('school-profile*'),
+            'icon_path' => 'M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4'
+        ],
+    ];
+
+    // Filter Menu Items based on Permissions/Role
+    $mobileMenuItems = [];
+    foreach ($allMenuItems as $item) {
+        if ($user->role === 'student' && in_array('student', $item['role'])) {
+            $mobileMenuItems[] = $item;
+        } elseif ($user->hasPermission($item['permission'])) {
+            $mobileMenuItems[] = $item;
+        }
     }
 
-    // Limit to 3 items for bottom nav pill (Dashboard, Second Priority, and Menu)
+    // Limit to 3 items for bottom nav pill
     $pillNavItems = array_slice($mobileMenuItems, 0, 3);
 
     // Determine Page Title
@@ -271,84 +307,18 @@
             </div>
 
             <nav class="p-4 space-y-1 max-h-[50vh] overflow-y-auto custom-scrollbar">
-                @if($user->role === 'student')
-                    <a href="{{ route('student.dashboard') }}" class="{{ $navLink(route('student.dashboard'), request()->routeIs('student.dashboard')) }}" @click="mobileOpen = false">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
-                        <span>Dashboard</span>
+                @foreach($mobileMenuItems as $item)
+                    <a href="{{ $item['route'] }}" class="{{ $navLink($item['route'], $item['active_check']) }}" @click="mobileOpen = false">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="{{ $item['icon_path'] }}"></path></svg>
+                        <span>{{ $item['label'] }}</span>
                     </a>
-                    <a href="{{ route('student.reports') }}" class="{{ $navLink(route('student.reports'), request()->routeIs('student.reports*')) }}" @click="mobileOpen = false">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477-4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
-                        <span>Raport Saya</span>
+                @endforeach
+
+                @if($user->isPimpinan())
+                    <a href="{{ route('admin-management.index') }}" class="{{ $navLink(route('admin-management.index'), request()->routeIs('admin-management.*')) }}" @click="mobileOpen = false">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                        <span>Kelola Admin</span>
                     </a>
-                    <a href="{{ route('student.invoices') }}" class="{{ $navLink(route('student.invoices'), request()->routeIs('student.invoices*')) }}" @click="mobileOpen = false">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                        <span>Tagihan Saya</span>
-                    </a>
-                @else
-                    @if($user->hasPermission('dashboard'))
-                        <a href="{{ route('dashboard') }}" class="{{ $navLink(route('dashboard'), request()->routeIs('dashboard')) }}" @click="mobileOpen = false">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
-                            <span>Dashboard</span>
-                        </a>
-                    @endif
-                    @if($user->hasPermission('invoices.index'))
-                        <a href="{{ route('invoices.index') }}" class="{{ $navLink(route('invoices.index'), request()->routeIs('invoices.*')) }}" @click="mobileOpen = false">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                            <span>Invoice Siswa</span>
-                        </a>
-                    @endif
-                    @if($user->hasPermission('assessments.index'))
-                        <a href="{{ route('assessments.index') }}" class="{{ $navLink(route('assessments.index'), request()->routeIs('assessments.*')) }}" @click="mobileOpen = false">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
-                            <span>Personal Mapping</span>
-                        </a>
-                    @endif
-                    @if($user->hasPermission('psychological-assessments.index'))
-                        <a href="{{ route('psychological-assessments.index') }}" class="{{ $navLink(route('psychological-assessments.index'), request()->routeIs('psychological-assessments.*')) }}" @click="mobileOpen = false">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                            <span>Asesmen Psikologis</span>
-                        </a>
-                    @endif
-                    @if($user->hasPermission('family-mapping.index'))
-                        <a href="{{ route('family-mapping.index') }}" class="{{ $navLink(route('family-mapping.index'), request()->routeIs('family-mapping.*')) }}" @click="mobileOpen = false">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
-                            <span>Family Mapping</span>
-                        </a>
-                    @endif
-                    @if($user->hasPermission('reports.manage'))
-                        <a href="{{ route('admin.reports.index') }}" class="{{ $navLink(route('admin.reports.index'), request()->routeIs('admin.reports.*')) }}" @click="mobileOpen = false">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                            <span>Manajemen Raport</span>
-                        </a>
-                        <a href="{{ route('admin.report-categories.index') }}" class="{{ $navLink(route('admin.report-categories.index'), request()->routeIs('admin.report-categories.*')) }}" @click="mobileOpen = false">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
-                            <span>Kategori Raport</span>
-                        </a>
-                    @endif
-                    @if($user->hasPermission('students.index'))
-                        <a href="{{ route('students.index') }}" class="{{ $navLink(route('students.index'), request()->routeIs('students.*')) }}" @click="mobileOpen = false">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
-                            <span>Siswa</span>
-                        </a>
-                    @endif
-                    @if($user->hasPermission('services.index'))
-                        <a href="{{ route('services.index') }}" class="{{ $navLink(route('services.index'), request()->routeIs('services.*')) }}" @click="mobileOpen = false">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                            <span>Layanan</span>
-                        </a>
-                    @endif
-                    @if($user->hasPermission('school-profile.edit'))
-                        <a href="{{ route('school-profile.edit') }}" class="{{ $navLink(route('school-profile.edit'), request()->routeIs('school-profile.*')) }}" @click="mobileOpen = false">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
-                            <span>Profil Sekolah</span>
-                        </a>
-                    @endif
-                    @if($user->isPimpinan())
-                        <a href="{{ route('admin-management.index') }}" class="{{ $navLink(route('admin-management.index'), request()->routeIs('admin-management.*')) }}" @click="mobileOpen = false">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
-                            <span>Kelola Admin</span>
-                        </a>
-                    @endif
                 @endif
 
                 <div class="border-t border-gray-100 dark:border-gray-700 my-4"></div>
