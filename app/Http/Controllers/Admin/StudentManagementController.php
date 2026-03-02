@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Siswa;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
@@ -150,22 +151,41 @@ class StudentManagementController extends Controller
 
     public function destroy(Siswa $student)
     {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
+        if (!$user->isPimpinan()) {
+            abort(403, 'Hanya pimpinan yang dapat menghapus siswa.');
+        }
+
         if ($student->invoices()->count() > 0) {
             return redirect()->route('students.index')
-                ->with('error', 'Siswa tidak dapat dihapus karena memiliki invoice.');
+                ->with('error', 'Siswa tidak dapat dihapus karena memiliki data invoice.');
+        }
+
+        if ($student->reports()->count() > 0) {
+            return redirect()->route('students.index')
+                ->with('error', 'Siswa tidak dapat dihapus karena memiliki data raport.');
         }
 
         DB::beginTransaction();
         try {
-            if ($student->user) {
-                $student->user->delete();
-            }
+            $userToDelete = $student->user;
+            
+            // Delete student first to avoid foreign key issues
             $student->delete();
+            
+            // Then delete associated user if exists
+            if ($userToDelete) {
+                $userToDelete->delete();
+            }
+            
             DB::commit();
             return redirect()->route('students.index')
-                ->with('success', 'Siswa berhasil dihapus.');
+                ->with('success', 'Data siswa dan akun akses berhasil dihapus.');
         } catch (\Exception $e) {
             DB::rollBack();
+            Log::error('Gagal menghapus siswa: ' . $e->getMessage());
             return redirect()->route('students.index')
                 ->with('error', 'Gagal menghapus siswa.');
         }
