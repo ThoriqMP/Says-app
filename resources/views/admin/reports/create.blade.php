@@ -107,11 +107,11 @@
                                                 x-init="$watch('pts', () => calculateAverage($data)); $watch('pas', () => calculateAverage($data)); $watch('rem', () => calculateAverage($data)); $watch('harian', () => calculateAverage($data))"
                                                 class="hover:bg-gray-50/50 dark:hover:bg-gray-900/20 transition">
                                                 <td class="p-4 font-bold text-gray-700 dark:text-gray-300">{{ $subject->name }}</td>
-                                                <td class="p-2"><input type="number" name="grades[{{ $subject->id }}][score_pts]" x-model="pts" step="0.01" class="w-20 rounded-lg border-gray-200 dark:bg-gray-700 dark:border-gray-600 text-sm font-bold"></td>
-                                                <td class="p-2"><input type="number" name="grades[{{ $subject->id }}][score_pas]" x-model="pas" step="0.01" class="w-20 rounded-lg border-gray-200 dark:bg-gray-700 dark:border-gray-600 text-sm font-bold"></td>
-                                                <td class="p-2"><input type="number" name="grades[{{ $subject->id }}][score_remedial]" x-model="rem" step="0.01" class="w-20 rounded-lg border-gray-200 dark:bg-gray-700 dark:border-gray-600 text-sm font-bold"></td>
-                                                <td class="p-2"><input type="number" name="grades[{{ $subject->id }}][score_harian]" x-model="harian" step="0.01" class="w-20 rounded-lg border-gray-200 dark:bg-gray-700 dark:border-gray-600 text-sm font-bold"></td>
-                                                <td class="p-2"><input type="number" name="grades[{{ $subject->id }}][score]" x-model="score" step="0.01" class="w-20 rounded-lg border-blue-200 dark:bg-gray-700 dark:border-gray-600 text-sm font-black text-blue-600" readonly></td>
+                                                <td class="p-2"><input type="number" name="grades[{{ $subject->id }}][score_pts]" x-model="pts" step="0.01" class="w-20 rounded-lg border-gray-200 dark:bg-gray-700 dark:border-gray-600 text-base font-bold placeholder:text-gray-400"></td>
+                                                <td class="p-2"><input type="number" name="grades[{{ $subject->id }}][score_pas]" x-model="pas" step="0.01" class="w-20 rounded-lg border-gray-200 dark:bg-gray-700 dark:border-gray-600 text-base font-bold placeholder:text-gray-400"></td>
+                                                <td class="p-2"><input type="number" name="grades[{{ $subject->id }}][score_remedial]" x-model="rem" step="0.01" class="w-20 rounded-lg border-gray-200 dark:bg-gray-700 dark:border-gray-600 text-base font-bold placeholder:text-gray-400"></td>
+                                                <td class="p-2"><input type="number" name="grades[{{ $subject->id }}][score_harian]" x-model="harian" step="0.01" class="w-20 rounded-lg border-gray-200 dark:bg-gray-700 dark:border-gray-600 text-base font-bold placeholder:text-gray-400"></td>
+                                                <td class="p-2"><input type="number" name="grades[{{ $subject->id }}][score]" x-model="score" step="0.01" class="w-20 rounded-lg border-blue-200 dark:bg-gray-700 dark:border-gray-600 text-base font-black text-blue-600" readonly></td>
                                                 <td class="p-4 text-center">
                                                     <input type="hidden" name="grades[{{ $subject->id }}][predicate]" :value="pred">
                                                 <span class="px-3 py-1 rounded-full text-xs font-black" :class="{
@@ -128,12 +128,12 @@
                                         <tr x-data="{ score: '', pts: '', pas: '', rem: '', harian: '', pred: '-' }" 
                                             x-init="$watch('pts', () => calculateAverage($data)); $watch('pas', () => calculateAverage($data)); $watch('rem', () => calculateAverage($data)); $watch('harian', () => calculateAverage($data))"
                                             class="bg-blue-50/30 dark:bg-blue-900/10">
-                                            <td class="p-2"><input type="text" :name="`new_subjects[${index}][name]`" placeholder="Nama Mapel" class="w-full rounded-lg border-gray-200 dark:bg-gray-700 text-sm font-bold"></td>
-                                            <td class="p-2"><input type="number" :name="`new_subjects[${index}][score_pts]`" x-model="pts" class="w-20 rounded-lg border-gray-200 dark:bg-gray-700 text-sm font-bold"></td>
-                                            <td class="p-2"><input type="number" :name="`new_subjects[${index}][score_pas]`" x-model="pas" class="w-20 rounded-lg border-gray-200 dark:bg-gray-700 text-sm font-bold"></td>
-                                            <td class="p-2"><input type="number" :name="`new_subjects[${index}][score_remedial]`" x-model="rem" class="w-20 rounded-lg border-gray-200 dark:bg-gray-700 text-sm font-bold"></td>
-                                            <td class="p-2"><input type="number" :name="`new_subjects[${index}][score_harian]`" x-model="harian" class="w-20 rounded-lg border-gray-200 dark:bg-gray-700 text-sm font-bold"></td>
-                                            <td class="p-2"><input type="number" :name="`new_subjects[${index}][score]`" x-model="score" class="w-20 rounded-lg border-blue-200 dark:bg-gray-700 text-sm font-black text-blue-600" readonly></td>
+                                            <td class="p-2"><input type="text" :name="`new_subjects[${index}][name]`" placeholder="Nama Mapel" class="w-full rounded-lg border-gray-200 dark:bg-gray-700 text-base font-bold placeholder:text-gray-400"></td>
+                                            <td class="p-2"><input type="number" :name="`new_subjects[${index}][score_pts]`" x-model="pts" class="w-20 rounded-lg border-gray-200 dark:bg-gray-700 text-base font-bold placeholder:text-gray-400"></td>
+                                            <td class="p-2"><input type="number" :name="`new_subjects[${index}][score_pas]`" x-model="pas" class="w-20 rounded-lg border-gray-200 dark:bg-gray-700 text-base font-bold placeholder:text-gray-400"></td>
+                                            <td class="p-2"><input type="number" :name="`new_subjects[${index}][score_remedial]`" x-model="rem" class="w-20 rounded-lg border-gray-200 dark:bg-gray-700 text-base font-bold placeholder:text-gray-400"></td>
+                                            <td class="p-2"><input type="number" :name="`new_subjects[${index}][score_harian]`" x-model="harian" class="w-20 rounded-lg border-gray-200 dark:bg-gray-700 text-base font-bold placeholder:text-gray-400"></td>
+                                            <td class="p-2"><input type="number" :name="`new_subjects[${index}][score]`" x-model="score" class="w-20 rounded-lg border-blue-200 dark:bg-gray-700 text-base font-black text-blue-600" readonly></td>
                                             <td class="p-4 text-center">
                                                 <input type="hidden" :name="`new_subjects[${index}][predicate]`" :value="pred">
                                                 <span class="px-3 py-1 rounded-full text-xs font-black" :class="{
@@ -163,10 +163,10 @@
                                 <div class="p-6 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl shadow-sm grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
                                     <div class="font-bold text-gray-700 dark:text-gray-300">{{ $subject->name }}</div>
                                     <div class="md:col-span-1">
-                                        <input type="text" name="grades[{{ $subject->id }}][ayat_range]" placeholder="Rentang Ayat (mis: 1-10)" class="w-full rounded-xl border-gray-300 dark:bg-gray-700 text-sm font-bold">
+                                        <input type="text" name="grades[{{ $subject->id }}][ayat_range]" placeholder="Rentang Ayat (mis: 1-10)" class="w-full rounded-xl border-gray-300 dark:bg-gray-700 text-base font-bold placeholder:text-gray-400">
                                     </div>
                                     <div class="md:col-span-1">
-                                        <select name="grades[{{ $subject->id }}][predicate]" class="w-full rounded-xl border-gray-300 dark:bg-gray-700 text-sm font-bold">
+                                        <select name="grades[{{ $subject->id }}][predicate]" class="w-full rounded-xl border-gray-300 dark:bg-gray-700 text-base font-bold">
                                             <option value="">Pilih Mutu</option>
                                             <option value="Mumtaz">Mumtaz (A)</option>
                                             <option value="Jayyid Jiddan">Jayyid Jiddan (B)</option>
@@ -175,7 +175,7 @@
                                         </select>
                                     </div>
                                     <div class="md:col-span-1">
-                                        <input type="text" name="grades[{{ $subject->id }}][description]" placeholder="Keterangan" class="w-full rounded-xl border-gray-300 dark:bg-gray-700 text-sm">
+                                        <input type="text" name="grades[{{ $subject->id }}][description]" placeholder="Keterangan" class="w-full rounded-xl border-gray-300 dark:bg-gray-700 text-base placeholder:text-gray-400">
                                     </div>
                                 </div>
                             @endforeach
@@ -193,7 +193,7 @@
                             @foreach($selectedCategory->subjects as $subject)
                                 <div class="p-5 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl shadow-sm flex items-center justify-between">
                                     <span class="font-bold text-gray-700 dark:text-gray-300">{{ $subject->name }}</span>
-                                    <select name="grades[{{ $subject->id }}][predicate]" class="rounded-xl border-gray-300 dark:bg-gray-700 text-sm font-black">
+                                    <select name="grades[{{ $subject->id }}][predicate]" class="rounded-xl border-gray-300 dark:bg-gray-700 text-base font-black">
                                         <option value="Lancar">Lancar</option>
                                         <option value="Cukup Lancar">Cukup Lancar</option>
                                         <option value="Perlu Bimbingan">Perlu Bimbingan</option>

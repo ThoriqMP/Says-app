@@ -128,7 +128,7 @@
                                         <div class="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-1">
                                             {{ $invoice->no_invoice }}
                                         </div>
-                                        <h3 class="text-xl font-black text-gray-900 dark:text-white line-clamp-1 leading-tight mb-1">
+                                        <h3 class="text-base sm:text-xl font-black text-gray-900 dark:text-white leading-tight mb-1 break-words">
                                             {{ $invoice->siswa->nama_siswa }}
                                         </h3>
                                         <div class="flex items-center gap-2 text-sm text-gray-500 font-bold uppercase tracking-wider">

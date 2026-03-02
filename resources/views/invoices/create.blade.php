@@ -62,7 +62,7 @@
                                        x-model.debounce.300ms="searchQuery"
                                        @focus="if(searchQuery.length >= 2) showResults = true"
                                        placeholder="Cari nama siswa atau orang tua..."
-                                       class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                                       class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-base placeholder:text-gray-400"
                                        autocomplete="off">
                                 <input type="hidden" name="id_siswa" x-model="form.id_siswa">
                                 
@@ -100,13 +100,13 @@
                         <div>
                             <label for="tanggal_invoice" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Tanggal Invoice</label>
                             <input type="date" id="tanggal_invoice" name="tanggal_invoice" x-model="form.tanggal_invoice" required
-                                   class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+                                   class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-base">
                         </div>
                         
                         <div>
                             <label for="jatuh_tempo" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Jatuh Tempo</label>
                             <input type="date" id="jatuh_tempo" name="jatuh_tempo" x-model="form.jatuh_tempo" required
-                                   class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+                                   class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-base">
                         </div>
                     </div>
 
@@ -141,7 +141,7 @@
                                             <td class="px-6 py-4">
                                                 <select :name="`items[${index}][id_layanan]`" x-model="item.id_layanan" required
                                                         @change="updateHarga(index)"
-                                                        class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+                                                        class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-base">
                                                     <option value="" class="text-gray-900 dark:text-gray-100">Pilih Layanan</option>
                                                     @foreach($services as $service)
                                                         <option value="{{ $service->id }}" data-harga="{{ $service->harga_standar }}" class="text-gray-900 dark:text-gray-100">
@@ -152,22 +152,22 @@
                                             </td>
                                             <td class="px-6 py-4">
                                                 <input type="text" :name="`items[${index}][deskripsi_tambahan]`" x-model="item.deskripsi_tambahan"
-                                                       class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                                                       class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-base placeholder:text-gray-400"
                                                        placeholder="Deskripsi tambahan (opsional)">
                                             </td>
                                             <td class="px-6 py-4">
                                                 <input type="number" :name="`items[${index}][kuantitas]`" x-model="item.kuantitas" required min="1"
                                                        @input="calculateTotal(index)"
-                                                       class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+                                                       class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-base">
                                             </td>
                                             <td class="px-6 py-4">
                                                 <input type="number" :name="`items[${index}][harga_satuan]`" x-model="item.harga_satuan" required min="0" step="0.01"
                                                        @input="calculateTotal(index)"
-                                                       class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+                                                       class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-base">
                                             </td>
                                             <td class="px-6 py-4">
                                                 <input type="text" x-model="formatRupiah(item.total)" readonly
-                                                       class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-600 text-gray-900 dark:text-gray-100">
+                                                       class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-600 text-gray-900 dark:text-gray-100 text-base font-bold">
                                             </td>
                                             <td class="px-6 py-4">
                                                 <button type="button" @click="removeItem(index)" 

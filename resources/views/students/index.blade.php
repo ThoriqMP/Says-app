@@ -61,7 +61,7 @@
                             <div class="relative z-10 flex flex-col h-full">
                                 <div class="flex justify-between items-start mb-6">
                                     <div class="min-w-0 flex-1">
-                                        <h3 class="text-xl font-black text-gray-900 dark:text-white line-clamp-1 leading-tight mb-1">
+                                        <h3 class="text-base sm:text-xl font-black text-gray-900 dark:text-white leading-tight mb-1 break-words">
                                             {{ $student->nama_siswa }}
                                         </h3>
                                         <div class="flex items-center gap-2 text-sm text-gray-500 font-bold uppercase tracking-wider">
