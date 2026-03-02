@@ -127,9 +127,9 @@
     </div>
 
     <!-- Mobile Bottom Nav -->
-    <div class="lg:hidden fixed bottom-6 left-0 right-0 z-40 px-3 sm:px-6 flex items-center justify-between gap-2 sm:gap-4" x-data="{ unread: 0 }" @chat-unread-update.window="unread = $event.detail">
+    <div class="lg:hidden fixed bottom-6 left-0 right-0 z-40 px-3 sm:px-6 flex items-center justify-center gap-2 sm:gap-4" x-data="{ unread: 0 }" @chat-unread-update.window="unread = $event.detail">
         <!-- Main Nav Pill -->
-        <div class="flex-1 h-14 sm:h-16 bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl rounded-full shadow-2xl border border-white/20 dark:border-gray-700/30 flex items-center justify-between px-1.5 sm:px-2">
+        <div class="flex-none w-auto max-w-[90%] h-14 sm:h-16 bg-white/90 dark:bg-gray-800/90 backdrop-blur-xl rounded-full shadow-2xl border border-white/20 dark:border-gray-700/30 flex items-center justify-center gap-2 sm:gap-4 px-4 sm:px-6">
             @foreach($pillNavItems as $item)
                 @if($item['active_check'])
                     <a href="{{ $item['route'] }}" class="flex items-center gap-1.5 sm:gap-2 px-3 sm:px-5 py-2 sm:py-3 bg-gray-900 dark:bg-gray-100 rounded-full text-white dark:text-gray-900 transition-all duration-300 active:scale-90 shadow-lg shadow-gray-900/20 dark:shadow-gray-100/10 min-w-0 flex-shrink-0">
