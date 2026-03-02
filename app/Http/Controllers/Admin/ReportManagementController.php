@@ -84,8 +84,13 @@ class ReportManagementController extends Controller
     {
         $report->load(['student', 'category', 'grades.subject', 'probingActivities', 'teacher']);
         $school = ProfilSekolah::first();
+        
+        // Sanitize filename: replace / and \ with -
+        $safePeriod = str_replace(['/', '\\'], '-', $report->period);
+        $filename = "Raport_{$report->student->nama_siswa}_{$safePeriod}.pdf";
+        
         $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('student.reports.pdf', compact('report', 'school'));
-        return $pdf->download("Raport_{$report->student->nama_siswa}_{$report->period}.pdf");
+        return $pdf->download($filename);
     }
 
     public function edit(StudentReport $report)
