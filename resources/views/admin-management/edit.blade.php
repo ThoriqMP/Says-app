@@ -34,39 +34,43 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <!-- Name -->
                         <div>
-                            <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nama Lengkap</label>
+                            <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 ml-1">Nama Lengkap</label>
                             <input type="text" name="name" id="name" value="{{ old('name', $admin->name) }}" required
-                                class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                placeholder="Masukkan nama lengkap"
+                                class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 focus:ring-2 focus:ring-opacity-50 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-base placeholder:text-gray-400 transition-all">
                             @error('name')
-                                <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                                <p class="mt-1 text-sm text-red-600 dark:text-red-400 ml-1">{{ $message }}</p>
                             @enderror
                         </div>
 
                         <!-- Email -->
                         <div>
-                            <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Email</label>
+                            <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 ml-1">Email</label>
                             <input type="email" name="email" id="email" value="{{ old('email', $admin->email) }}" required
-                                class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                placeholder="example@email.com"
+                                class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 focus:ring-2 focus:ring-opacity-50 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-base placeholder:text-gray-400 transition-all">
                             @error('email')
-                                <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                                <p class="mt-1 text-sm text-red-600 dark:text-red-400 ml-1">{{ $message }}</p>
                             @enderror
                         </div>
 
                         <!-- Password -->
                         <div>
-                            <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Password (Biarkan kosong jika tidak diubah)</label>
+                            <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 ml-1">Password (Biarkan kosong jika tidak diubah)</label>
                             <input type="password" name="password" id="password"
-                                class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                placeholder="Masukkan password baru"
+                                class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 focus:ring-2 focus:ring-opacity-50 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-base placeholder:text-gray-400 transition-all">
                             @error('password')
-                                <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                                <p class="mt-1 text-sm text-red-600 dark:text-red-400 ml-1">{{ $message }}</p>
                             @enderror
                         </div>
 
                         <!-- Password Confirmation -->
                         <div>
-                            <label for="password_confirmation" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Konfirmasi Password</label>
+                            <label for="password_confirmation" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 ml-1">Konfirmasi Password</label>
                             <input type="password" name="password_confirmation" id="password_confirmation"
-                                class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                placeholder="Ulangi password baru"
+                                class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 focus:ring-2 focus:ring-opacity-50 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-base placeholder:text-gray-400 transition-all">
                         </div>
                     </div>
 

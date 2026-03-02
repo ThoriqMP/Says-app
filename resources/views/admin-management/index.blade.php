@@ -67,7 +67,7 @@
                             <input type="text" 
                                    name="search" 
                                    value="{{ request('search') }}"
-                                   class="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition dark:bg-gray-700 dark:text-gray-300 dark:placeholder-gray-400" 
+                                   class="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition dark:bg-gray-700 dark:text-gray-300 dark:placeholder-gray-400 placeholder:text-gray-400" 
                                    placeholder="Cari pengguna...">
                         </form>
 

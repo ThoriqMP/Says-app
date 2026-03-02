@@ -58,14 +58,14 @@
                     <!-- Informasi Utama -->
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                         <div>
-                            <label for="id_siswa" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Siswa</label>
+                            <label for="id_siswa" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 ml-1">Siswa</label>
                             
                             <div class="relative" @click.outside="showResults = false">
                                 <input type="text" 
                                        x-model.debounce.300ms="searchQuery"
                                        @focus="if(searchQuery.length >= 2) showResults = true"
                                        placeholder="Cari nama siswa atau orang tua..."
-                                       class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                                       class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 focus:ring-2 focus:ring-opacity-50 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-base placeholder:text-gray-400 transition-all"
                                        autocomplete="off">
                                 <input type="hidden" name="id_siswa" x-model="form.id_siswa">
                                 
@@ -101,31 +101,31 @@
                         </div>
                         
                         <div>
-                            <label for="tanggal_invoice" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Tanggal Invoice</label>
+                            <label for="tanggal_invoice" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 ml-1">Tanggal Invoice</label>
                             <input type="date" id="tanggal_invoice" name="tanggal_invoice" x-model="form.tanggal_invoice" required
                                    value="{{ old('tanggal_invoice', $invoice->tanggal_invoice->format('Y-m-d')) }}"
-                                   class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+                                   class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 focus:ring-2 focus:ring-opacity-50 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-base transition-all">
                         </div>
                         
                         <div>
-                            <label for="jatuh_tempo" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Jatuh Tempo</label>
+                            <label for="jatuh_tempo" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 ml-1">Jatuh Tempo</label>
                             <input type="date" id="jatuh_tempo" name="jatuh_tempo" x-model="form.jatuh_tempo" required
                                    value="{{ old('jatuh_tempo', $invoice->jatuh_tempo->format('Y-m-d')) }}"
-                                   class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+                                   class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 focus:ring-2 focus:ring-opacity-50 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-base transition-all">
                         </div>
                     </div>
 
                     <!-- Status Invoice -->
                     <div class="mb-8">
-                        <label for="status" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Status Invoice</label>
+                        <label for="status" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 ml-1">Status Invoice</label>
                         <select id="status" name="status" x-model="form.status" required
-                                class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+                                class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 focus:ring-2 focus:ring-opacity-50 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-base transition-all">
                             <option value="draft" {{ $invoice->status == 'draft' ? 'selected' : '' }} class="text-gray-900 dark:text-gray-100">Draft</option>
                             <option value="sent" {{ $invoice->status == 'sent' ? 'selected' : '' }} class="text-gray-900 dark:text-gray-100">Terkirim</option>
                             <option value="paid" {{ $invoice->status == 'paid' ? 'selected' : '' }} class="text-gray-900 dark:text-gray-100">Lunas</option>
                             <option value="overdue" {{ $invoice->status == 'overdue' ? 'selected' : '' }} class="text-gray-900 dark:text-gray-100">Jatuh Tempo</option>
                         </select>
-                        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+                        <p class="mt-2 text-sm text-gray-500 dark:text-gray-400 ml-1">
                             Status invoice: 
                             <span class="font-medium">
                                 <span x-text="getStatusLabel(form.status)"></span>
@@ -164,7 +164,7 @@
                                             <td class="px-6 py-4">
                                                 <select :name="`items[${index}][id_layanan]`" x-model="item.id_layanan" required
                                                         @change="updateHarga(index)"
-                                                        class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+                                                        class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 focus:ring-2 focus:ring-opacity-50 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-base transition-all">
                                                     <option value="" class="text-gray-900 dark:text-gray-100">Pilih Layanan</option>
                                                     @foreach($services as $service)
                                                         <option value="{{ $service->id }}" data-harga="{{ $service->harga_standar }}"
@@ -176,22 +176,22 @@
                                             </td>
                                             <td class="px-6 py-4">
                                                 <input type="text" :name="`items[${index}][deskripsi_tambahan]`" x-model="item.deskripsi_tambahan"
-                                                       class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+                                                       class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 focus:ring-2 focus:ring-opacity-50 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-base placeholder:text-gray-400 transition-all"
                                                        placeholder="Deskripsi tambahan (opsional)">
                                             </td>
                                             <td class="px-6 py-4">
                                                 <input type="number" :name="`items[${index}][kuantitas]`" x-model="item.kuantitas" required min="1"
                                                        @input="calculateTotal(index)"
-                                                       class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+                                                       class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 focus:ring-2 focus:ring-opacity-50 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-base transition-all">
                                             </td>
                                             <td class="px-6 py-4">
                                                 <input type="number" :name="`items[${index}][harga_satuan]`" x-model="item.harga_satuan" required min="0" step="0.01"
                                                        @input="calculateTotal(index)"
-                                                       class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+                                                       class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 focus:ring-2 focus:ring-opacity-50 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-base transition-all">
                                             </td>
                                             <td class="px-6 py-4">
                                                 <input type="text" x-model="formatRupiah(item.total)" readonly
-                                                       class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-600 text-gray-900 dark:text-gray-100">
+                                                       class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-600 text-gray-900 dark:text-gray-100 text-base font-bold">
                                             </td>
                                             <td class="px-6 py-4">
                                                 <button type="button" @click="removeItem(index)" 

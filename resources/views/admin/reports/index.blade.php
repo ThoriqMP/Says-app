@@ -27,7 +27,7 @@
                     <input type="text" 
                            x-model="searchQuery" 
                            placeholder="Ketik nama atau NIS siswa..." 
-                           class="w-full pl-12 pr-6 py-4 bg-gray-50 dark:bg-gray-900 border-none rounded-2xl focus:ring-2 focus:ring-blue-500 dark:text-white font-bold placeholder-gray-400">
+                           class="w-full pl-12 pr-6 py-4 bg-gray-50 dark:bg-gray-900 border-2 border-transparent focus:border-blue-500 rounded-2xl focus:ring-4 focus:ring-blue-500/20 dark:text-white font-bold placeholder:text-gray-400 text-base transition-all">
                     <svg class="w-6 h-6 text-gray-400 absolute left-4 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                     </svg>

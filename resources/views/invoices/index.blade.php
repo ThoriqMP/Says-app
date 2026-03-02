@@ -32,13 +32,13 @@
                                 <input type="text" 
                                        name="search" 
                                        value="{{ request('search') }}"
-                                       class="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition" 
+                                       class="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 rounded-lg text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition placeholder:text-gray-400" 
                                        placeholder="Cari invoice (No, Siswa, Ortu)...">
                             </div>
 
                             <!-- Month Filter -->
                             <div class="w-full lg:w-48">
-                                <select name="month" onchange="this.form.submit()" class="w-full py-2 pl-3 pr-8 border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
+                                <select name="month" onchange="this.form.submit()" class="w-full py-3 pl-3 pr-8 border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 rounded-lg text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
                                     <option value="">Semua Bulan</option>
                                     @php
                                         $bulanIndo = [
@@ -57,7 +57,7 @@
 
                             <!-- Status Filter -->
                             <div class="w-full lg:w-48">
-                                <select name="status" onchange="this.form.submit()" class="w-full py-2 pl-3 pr-8 border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
+                                <select name="status" onchange="this.form.submit()" class="w-full py-3 pl-3 pr-8 border border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-200 rounded-lg text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition">
                                     <option value="">Semua Status</option>
                                     <option value="draft" {{ request('status') == 'draft' ? 'selected' : '' }}>Draft</option>
                                     <option value="sent" {{ request('status') == 'sent' ? 'selected' : '' }}>Terkirim</option>
@@ -128,7 +128,7 @@
                                         <div class="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-1">
                                             {{ $invoice->no_invoice }}
                                         </div>
-                                        <h3 class="text-base sm:text-xl font-black text-gray-900 dark:text-white leading-tight mb-1 break-words">
+                                        <h3 class="text-base sm:text-xl font-black text-gray-900 dark:text-white leading-tight mb-1 truncate" title="{{ $invoice->siswa->nama_siswa }}">
                                             {{ $invoice->siswa->nama_siswa }}
                                         </h3>
                                         <div class="flex items-center gap-2 text-sm text-gray-500 font-bold uppercase tracking-wider">

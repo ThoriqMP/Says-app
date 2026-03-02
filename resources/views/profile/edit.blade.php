@@ -51,29 +51,33 @@
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                         <div>
-                            <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Nama Lengkap</label>
+                            <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 ml-1">Nama Lengkap</label>
                             <input type="text" id="name" name="name" value="{{ old('name', $user->name) }}" required
-                                   class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+                                   placeholder="Masukkan nama lengkap"
+                                   class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 focus:ring-2 focus:ring-opacity-50 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-base placeholder:text-gray-400 transition-all">
                         </div>
                         
                         <div>
-                            <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Email</label>
+                            <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 ml-1">Email</label>
                             <input type="email" id="email" name="email" value="{{ old('email', $user->email) }}" required
-                                   class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+                                   placeholder="example@email.com"
+                                   class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 focus:ring-2 focus:ring-opacity-50 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-base placeholder:text-gray-400 transition-all">
                         </div>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                         <div>
-                            <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Password Baru (Kosongkan jika tidak ganti)</label>
+                            <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 ml-1">Password Baru (Kosongkan jika tidak ganti)</label>
                             <input type="password" id="password" name="password"
-                                   class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+                                   placeholder="Masukkan password baru"
+                                   class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 focus:ring-2 focus:ring-opacity-50 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-base placeholder:text-gray-400 transition-all">
                         </div>
                         
                         <div>
-                            <label for="password_confirmation" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Konfirmasi Password Baru</label>
+                            <label for="password_confirmation" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 ml-1">Konfirmasi Password Baru</label>
                             <input type="password" id="password_confirmation" name="password_confirmation"
-                                   class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+                                   placeholder="Ulangi password baru"
+                                   class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 focus:ring-2 focus:ring-opacity-50 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-base placeholder:text-gray-400 transition-all">
                         </div>
                     </div>
 

@@ -73,8 +73,10 @@
                         </div>
                     </div>
                     <div>
-                        <label class="block text-sm font-bold text-gray-400 uppercase tracking-wider mb-2">Periode / Semester</label>
-                        <input type="text" name="period" value="{{ old('period', $report->period) }}" required class="w-full rounded-xl border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white font-semibold">
+                        <label class="block text-sm font-bold text-gray-400 uppercase tracking-wider mb-2 ml-1">Periode / Semester</label>
+                        <input type="text" name="period" value="{{ old('period', $report->period) }}" required 
+                               placeholder="Contoh: 2023/2024 Ganjil"
+                               class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-blue-500 focus:border-blue-500 focus:ring-2 focus:ring-opacity-50 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-base font-bold placeholder:text-gray-400 transition-all">
                     </div>
                 </div>
 
@@ -109,11 +111,11 @@
                                                 x-init="$watch('pts', () => calculateAverage($data)); $watch('pas', () => calculateAverage($data)); $watch('rem', () => calculateAverage($data)); $watch('harian', () => calculateAverage($data))"
                                                 class="hover:bg-gray-50/50 dark:hover:bg-gray-900/20 transition">
                                                 <td class="p-4 font-bold text-gray-700 dark:text-gray-300">{{ $subject->name }}</td>
-                                                <td class="p-2"><input type="number" name="grades[{{ $subject->id }}][score_pts]" x-model="pts" step="0.01" class="w-20 rounded-lg border-gray-200 dark:bg-gray-700 dark:border-gray-600 text-sm font-bold"></td>
-                                                <td class="p-2"><input type="number" name="grades[{{ $subject->id }}][score_pas]" x-model="pas" step="0.01" class="w-20 rounded-lg border-gray-200 dark:bg-gray-700 dark:border-gray-600 text-sm font-bold"></td>
-                                                <td class="p-2"><input type="number" name="grades[{{ $subject->id }}][score_remedial]" x-model="rem" step="0.01" class="w-20 rounded-lg border-gray-200 dark:bg-gray-700 dark:border-gray-600 text-sm font-bold"></td>
-                                                <td class="p-2"><input type="number" name="grades[{{ $subject->id }}][score_harian]" x-model="harian" step="0.01" class="w-20 rounded-lg border-gray-200 dark:bg-gray-700 dark:border-gray-600 text-sm font-bold"></td>
-                                                <td class="p-2"><input type="number" name="grades[{{ $subject->id }}][score]" x-model="score" step="0.01" class="w-20 rounded-lg border-blue-200 dark:bg-gray-700 dark:border-gray-600 text-sm font-black text-blue-600" readonly></td>
+                                                <td class="p-2"><input type="number" name="grades[{{ $subject->id }}][score_pts]" x-model="pts" step="0.01" class="w-20 rounded-lg border-gray-200 dark:bg-gray-700 dark:border-gray-600 text-base font-bold placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500 transition-all"></td>
+                                                <td class="p-2"><input type="number" name="grades[{{ $subject->id }}][score_pas]" x-model="pas" step="0.01" class="w-20 rounded-lg border-gray-200 dark:bg-gray-700 dark:border-gray-600 text-base font-bold placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500 transition-all"></td>
+                                                <td class="p-2"><input type="number" name="grades[{{ $subject->id }}][score_remedial]" x-model="rem" step="0.01" class="w-20 rounded-lg border-gray-200 dark:bg-gray-700 dark:border-gray-600 text-base font-bold placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500 transition-all"></td>
+                                                <td class="p-2"><input type="number" name="grades[{{ $subject->id }}][score_harian]" x-model="harian" step="0.01" class="w-20 rounded-lg border-gray-200 dark:bg-gray-700 dark:border-gray-600 text-base font-bold placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500 transition-all"></td>
+                                                <td class="p-2"><input type="number" name="grades[{{ $subject->id }}][score]" x-model="score" step="0.01" class="w-20 rounded-lg border-blue-200 dark:bg-gray-700 dark:border-gray-600 text-base font-black text-blue-600" readonly></td>
                                                 <td class="p-4 text-center">
                                                     <input type="hidden" name="grades[{{ $subject->id }}][predicate]" :value="pred">
                                                 <span class="px-3 py-1 rounded-full text-xs font-black" :class="{
@@ -130,12 +132,12 @@
                                         <tr x-data="{ score: '', pts: '', pas: '', rem: '', harian: '', pred: '-' }" 
                                             x-init="$watch('pts', () => calculateAverage($data)); $watch('pas', () => calculateAverage($data)); $watch('rem', () => calculateAverage($data)); $watch('harian', () => calculateAverage($data))"
                                             class="bg-blue-50/30 dark:bg-blue-900/10">
-                                            <td class="p-2"><input type="text" :name="`new_subjects[${index}][name]`" placeholder="Nama Mapel" class="w-full rounded-lg border-gray-200 dark:bg-gray-700 text-sm font-bold"></td>
-                                            <td class="p-2"><input type="number" :name="`new_subjects[${index}][score_pts]`" x-model="pts" class="w-20 rounded-lg border-gray-200 dark:bg-gray-700 text-sm font-bold"></td>
-                                            <td class="p-2"><input type="number" :name="`new_subjects[${index}][score_pas]`" x-model="pas" class="w-20 rounded-lg border-gray-200 dark:bg-gray-700 text-sm font-bold"></td>
-                                            <td class="p-2"><input type="number" :name="`new_subjects[${index}][score_remedial]`" x-model="rem" class="w-20 rounded-lg border-gray-200 dark:bg-gray-700 text-sm font-bold"></td>
-                                            <td class="p-2"><input type="number" :name="`new_subjects[${index}][score_harian]`" x-model="harian" class="w-20 rounded-lg border-gray-200 dark:bg-gray-700 text-sm font-bold"></td>
-                                            <td class="p-2"><input type="number" :name="`new_subjects[${index}][score]`" x-model="score" class="w-20 rounded-lg border-blue-200 dark:bg-gray-700 text-sm font-black text-blue-600" readonly></td>
+                                            <td class="p-2"><input type="text" :name="`new_subjects[${index}][name]`" placeholder="Nama Mapel" class="w-full rounded-lg border-gray-200 dark:bg-gray-700 text-base font-bold placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500 transition-all"></td>
+                                            <td class="p-2"><input type="number" :name="`new_subjects[${index}][score_pts]`" x-model="pts" class="w-20 rounded-lg border-gray-200 dark:bg-gray-700 text-base font-bold placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500 transition-all"></td>
+                                            <td class="p-2"><input type="number" :name="`new_subjects[${index}][score_pas]`" x-model="pas" class="w-20 rounded-lg border-gray-200 dark:bg-gray-700 text-base font-bold placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500 transition-all"></td>
+                                            <td class="p-2"><input type="number" :name="`new_subjects[${index}][score_remedial]`" x-model="rem" class="w-20 rounded-lg border-gray-200 dark:bg-gray-700 text-base font-bold placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500 transition-all"></td>
+                                            <td class="p-2"><input type="number" :name="`new_subjects[${index}][score_harian]`" x-model="harian" class="w-20 rounded-lg border-gray-200 dark:bg-gray-700 text-base font-bold placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500 transition-all"></td>
+                                            <td class="p-2"><input type="number" :name="`new_subjects[${index}][score]`" x-model="score" class="w-20 rounded-lg border-blue-200 dark:bg-gray-700 text-base font-black text-blue-600" readonly></td>
                                             <td class="p-4 text-center">
                                                 <input type="hidden" :name="`new_subjects[${index}][predicate]`" :value="pred">
                                                 <span class="px-3 py-1 rounded-full text-xs font-black" :class="{
@@ -166,10 +168,10 @@
                                 <div class="p-6 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl shadow-sm grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
                                     <div class="font-bold text-gray-700 dark:text-gray-300">{{ $subject->name }}</div>
                                     <div class="md:col-span-1">
-                                        <input type="text" name="grades[{{ $subject->id }}][ayat_range]" value="{{ $grade->ayat_range ?? '' }}" placeholder="Rentang Ayat (mis: 1-10)" class="w-full rounded-xl border-gray-300 dark:bg-gray-700 text-sm font-bold">
+                                        <input type="text" name="grades[{{ $subject->id }}][ayat_range]" value="{{ $grade->ayat_range ?? '' }}" placeholder="Rentang Ayat (mis: 1-10)" class="w-full rounded-xl border-gray-300 dark:bg-gray-700 text-base font-bold placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500 transition-all">
                                     </div>
                                     <div class="md:col-span-1">
-                                        <select name="grades[{{ $subject->id }}][predicate]" class="w-full rounded-xl border-gray-300 dark:bg-gray-700 text-sm font-bold">
+                                        <select name="grades[{{ $subject->id }}][predicate]" class="w-full rounded-xl border-gray-300 dark:bg-gray-700 text-base font-bold focus:ring-2 focus:ring-blue-500 transition-all">
                                             <option value="">Pilih Mutu</option>
                                             <option value="Mumtaz" {{ ($grade->predicate ?? '') === 'Mumtaz' ? 'selected' : '' }}>Mumtaz (A)</option>
                                             <option value="Jayyid Jiddan" {{ ($grade->predicate ?? '') === 'Jayyid Jiddan' ? 'selected' : '' }}>Jayyid Jiddan (B)</option>
@@ -178,7 +180,7 @@
                                         </select>
                                     </div>
                                     <div class="md:col-span-1">
-                                        <input type="text" name="grades[{{ $subject->id }}][description]" value="{{ $grade->description ?? '' }}" placeholder="Keterangan" class="w-full rounded-xl border-gray-300 dark:bg-gray-700 text-sm">
+                                        <input type="text" name="grades[{{ $subject->id }}][description]" value="{{ $grade->description ?? '' }}" placeholder="Keterangan" class="w-full rounded-xl border-gray-300 dark:bg-gray-700 text-base placeholder:text-gray-400 focus:ring-2 focus:ring-blue-500 transition-all">
                                     </div>
                                 </div>
                             @endforeach
@@ -197,7 +199,7 @@
                                 @php $grade = $report->grades->where('report_subject_id', $subject->id)->first(); @endphp
                                 <div class="p-5 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-2xl shadow-sm flex items-center justify-between">
                                     <span class="font-bold text-gray-700 dark:text-gray-300">{{ $subject->name }}</span>
-                                    <select name="grades[{{ $subject->id }}][predicate]" class="rounded-xl border-gray-300 dark:bg-gray-700 text-sm font-black">
+                                    <select name="grades[{{ $subject->id }}][predicate]" class="rounded-xl border-gray-300 dark:bg-gray-700 text-base font-black focus:ring-2 focus:ring-blue-500 transition-all">
                                         <option value="Lancar" {{ ($grade->predicate ?? '') === 'Lancar' ? 'selected' : '' }}>Lancar</option>
                                         <option value="Cukup Lancar" {{ ($grade->predicate ?? '') === 'Cukup Lancar' ? 'selected' : '' }}>Cukup Lancar</option>
                                         <option value="Perlu Bimbingan" {{ ($grade->predicate ?? '') === 'Perlu Bimbingan' ? 'selected' : '' }}>Perlu Bimbingan</option>
@@ -256,12 +258,15 @@
                                         </div>
                                         <div class="md:col-span-8 space-y-6">
                                             <div>
-                                                <label class="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Judul Aktivitas</label>
-                                                <input type="text" :name="`probing[${index}][title]`" x-model="activity.title" required placeholder="Contoh: Praktek Memasak di Dapur" class="w-full rounded-2xl border-gray-300 focus:ring-blue-500 dark:bg-gray-700 dark:text-white font-bold text-lg p-4">
+                                                <label class="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2 ml-1">Judul Aktivitas</label>
+                                                <input type="text" :name="`probing[${index}][title]`" x-model="activity.title" required placeholder="Contoh: Praktek Memasak di Dapur" 
+                                                       class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-blue-500 focus:border-blue-500 focus:ring-2 focus:ring-opacity-50 dark:bg-gray-700 dark:text-white font-bold text-lg placeholder:text-gray-400 transition-all">
                                             </div>
                                             <div>
-                                                <label class="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2">Narasi Deskripsi</label>
-                                                <textarea :name="`probing[${index}][description]`" x-model="activity.desc" rows="6" class="w-full rounded-2xl border-gray-300 focus:ring-blue-500 dark:bg-gray-700 dark:text-white p-4" placeholder="Ceritakan detail aktivitas siswa, apa yang dipelajari, dan bagaimana perkembangannya..."></textarea>
+                                                <label class="block text-xs font-black text-gray-400 uppercase tracking-widest mb-2 ml-1">Narasi Deskripsi</label>
+                                                <textarea :name="`probing[${index}][description]`" x-model="activity.desc" rows="6" 
+                                                          class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-blue-500 focus:border-blue-500 focus:ring-2 focus:ring-opacity-50 dark:bg-gray-700 dark:text-white text-base placeholder:text-gray-400 transition-all" 
+                                                          placeholder="Ceritakan detail aktivitas siswa, apa yang dipelajari, dan bagaimana perkembangannya..."></textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -279,7 +284,9 @@
                 <!-- Summary Notes -->
                 <div class="mt-12 bg-gray-50 dark:bg-gray-900/50 p-8 rounded-[32px] border border-gray-100 dark:border-gray-800">
                     <label class="block text-xs font-black text-gray-400 uppercase tracking-widest mb-4 ml-1">Catatan Kesimpulan (Wali Kelas)</label>
-                    <textarea name="summary_notes" rows="5" class="w-full rounded-2xl border-gray-200 focus:ring-blue-500 dark:bg-gray-700 dark:text-white p-6 text-lg" placeholder="Berikan gambaran umum perkembangan siswa selama periode ini...">{{ old('summary_notes', $report->summary_notes) }}</textarea>
+                    <textarea name="summary_notes" rows="5" 
+                              class="w-full px-6 py-4 border border-gray-200 dark:border-gray-700 rounded-2xl focus:ring-blue-500 focus:border-blue-500 focus:ring-2 focus:ring-opacity-50 dark:bg-gray-700 dark:text-white text-lg placeholder:text-gray-400 transition-all" 
+                              placeholder="Berikan gambaran umum perkembangan siswa selama periode ini...">{{ old('summary_notes', $report->summary_notes) }}</textarea>
                 </div>
 
                 <div class="mt-12 pt-8 border-t border-gray-100 dark:border-gray-700 flex justify-between">

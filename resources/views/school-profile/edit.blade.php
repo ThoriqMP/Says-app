@@ -87,15 +87,17 @@
                     <!-- Informasi Sekolah -->
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                         <div>
-                            <label for="nama_sekolah" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Nama Sekolah</label>
+                            <label for="nama_sekolah" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 ml-1">Nama Sekolah</label>
                             <input type="text" id="nama_sekolah" name="nama_sekolah" value="{{ old('nama_sekolah', $schoolProfile->nama_sekolah) }}" required
-                                   class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+                                   placeholder="Masukkan nama sekolah"
+                                   class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 focus:ring-2 focus:ring-opacity-50 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-base placeholder:text-gray-400 transition-all">
                         </div>
                         
                         <div>
-                            <label for="pimpinan_nama" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Nama Pimpinan</label>
+                            <label for="pimpinan_nama" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 ml-1">Nama Pimpinan</label>
                             <input type="text" id="pimpinan_nama" name="pimpinan_nama" value="{{ old('pimpinan_nama', $schoolProfile->pimpinan_nama) }}"
-                                   class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+                                   placeholder="Masukkan nama pimpinan"
+                                   class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 focus:ring-2 focus:ring-opacity-50 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-base placeholder:text-gray-400 transition-all">
                         </div>
                     </div>
 

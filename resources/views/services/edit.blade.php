@@ -38,15 +38,17 @@
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                         <div>
-                            <label for="nama_layanan" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Nama Layanan</label>
+                            <label for="nama_layanan" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 ml-1">Nama Layanan</label>
                             <input type="text" id="nama_layanan" name="nama_layanan" value="{{ old('nama_layanan', $service->nama_layanan) }}" required
-                                   class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+                                   placeholder="Masukkan nama layanan"
+                                   class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 focus:ring-2 focus:ring-opacity-50 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-base placeholder:text-gray-400 transition-all">
                         </div>
                         
                         <div>
-                            <label for="harga_standar" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Harga Standar</label>
+                            <label for="harga_standar" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 ml-1">Harga Standar</label>
                             <input type="number" id="harga_standar" name="harga_standar" value="{{ old('harga_standar', $service->harga_standar) }}" required min="0" step="0.01"
-                                   class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+                                   placeholder="Contoh: 50000"
+                                   class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 focus:ring-2 focus:ring-opacity-50 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-base placeholder:text-gray-400 transition-all">
                         </div>
                     </div>
 

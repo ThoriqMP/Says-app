@@ -18,7 +18,7 @@
                 <input type="text" 
                        name="search" 
                        value="{{ request('search') }}"
-                       class="w-full pl-11 pr-4 py-2.5 border border-gray-300 rounded-full text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder-gray-400 transition shadow-sm" 
+                       class="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-full text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder:text-gray-400 transition shadow-sm" 
                        placeholder="Cari nama atau no. hp...">
             </form>
 

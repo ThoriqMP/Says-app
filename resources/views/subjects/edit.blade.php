@@ -28,13 +28,14 @@
                 <form method="POST" action="{{ route('subjects.update', $subject) }}">
                     @csrf
                     @method('PUT')
-                    <div class="space-y-4">
+                    <div class="space-y-6">
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nama</label>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 ml-1">Nama</label>
                             <input type="text" name="name" value="{{ old('name', $subject->name) }}" required
-                                   class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+                                   placeholder="Masukkan nama subjek"
+                                   class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder:text-gray-400 transition-all">
                         </div>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4" x-data="{ 
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6" x-data="{ 
                             dob: '{{ old('date_of_birth', $subject->date_of_birth?->format('Y-m-d')) }}',
                             age: '',
                             calculateAge() {
@@ -57,25 +58,26 @@
                             }
                         }" x-init="calculateAge()">
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tanggal Lahir</label>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 ml-1">Tanggal Lahir</label>
                                 <input type="date" name="date_of_birth" x-model="dob" @change="calculateAge()"
-                                       class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
-                                <p class="text-sm text-gray-500 mt-1" x-show="age" x-text="age"></p>
+                                       class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all">
+                                <p class="text-sm text-gray-500 mt-2 ml-1" x-show="age" x-text="age"></p>
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Jenis Kelamin</label>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 ml-1">Jenis Kelamin</label>
                                 <select name="gender"
-                                        class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
-                                    <option value="">Pilih</option>
+                                        class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all">
+                                    <option value="">Pilih Jenis Kelamin</option>
                                     <option value="male" @selected(old('gender', $subject->gender) === 'male')>Laki-laki</option>
                                     <option value="female" @selected(old('gender', $subject->gender) === 'female')>Perempuan</option>
                                 </select>
                             </div>
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">No. HP</label>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 ml-1">No. HP</label>
                             <input type="text" name="phone" value="{{ old('phone', $subject->phone) }}"
-                                   class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+                                   placeholder="Contoh: 08123456789"
+                                   class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder:text-gray-400 transition-all">
                         </div>
                     </div>
 

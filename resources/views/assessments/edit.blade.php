@@ -56,18 +56,19 @@
 
                         <div>
                             <h3 class="text-lg font-medium text-gray-800 dark:text-gray-200 mb-4">Info Asesmen</h3>
-                            <div class="space-y-3">
+                            <div class="space-y-4">
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tanggal Tes</label>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 ml-1">Tanggal Tes</label>
                                     <input type="date" name="test_date" 
                                            value="{{ old('test_date', $assessment->test_date->format('Y-m-d')) }}"
-                                           class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+                                           class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 focus:ring-2 focus:ring-opacity-50 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-base transition-all">
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Psikolog</label>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 ml-1">Psikolog</label>
                                     <input type="text" name="psychologist_name" 
                                            value="{{ old('psychologist_name', $assessment->psychologist_name) }}"
-                                           class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+                                           placeholder="Nama Psikolog"
+                                           class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 focus:ring-2 focus:ring-opacity-50 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-base placeholder:text-gray-400 transition-all">
                                 </div>
                             </div>
                         </div>
@@ -141,7 +142,7 @@
                                         <input type="number" min="0" max="50"
                                                name="multiple_intelligence[{{ $aspect }}]"
                                                value="{{ old('multiple_intelligence.'.$aspect, $multipleIntelligenceScores[$aspect] ?? null) }}"
-                                               class="w-full px-2 py-1 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-sm">
+                                               class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all">
                                     </div>
                                 </div>
                             @endforeach
@@ -153,52 +154,59 @@
                         @php
                             $tm = $assessment->talentsMapping;
                         @endphp
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Brain Dominance</label>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 ml-1">Brain Dominance</label>
                                 <input type="text" name="talents[brain_dominance]" 
-                                       value="{{ old('talents.brain_dominance', $tm->brain_dominance ?? '') }}"
-                                       class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+                                       value="{{ old('talents.brain_dominance', $talentsScores['brain_dominance'] ?? '') }}"
+                                       placeholder="Dominasi Otak"
+                                       class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder:text-gray-400 transition-all">
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Social Dominance</label>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 ml-1">Social Dominance</label>
                                 <input type="text" name="talents[social_dominance]" 
-                                       value="{{ old('talents.social_dominance', $tm->social_dominance ?? '') }}"
-                                       class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+                                       value="{{ old('talents.social_dominance', $talentsScores['social_dominance'] ?? '') }}"
+                                       placeholder="Dominasi Sosial"
+                                       class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder:text-gray-400 transition-all">
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Skill Dominance</label>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 ml-1">Skill Dominance</label>
                                 <input type="text" name="talents[skill_dominance]" 
-                                       value="{{ old('talents.skill_dominance', $tm->skill_dominance ?? '') }}"
-                                       class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+                                       value="{{ old('talents.skill_dominance', $talentsScores['skill_dominance'] ?? '') }}"
+                                       placeholder="Dominasi Keahlian"
+                                       class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder:text-gray-400 transition-all">
                             </div>
                         </div>
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Strengths</label>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 ml-1">Strengths</label>
                                 <textarea name="talents[strengths]" rows="4"
-                                          class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">{{ old('talents.strengths', $tm->strengths ?? '') }}</textarea>
+                                          placeholder="Kekuatan subjek..."
+                                          class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder:text-gray-400 transition-all">{{ old('talents.strengths', $talentsScores['strengths'] ?? '') }}</textarea>
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Deficits</label>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 ml-1">Deficits</label>
                                 <textarea name="talents[deficits]" rows="4"
-                                          class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">{{ old('talents.deficits', $tm->deficits ?? '') }}</textarea>
+                                          placeholder="Kekurangan subjek..."
+                                          class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder:text-gray-400 transition-all">{{ old('talents.deficits', $talentsScores['deficits'] ?? '') }}</textarea>
                             </div>
                         </div>
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Cluster Strength</label>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 ml-1">Cluster Strength</label>
                                 <input type="text" name="talents[cluster_strength]"
-                                       value="{{ old('talents.cluster_strength', $tm->cluster_strength ?? '') }}"
-                                       class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+                                       value="{{ old('talents.cluster_strength', $talentsScores['cluster_strength'] ?? '') }}"
+                                       placeholder="Kekuatan Kluster"
+                                       class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder:text-gray-400 transition-all">
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Personal Branding</label>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 ml-1">Personal Branding</label>
                                 <input type="text" name="talents[personal_branding]"
-                                       value="{{ old('talents.personal_branding', $tm->personal_branding ?? '') }}"
-                                       class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+                                       value="{{ old('talents.personal_branding', $talentsScores['personal_branding'] ?? '') }}"
+                                       placeholder="Branding Pribadi"
+                                       class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder:text-gray-400 transition-all">
                             </div>
                         </div>
                     </div>

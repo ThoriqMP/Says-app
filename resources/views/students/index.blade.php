@@ -20,7 +20,7 @@
                             <input type="text" 
                        name="search" 
                        value="{{ request('search') }}"
-                       class="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition dark:bg-gray-700 dark:text-gray-300 dark:placeholder-gray-400" 
+                       class="w-full pl-10 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition dark:bg-gray-700 dark:text-gray-300 dark:placeholder-gray-400 placeholder:text-gray-400" 
                        placeholder="Cari siswa...">
                         </form>
 
@@ -61,7 +61,7 @@
                             <div class="relative z-10 flex flex-col h-full">
                                 <div class="flex justify-between items-start mb-6">
                                     <div class="min-w-0 flex-1">
-                                        <h3 class="text-base sm:text-xl font-black text-gray-900 dark:text-white leading-tight mb-1 break-words">
+                                        <h3 class="text-base sm:text-xl font-black text-gray-900 dark:text-white leading-tight mb-1 truncate" title="{{ $student->nama_siswa }}">
                                             {{ $student->nama_siswa }}
                                         </h3>
                                         <div class="flex items-center gap-2 text-sm text-gray-500 font-bold uppercase tracking-wider">

@@ -59,23 +59,23 @@
                                  but user might want to change the "Test Date" which affects "Age at Test".
                             -->
 
-                            <div class="space-y-3">
+                            <div class="space-y-4">
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nama</label>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 ml-1">Nama</label>
                                     <input type="text" value="{{ $assessment->subject->name }}" disabled
-                                           class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-100 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed">
-                                    <p class="text-xs text-gray-500 mt-1">Data subjek tidak dapat diubah di sini.</p>
+                                           class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-100 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed text-base">
+                                    <p class="text-xs text-gray-500 mt-2 ml-1">Data subjek tidak dapat diubah di sini.</p>
                                 </div>
-                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     <div>
-                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tanggal Lahir</label>
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 ml-1">Tanggal Lahir</label>
                                         <input type="date" value="{{ $assessment->subject->date_of_birth ? $assessment->subject->date_of_birth->format('Y-m-d') : '' }}" disabled
-                                               class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-100 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed">
+                                               class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-100 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed text-base">
                                     </div>
                                     <div>
-                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Usia Saat Tes</label>
+                                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 ml-1">Usia Saat Tes</label>
                                         <input type="text" :value="calculated_age" readonly
-                                               class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-100 dark:bg-gray-600 text-gray-700 dark:text-gray-300">
+                                               class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-100 dark:bg-gray-600 text-gray-700 dark:text-gray-300 text-base">
                                     </div>
                                 </div>
                             </div>
@@ -83,16 +83,17 @@
 
                         <div>
                             <h3 class="text-lg font-medium text-gray-800 dark:text-gray-200 mb-4">Info Asesmen</h3>
-                            <div class="space-y-3">
+                            <div class="space-y-4">
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tanggal Tes</label>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 ml-1">Tanggal Tes</label>
                                     <input type="date" name="test_date" x-model="form.test_date" @change="calculateAge()"
-                                           class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+                                           class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 focus:ring-2 focus:ring-opacity-50 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-base transition-all">
                                 </div>
                                 <div>
-                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Asesor</label>
+                                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 ml-1">Asesor</label>
                                     <input type="text" name="psychologist_name" x-model="form.psychologist_name"
-                                           class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+                                           placeholder="Nama Asesor"
+                                           class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 focus:ring-2 focus:ring-opacity-50 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-base placeholder:text-gray-400 transition-all">
                                 </div>
                             </div>
                         </div>
@@ -302,7 +303,7 @@
                                         <input type="number" min="0" max="50"
                                                name="multiple_intelligence[{{ $aspect }}]"
                                                x-model.number="mi['{{ $aspect }}']"
-                                               class="w-full px-2 py-1 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-sm">
+                                               class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all">
                                     </div>
                                     <div class="w-full sm:flex-1">
                                         <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
@@ -318,52 +319,59 @@
 
                     <div class="mb-10">
                         <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">Talents Mapping</h3>
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Brain Dominance</label>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 ml-1">Brain Dominance</label>
                                 <input type="text" name="talents[brain_dominance]" 
                                        value="{{ old('talents.brain_dominance', $assessment->talentsMapping->brain_dominance ?? '') }}"
-                                       class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+                                       placeholder="Dominasi Otak"
+                                       class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder:text-gray-400 transition-all">
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Social Dominance</label>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 ml-1">Social Dominance</label>
                                 <input type="text" name="talents[social_dominance]" 
                                        value="{{ old('talents.social_dominance', $assessment->talentsMapping->social_dominance ?? '') }}"
-                                       class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+                                       placeholder="Dominasi Sosial"
+                                       class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder:text-gray-400 transition-all">
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Skill Dominance</label>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 ml-1">Skill Dominance</label>
                                 <input type="text" name="talents[skill_dominance]" 
                                        value="{{ old('talents.skill_dominance', $assessment->talentsMapping->skill_dominance ?? '') }}"
-                                       class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+                                       placeholder="Dominasi Keahlian"
+                                       class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder:text-gray-400 transition-all">
                             </div>
                         </div>
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Strengths</label>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 ml-1">Strengths</label>
                                 <textarea name="talents[strengths]" rows="4"
-                                          class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">{{ old('talents.strengths', $assessment->talentsMapping->strengths ?? '') }}</textarea>
+                                          placeholder="Kekuatan subjek..."
+                                          class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder:text-gray-400 transition-all">{{ old('talents.strengths', $assessment->talentsMapping->strengths ?? '') }}</textarea>
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Deficits</label>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 ml-1">Deficits</label>
                                 <textarea name="talents[deficits]" rows="4"
-                                          class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">{{ old('talents.deficits', $assessment->talentsMapping->deficits ?? '') }}</textarea>
+                                          placeholder="Kekurangan subjek..."
+                                          class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder:text-gray-400 transition-all">{{ old('talents.deficits', $assessment->talentsMapping->deficits ?? '') }}</textarea>
                             </div>
                         </div>
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Cluster Strength</label>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 ml-1">Cluster Strength</label>
                                 <input type="text" name="talents[cluster_strength]"
                                        value="{{ old('talents.cluster_strength', $assessment->talentsMapping->cluster_strength ?? '') }}"
-                                       class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+                                       placeholder="Kekuatan Kluster"
+                                       class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder:text-gray-400 transition-all">
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Personal Branding</label>
+                                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 ml-1">Personal Branding</label>
                                 <input type="text" name="talents[personal_branding]"
                                        value="{{ old('talents.personal_branding', $assessment->talentsMapping->personal_branding ?? '') }}"
-                                       class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100">
+                                       placeholder="Branding Pribadi"
+                                       class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder:text-gray-400 transition-all">
                             </div>
                         </div>
                     </div>
@@ -371,10 +379,10 @@
                     <div class="mb-10">
                         <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">Kesimpulan & Rekomendasi</h3>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Rekomendasi Pekerjaan</label>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2 ml-1">Rekomendasi Pekerjaan</label>
                             <textarea name="psychological[job_recommendation]" rows="4"
-                                      class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-                                      placeholder="Tuliskan rekomendasi pekerjaan di sini...">{{ old('psychological.job_recommendation', $assessment->psychologicalAssessment->job_recommendation ?? '') }}</textarea>
+                                      class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-base focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                                      placeholder="Tuliskan maksimal 10 rekomendasi pekerjaan di sini...">{{ old('psychological.job_recommendation', $assessment->psychologicalAssessment->job_recommendation ?? '') }}</textarea>
                         </div>
                     </div>
 

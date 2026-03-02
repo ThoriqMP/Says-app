@@ -20,7 +20,7 @@
                     <div>
                         <label for="name" class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-3 ml-1">Nama Kategori</label>
                         <input type="text" name="name" id="name" value="{{ old('name') }}" required placeholder="Misal: Akademik, Diniyah, dll" 
-                               class="w-full px-6 py-4 bg-gray-50 dark:bg-gray-900 border-none rounded-2xl focus:ring-2 focus:ring-blue-500 dark:text-white font-bold placeholder-gray-400">
+                               class="w-full px-6 py-4 bg-gray-50 dark:bg-gray-900 border-2 border-transparent focus:border-blue-500 rounded-2xl focus:ring-4 focus:ring-blue-500/20 dark:text-white font-bold placeholder:text-gray-400 text-base transition-all">
                         @error('name')
                             <p class="mt-2 text-sm text-red-600 font-bold ml-1">{{ $message }}</p>
                         @enderror
@@ -38,7 +38,7 @@
                             <template x-for="(subject, index) in subjects" :key="index">
                                 <div class="flex gap-3">
                                     <input type="text" name="subjects[]" x-model="subjects[index]" placeholder="Nama Subjek (misal: Matematika)" required
-                                           class="flex-1 px-6 py-4 bg-gray-50 dark:bg-gray-900 border-none rounded-2xl focus:ring-2 focus:ring-blue-500 dark:text-white font-bold placeholder-gray-400">
+                                           class="flex-1 px-6 py-4 bg-gray-50 dark:bg-gray-900 border-2 border-transparent focus:border-blue-500 rounded-2xl focus:ring-4 focus:ring-blue-500/20 dark:text-white font-bold placeholder:text-gray-400 text-base transition-all">
                                     <button type="button" @click="subjects.splice(index, 1)" x-show="subjects.length > 1"
                                             class="p-4 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-2xl hover:bg-red-100 transition-colors">
                                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
