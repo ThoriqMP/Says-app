@@ -51,35 +51,35 @@
                     <table class="w-full text-left">
                         <thead>
                             <tr class="bg-gray-50/50 dark:bg-gray-900/50 border-b border-gray-100 dark:border-gray-700">
-                                <th class="px-10 py-6 text-[10px] font-black text-gray-400 uppercase tracking-widest">Layanan / Item</th>
-                                <th class="px-10 py-6 text-[10px] font-black text-gray-400 uppercase tracking-widest text-right">Harga Satuan</th>
-                                <th class="px-10 py-6 text-[10px] font-black text-gray-400 uppercase tracking-widest text-center">Jumlah</th>
-                                <th class="px-10 py-6 text-[10px] font-black text-gray-400 uppercase tracking-widest text-right">Total</th>
+                                <th class="px-4 sm:px-10 py-4 sm:py-6 text-[10px] font-black text-gray-400 uppercase tracking-widest">Layanan / Item</th>
+                                <th class="px-4 sm:px-10 py-4 sm:py-6 text-[10px] font-black text-gray-400 uppercase tracking-widest text-right">Harga Satuan</th>
+                                <th class="px-4 sm:px-10 py-4 sm:py-6 text-[10px] font-black text-gray-400 uppercase tracking-widest text-center">Jumlah</th>
+                                <th class="px-4 sm:px-10 py-4 sm:py-6 text-[10px] font-black text-gray-400 uppercase tracking-widest text-right">Total</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-50 dark:divide-gray-700">
                             @foreach($invoice->invoiceDetails as $item)
                                 <tr class="hover:bg-blue-50/30 dark:hover:bg-blue-900/10 transition-colors">
-                                    <td class="px-10 py-8">
-                                        <div class="flex items-center gap-4">
-                                            <div class="h-10 w-10 bg-blue-50 dark:bg-blue-900/40 rounded-xl flex items-center justify-center text-blue-600 dark:text-blue-400 font-bold">
+                                    <td class="px-4 sm:px-10 py-6 sm:py-8">
+                                        <div class="flex items-center gap-3 sm:gap-4">
+                                            <div class="h-8 w-8 sm:h-10 sm:w-10 bg-blue-50 dark:bg-blue-900/40 rounded-lg sm:rounded-xl flex items-center justify-center text-blue-600 dark:text-blue-400 font-bold text-sm sm:text-base">
                                                 {{ substr($item->layanan->nama_layanan ?? 'L', 0, 1) }}
                                             </div>
                                             <div>
-                                                <span class="text-lg font-black text-gray-900 dark:text-white block">{{ $item->layanan->nama_layanan ?? 'Layanan' }}</span>
+                                                <span class="text-base sm:text-lg font-black text-gray-900 dark:text-white block">{{ $item->layanan->nama_layanan ?? 'Layanan' }}</span>
                                                 @if($item->deskripsi_tambahan)
-                                                    <span class="text-xs text-gray-500">{{ $item->deskripsi_tambahan }}</span>
+                                                    <span class="text-[10px] sm:text-xs text-gray-500 line-clamp-1">{{ $item->deskripsi_tambahan }}</span>
                                                 @endif
                                             </div>
                                         </div>
                                     </td>
-                                    <td class="px-10 py-8 text-right text-gray-600 dark:text-gray-400 font-bold">
+                                    <td class="px-4 sm:px-10 py-6 sm:py-8 text-right text-gray-600 dark:text-gray-400 font-bold text-xs sm:text-base">
                                         Rp {{ number_format($item->harga_satuan, 0, ',', '.') }}
                                     </td>
-                                    <td class="px-10 py-8 text-center text-gray-900 dark:text-white font-black">
+                                    <td class="px-4 sm:px-10 py-6 sm:py-8 text-center text-gray-900 dark:text-white font-black text-sm sm:text-base">
                                         {{ $item->kuantitas }}
                                     </td>
-                                    <td class="px-10 py-8 text-right text-gray-900 dark:text-white font-black text-lg">
+                                    <td class="px-4 sm:px-10 py-6 sm:py-8 text-right text-gray-900 dark:text-white font-black text-sm sm:text-lg">
                                         Rp {{ number_format($item->total_biaya, 0, ',', '.') }}
                                     </td>
                                 </tr>
@@ -87,8 +87,8 @@
                         </tbody>
                         <tfoot>
                             <tr class="bg-gray-900 dark:bg-gray-700 text-white">
-                                <td colspan="3" class="px-10 py-8 text-right font-black uppercase tracking-widest text-gray-400">Total Keseluruhan</td>
-                                <td class="px-10 py-8 text-right font-black text-2xl">Rp {{ number_format($invoice->grand_total, 0, ',', '.') }}</td>
+                                <td colspan="3" class="px-4 sm:px-10 py-6 sm:py-8 text-right font-black uppercase tracking-widest text-gray-400 text-[10px] sm:text-sm">Total Keseluruhan</td>
+                                <td class="px-4 sm:px-10 py-6 sm:py-8 text-right font-black text-lg sm:text-2xl">Rp {{ number_format($invoice->grand_total, 0, ',', '.') }}</td>
                             </tr>
                         </tfoot>
                     </table>

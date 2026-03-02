@@ -52,49 +52,61 @@
                 @endif
 
                 <!-- Grid Cards -->
-                <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     @forelse($students as $student)
-                        <div class="bg-white dark:bg-gray-800 rounded-[16px] md:rounded-[20px] border border-gray-200 dark:border-gray-700 p-3 md:p-6 shadow-sm hover:shadow-md transition duration-200 flex flex-col">
-                            <div class="flex justify-between items-start mb-2 md:mb-4">
-                                <div>
-                                    <h3 class="text-xs md:text-lg font-bold text-gray-900 dark:text-gray-100 line-clamp-1" title="{{ $student->nama_siswa }}">
-                                        {{ $student->nama_siswa }}
-                                    </h3>
-                                    <div class="flex items-center text-[10px] md:text-sm text-gray-500 dark:text-gray-400 mt-0.5 md:mt-1">
-                                        <svg class="h-3 w-3 md:h-4 md:w-4 mr-1 md:mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-                                        </svg>
-                                        <span class="truncate">{{ $student->nama_orang_tua }}</span>
+                        <div class="bg-white dark:bg-gray-800 rounded-[24px] border border-gray-100 dark:border-gray-700 p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col group relative overflow-hidden">
+                            <!-- Background Accent -->
+                            <div class="absolute top-0 right-0 w-32 h-32 -mr-16 -mt-16 bg-blue-600 opacity-[0.03] group-hover:opacity-[0.08] transition-opacity rotate-45"></div>
+
+                            <div class="relative z-10 flex flex-col h-full">
+                                <div class="flex justify-between items-start mb-6">
+                                    <div class="min-w-0 flex-1">
+                                        <h3 class="text-xl font-black text-gray-900 dark:text-white line-clamp-1 leading-tight mb-1">
+                                            {{ $student->nama_siswa }}
+                                        </h3>
+                                        <div class="flex items-center gap-2 text-sm text-gray-500 font-bold uppercase tracking-wider">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                                            {{ $student->nama_orang_tua }}
+                                        </div>
+                                    </div>
+                                    <div class="h-12 w-12 bg-blue-50 dark:bg-blue-900/30 rounded-2xl flex items-center justify-center text-blue-600 dark:text-blue-400 font-black text-xl">
+                                        {{ substr($student->nama_siswa, 0, 1) }}
                                     </div>
                                 </div>
-                                <div class="flex space-x-1 md:space-x-2">
-                                    <a href="{{ route('students.edit', $student) }}" 
-                                       class="p-1 md:p-2 text-gray-400 hover:text-blue-600 transition rounded-full hover:bg-blue-50">
-                                        <svg class="h-4 w-4 md:h-5 md:w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 00-2 2h11a2 2 0 00 2-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
-                                        </svg>
+
+                                <div class="space-y-4 mb-8">
+                                    <div class="p-4 bg-gray-50 dark:bg-gray-900/50 rounded-2xl border border-gray-100 dark:border-gray-800 flex items-center gap-3">
+                                        <svg class="h-5 w-5 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+                                        <span class="text-sm font-bold text-gray-600 dark:text-gray-300 line-clamp-1">
+                                            {{ $student->sekolah ?? 'Sayyidah School' }}
+                                        </span>
+                                    </div>
+                                    @if($student->nis || $student->class)
+                                        <div class="flex gap-2">
+                                            @if($student->nis)
+                                                <span class="px-3 py-1 bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 rounded-lg text-[10px] font-black uppercase tracking-widest">NIS: {{ $student->nis }}</span>
+                                            @endif
+                                            @if($student->class)
+                                                <span class="px-3 py-1 bg-blue-50 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400 rounded-lg text-[10px] font-black uppercase tracking-widest">Kelas: {{ $student->class }}</span>
+                                            @endif
+                                        </div>
+                                    @endif
+                                </div>
+
+                                <div class="mt-auto flex items-center justify-between pt-6 border-t border-gray-50 dark:border-gray-700">
+                                    <div class="flex gap-2">
+                                        <a href="{{ route('students.edit', $student) }}" 
+                                           class="p-3 bg-gray-100 dark:bg-gray-700 text-gray-500 hover:bg-yellow-500 hover:text-white rounded-xl transition-all active:scale-90" title="Edit Data">
+                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 00-2 2h11a2 2 0 00 2-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                                        </a>
+                                    </div>
+                                    
+                                    <a href="{{ route('students.show', $student) }}" 
+                                       class="flex items-center gap-2 px-6 py-3 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-xl font-black text-xs uppercase tracking-widest hover:bg-blue-600 dark:hover:bg-blue-600 hover:text-white dark:hover:text-white transition-all active:scale-95 shadow-lg shadow-black/10">
+                                        Detail Profil
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
                                     </a>
                                 </div>
-                            </div>
-
-                            <div class="space-y-1 md:space-y-3 mb-2 md:mb-6 flex-grow">
-                                <div class="flex items-start text-[10px] md:text-sm">
-                                    <svg class="h-3 w-3 md:h-5 md:w-5 text-gray-400 mr-1.5 md:mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
-                                    </svg>
-                                    <span class="text-gray-600 dark:text-gray-300 line-clamp-1 md:line-clamp-2">
-                                        {{ $student->sekolah ?? '-' }}
-                                    </span>
-                                </div>
-                            </div>
-
-                            <div class="pt-2 md:pt-4 border-t border-gray-100 dark:border-gray-700 flex justify-between items-center">
-                                <a href="{{ route('students.show', $student) }}" class="text-blue-600 hover:text-blue-800 text-[10px] md:text-sm font-bold flex items-center gap-1 group">
-                                    Profil
-                                    <svg class="h-3 w-3 md:h-4 md:w-4 transform group-hover:translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
-                                    </svg>
-                                </a>
                             </div>
                         </div>
                     @empty

@@ -221,6 +221,13 @@ class ReportManagementController extends Controller
 
     public function destroy(StudentReport $report)
     {
+        /** @var \App\Models\User $user */
+        $user = Auth::user();
+
+        if (!$user->isPimpinan()) {
+            abort(403, 'Hanya Pimpinan yang dapat menghapus raport.');
+        }
+
         $siswaId = $report->siswa_id;
         DB::beginTransaction();
         try {

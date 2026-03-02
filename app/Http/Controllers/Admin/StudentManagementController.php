@@ -25,7 +25,7 @@ class StudentManagementController extends Controller
             });
         }
 
-        $students = $query->paginate(10);
+        $students = $query->paginate(12)->withQueryString();
 
         return view('students.index', compact('students'));
     }

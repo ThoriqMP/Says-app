@@ -31,17 +31,17 @@
                     @foreach($report->probingActivities as $activity)
                         <div class="bg-white dark:bg-gray-800 rounded-[40px] overflow-hidden border border-gray-100 dark:border-gray-700 shadow-sm hover:shadow-xl transition-all duration-500 group">
                             @if($activity->image_path)
-                                <div class="relative h-96 overflow-hidden">
+                                <div class="relative h-64 sm:h-96 overflow-hidden">
                                     <img src="{{ asset('storage/' . $activity->image_path) }}" alt="{{ $activity->activity_name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700">
                                     <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                                 </div>
                             @endif
-                            <div class="p-10">
+                            <div class="p-6 sm:p-10">
                                 <div class="flex items-center gap-3 mb-4">
                                     <div class="h-2 w-10 bg-blue-600 rounded-full"></div>
-                                    <h4 class="text-2xl font-black text-gray-900 dark:text-white">{{ $activity->activity_name }}</h4>
+                                    <h4 class="text-xl sm:text-2xl font-black text-gray-900 dark:text-white">{{ $activity->activity_name }}</h4>
                                 </div>
-                                <p class="text-gray-600 dark:text-gray-400 text-lg leading-relaxed whitespace-pre-line font-medium">{{ $activity->description }}</p>
+                                <p class="text-gray-600 dark:text-gray-400 text-base sm:text-lg leading-relaxed whitespace-pre-line font-medium">{{ $activity->description }}</p>
                             </div>
                         </div>
                     @endforeach
@@ -52,29 +52,29 @@
                         <table class="w-full text-left">
                             <thead>
                                 <tr class="bg-gray-50/50 dark:bg-gray-900/50 border-b border-gray-100 dark:border-gray-700">
-                                    <th class="px-10 py-6 text-[10px] font-black text-gray-400 uppercase tracking-widest">Mata Pelajaran / Subjek</th>
-                                    <th class="px-10 py-6 text-[10px] font-black text-gray-400 uppercase tracking-widest text-center">Nilai Akhir</th>
-                                    <th class="px-10 py-6 text-[10px] font-black text-gray-400 uppercase tracking-widest">Catatan / Keterangan</th>
+                                    <th class="px-4 sm:px-10 py-4 sm:py-6 text-[10px] font-black text-gray-400 uppercase tracking-widest">Mata Pelajaran / Subjek</th>
+                                    <th class="px-4 sm:px-10 py-4 sm:py-6 text-[10px] font-black text-gray-400 uppercase tracking-widest text-center">Nilai Akhir</th>
+                                    <th class="px-4 sm:px-10 py-4 sm:py-6 text-[10px] font-black text-gray-400 uppercase tracking-widest">Catatan / Keterangan</th>
                                 </tr>
                             </thead>
                             <tbody class="divide-y divide-gray-50 dark:divide-gray-700">
                                 @foreach($report->grades as $grade)
                                     <tr class="hover:bg-blue-50/30 dark:hover:bg-blue-900/10 transition-colors">
-                                        <td class="px-10 py-8">
-                                            <div class="flex items-center gap-4">
-                                                <div class="h-10 w-10 bg-blue-50 dark:bg-blue-900/40 rounded-xl flex items-center justify-center text-blue-600 dark:text-blue-400 font-bold">
+                                        <td class="px-4 sm:px-10 py-6 sm:py-8">
+                                            <div class="flex items-center gap-3 sm:gap-4">
+                                                <div class="h-8 w-8 sm:h-10 sm:w-10 bg-blue-50 dark:bg-blue-900/40 rounded-lg sm:rounded-xl flex items-center justify-center text-blue-600 dark:text-blue-400 font-bold text-sm sm:text-base">
                                                     {{ substr($grade->subject->name, 0, 1) }}
                                                 </div>
-                                                <span class="text-lg font-black text-gray-900 dark:text-white">{{ $grade->subject->name }}</span>
+                                                <span class="text-base sm:text-lg font-black text-gray-900 dark:text-white">{{ $grade->subject->name }}</span>
                                             </div>
                                         </td>
-                                        <td class="px-10 py-8 text-center">
-                                            <div class="inline-flex items-center justify-center h-14 w-14 rounded-2xl bg-gray-900 dark:bg-gray-700 text-white font-black text-xl shadow-lg">
+                                        <td class="px-4 sm:px-10 py-6 sm:py-8 text-center">
+                                            <div class="inline-flex items-center justify-center h-10 w-10 sm:h-14 sm:w-14 rounded-xl sm:rounded-2xl bg-gray-900 dark:bg-gray-700 text-white font-black text-base sm:text-xl shadow-lg">
                                                 {{ $grade->score }}
                                             </div>
                                         </td>
-                                        <td class="px-10 py-8">
-                                            <p class="text-gray-500 dark:text-gray-400 font-medium italic">{{ $grade->description ?: '-' }}</p>
+                                        <td class="px-4 sm:px-10 py-6 sm:py-8">
+                                            <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 font-medium italic line-clamp-2 sm:line-clamp-none">{{ $grade->description ?: '-' }}</p>
                                         </td>
                                     </tr>
                                 @endforeach
