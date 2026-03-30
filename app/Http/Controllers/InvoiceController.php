@@ -204,7 +204,8 @@ class InvoiceController extends Controller
                 $service = $services->get($item['id_layanan']);
                 $deskripsiTambahan = $item['deskripsi_tambahan'] ?? null;
 
-                if ($service && stripos($service->nama_layanan, 'SPP') !== false) {
+                // Hanya isi default SPP jika deskripsi tambahan kosong
+                if (empty($deskripsiTambahan) && $service && stripos($service->nama_layanan, 'SPP') !== false) {
                     $deskripsiTambahan = 'SPP ('.$dueMonthName.' '.$dueYear.')';
                 }
 
@@ -315,7 +316,8 @@ class InvoiceController extends Controller
                 $service = $services->get($item['id_layanan']);
                 $deskripsiTambahan = $item['deskripsi_tambahan'] ?? null;
 
-                if ($service && stripos($service->nama_layanan, 'SPP') !== false) {
+                // Hanya isi default SPP jika deskripsi tambahan kosong
+                if (empty($deskripsiTambahan) && $service && stripos($service->nama_layanan, 'SPP') !== false) {
                     $deskripsiTambahan = 'SPP ('.$dueMonthName.' '.$dueYear.')';
                 }
 

@@ -176,7 +176,9 @@
                                             </td>
                                             <td class="px-6 py-4">
                                                 <input type="text" :name="`items[${index}][deskripsi_tambahan]`" x-model="item.deskripsi_tambahan"
-                                                       class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 focus:ring-2 focus:ring-opacity-50 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-base placeholder:text-gray-400 transition-all"
+                                                       @input="item.is_custom = true"
+                                                       :class="item.is_custom ? 'border-amber-400 focus:ring-amber-500 focus:border-amber-500' : 'border-gray-300 dark:border-gray-600'"
+                                                       class="w-full px-4 py-3 border rounded-lg focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-base placeholder:text-gray-400 transition-all"
                                                        placeholder="Deskripsi tambahan (opsional)">
                                             </td>
                                             <td class="px-6 py-4">
@@ -248,7 +250,7 @@ function invoiceEditForm(services, existingItems = [], currentStudentName = '') 
             jatuh_tempo: '{{ old("jatuh_tempo", $invoice->jatuh_tempo->format("Y-m-d")) }}',
             status: '{{ old("status", $invoice->status) }}',
         },
-        items: existingItems.length > 0 ? existingItems : [],
+        items: existingItems.length > 0 ? existingItems.map(item => ({...item, is_custom: false})) : [],
         grandTotal: 0,
         terbilang: '',
 
@@ -284,7 +286,8 @@ function invoiceEditForm(services, existingItems = [], currentStudentName = '') 
             this.$watch('form.jatuh_tempo', (value) => {
                 this.items.forEach((item, index) => {
                     const service = this.services.find(s => s.id == item.id_layanan);
-                    if (service && service.nama_layanan.toUpperCase().includes('SPP')) {
+                    // Only update if it's SPP and description is currently empty
+                    if (service && service.nama_layanan.toUpperCase().includes('SPP') && !item.deskripsi_tambahan) {
                         this.updateItemSPPDescription(index);
                     }
                 });
@@ -337,7 +340,8 @@ function invoiceEditForm(services, existingItems = [], currentStudentName = '') 
                 deskripsi_tambahan: '',
                 kuantitas: 1,
                 harga_satuan: 0,
-                total: 0
+                total: 0,
+                is_custom: false
             };
         },
         
@@ -362,9 +366,9 @@ function invoiceEditForm(services, existingItems = [], currentStudentName = '') 
                 this.calculateTotal(index);
             }
 
-            // Auto Description for SPP
+            // Auto Description for SPP - Only if currently empty
             const serviceName = selectedOption.text.trim();
-            if (serviceName.toUpperCase().includes('SPP')) {
+            if (serviceName.toUpperCase().includes('SPP') && !this.items[index].deskripsi_tambahan) {
                 this.updateItemSPPDescription(index);
             }
         },

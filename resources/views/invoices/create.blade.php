@@ -152,7 +152,9 @@
                                             </td>
                                             <td class="px-6 py-4">
                                                 <input type="text" :name="`items[${index}][deskripsi_tambahan]`" x-model="item.deskripsi_tambahan"
-                                                       class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-base placeholder:text-gray-400"
+                                                       @input="item.is_custom = true"
+                                                       :class="item.is_custom ? 'border-amber-400 focus:ring-amber-500 focus:border-amber-500' : 'border-gray-300 dark:border-gray-600'"
+                                                       class="w-full px-4 py-3 border rounded-lg focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-base placeholder:text-gray-400 transition-all"
                                                        placeholder="Deskripsi tambahan (opsional)">
                                             </td>
                                             <td class="px-6 py-4">
@@ -274,6 +276,16 @@ function invoiceForm(servicesData) {
                     this.form.jatuh_tempo = this.calculateDueDate(value);
                 }
             });
+
+            this.$watch('form.jatuh_tempo', (value) => {
+                this.items.forEach((item, index) => {
+                    const service = this.services.find(s => s.id == item.id_layanan);
+                    // Only update if it's SPP and description is currently empty
+                    if (service && service.nama_layanan.toUpperCase().includes('SPP') && !item.deskripsi_tambahan) {
+                        this.updateItemSPPDescription(index);
+                    }
+                });
+            });
         },
 
         performSearch() {
@@ -304,7 +316,8 @@ function invoiceForm(servicesData) {
                 deskripsi_tambahan: '',
                 kuantitas: 1,
                 harga_satuan: 0,
-                total: 0
+                total: 0,
+                is_custom: false
             });
         },
         
@@ -316,12 +329,32 @@ function invoiceForm(servicesData) {
         },
         
         updateHarga(index) {
-            const item = this.items[index];
-            const service = this.services.find(s => s.id == item.id_layanan);
+            const select = event.target;
+            const selectedOption = select.options[select.selectedIndex];
+            const harga = selectedOption.getAttribute('data-harga');
             
-            if (service) {
-                item.harga_satuan = parseFloat(service.harga_standar);
+            if (harga) {
+                this.items[index].harga_satuan = parseFloat(harga);
                 this.calculateTotal(index);
+            }
+
+            // Auto Description for SPP - Only if currently empty
+            const serviceName = selectedOption.text.trim();
+            if (serviceName.toUpperCase().includes('SPP') && !this.items[index].deskripsi_tambahan) {
+                this.updateItemSPPDescription(index);
+            }
+        },
+
+        updateItemSPPDescription(index) {
+            const jatuhTempo = new Date(this.form.jatuh_tempo);
+            if (!isNaN(jatuhTempo.getTime())) {
+                const months = [
+                    'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+                    'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+                ];
+                const monthName = months[jatuhTempo.getMonth()];
+                const year = jatuhTempo.getFullYear();
+                this.items[index].deskripsi_tambahan = `SPP ${monthName} ${year}`;
             }
         },
         
