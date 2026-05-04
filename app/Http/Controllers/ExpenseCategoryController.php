@@ -119,6 +119,21 @@ class ExpenseCategoryController extends Controller
             ['created_by' => Auth::id(), 'budget_limit' => null]
         );
 
+        // Parse date from header name
+        $headerDate = now()->toDateString();
+        $months = ['januari' => 'jan', 'februari' => 'feb', 'maret' => 'mar', 'april' => 'apr', 'mei' => 'may', 'juni' => 'jun', 'juli' => 'jul', 'agustus' => 'aug', 'september' => 'sep', 'oktober' => 'oct', 'november' => 'nov', 'desember' => 'dec'];
+        $headerEng = str_ireplace(array_keys($months), array_values($months), strtolower($categoryName));
+        
+        try {
+            if (preg_match('/(\d{1,2})\s+(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)/i', $headerEng, $matches)) {
+                $headerDate = \Carbon\Carbon::parse($matches[1] . ' ' . $matches[2] . ' ' . date('Y'))->toDateString();
+            } elseif (preg_match('/(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)\s+(\d{1,2})/i', $headerEng, $matches)) {
+                $headerDate = \Carbon\Carbon::parse($matches[2] . ' ' . $matches[1] . ' ' . date('Y'))->toDateString();
+            } elseif (preg_match('/(jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)/i', $headerEng, $matches)) {
+                $headerDate = \Carbon\Carbon::parse('1 ' . $matches[1] . ' ' . date('Y'))->toDateString();
+            }
+        } catch (\Exception $e) {}
+
         // 3. Process remaining blocks as expenses
         $expensesCount = 0;
         for ($i = 1; $i < count($blocks); $i++) {
@@ -139,6 +154,7 @@ class ExpenseCategoryController extends Controller
             $metadata = [];
             $jumlah = 0;
             $total = 0;
+            $date = $headerDate; // Default to header date
 
             for ($j = 1; $j < count($blockLines); $j++) {
                 $line = $blockLines[$j];
@@ -155,6 +171,19 @@ class ExpenseCategoryController extends Controller
                     $val = explode(':', $line)[1];
                     $val = preg_replace('/[^0-9]/', '', $val);
                     if (is_numeric($val)) $jumlah = (float)$val;
+                } elseif ((stripos($line, 'Tanggal') === 0 || stripos($line, 'Tgl') === 0) && strpos($line, ':') !== false) {
+                    $val = trim(explode(':', $line)[1]);
+                    // Translate indonesian months to english for Carbon parsing
+                    $months = ['januari' => 'jan', 'februari' => 'feb', 'maret' => 'mar', 'april' => 'apr', 'mei' => 'may', 'juni' => 'jun', 'juli' => 'jul', 'agustus' => 'aug', 'september' => 'sep', 'oktober' => 'oct', 'november' => 'nov', 'desember' => 'dec'];
+                    $valEng = str_ireplace(array_keys($months), array_values($months), $val);
+                    try {
+                        if (preg_match('/^\d{2}\/\d{2}\/\d{4}$/', $valEng)) {
+                            $date = \Carbon\Carbon::createFromFormat('d/m/Y', $valEng)->toDateString();
+                        } else {
+                            $date = \Carbon\Carbon::parse($valEng)->toDateString();
+                        }
+                    } catch (\Exception $e) {}
+                    // Skip adding to metadata so it doesn't clutter description
                 } elseif (strpos($line, ':') !== false) {
                     $metadata[] = trim($line);
                 } else {
@@ -174,7 +203,7 @@ class ExpenseCategoryController extends Controller
                     'expense_category_id' => $category->id,
                     'description' => $description,
                     'amount' => $amount,
-                    'date' => now()->toDateString(),
+                    'date' => $date,
                     'created_by' => Auth::id(),
                 ]);
                 $expensesCount++;
