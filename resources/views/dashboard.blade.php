@@ -86,7 +86,7 @@
                 </div>
 
                 <!-- Financial Cards -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
                     <!-- Realized Revenue -->
                     <div class="bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl p-6 text-white shadow-lg relative overflow-hidden group">
                         <div class="absolute right-0 top-0 opacity-10 transform translate-x-2 -translate-y-2 group-hover:scale-110 transition-transform duration-500">
@@ -94,10 +94,39 @@
                                 <path fill-rule="evenodd" d="M4 4a2 2 0 00-2 2v4a2 2 0 002 2V6h10a2 2 0 00-2-2H4zm2 6a2 2 0 012-2h8a2 2 0 012 2v4a2 2 0 01-2 2H8a2 2 0 01-2-2v-4zm6 4a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path>
                             </svg>
                         </div>
-                        <p class="text-green-100 font-medium mb-1">Pendapatan Diterima (Paid)</p>
-                        <h4 class="text-3xl font-bold">Rp {{ number_format($revenue, 0, ',', '.') }}</h4>
-                        <div class="mt-4 flex items-center text-sm text-green-100">
+                        <p class="text-green-100 font-medium text-sm mb-1 uppercase tracking-wider">Pendapatan Diterima</p>
+                        <h4 class="text-2xl lg:text-3xl font-bold truncate" title="Rp {{ number_format($revenue, 0, ',', '.') }}">Rp {{ number_format($revenue, 0, ',', '.') }}</h4>
+                        <div class="mt-4 flex items-center text-xs text-green-100">
                             <span class="bg-white/20 px-2 py-1 rounded-md">{{ $paidInvoices }} Invoice Lunas</span>
+                        </div>
+                    </div>
+
+                    <!-- Total Expenses -->
+                    <div class="bg-gradient-to-br from-rose-500 to-red-600 rounded-xl p-6 text-white shadow-lg relative overflow-hidden group">
+                        <div class="absolute right-0 top-0 opacity-10 transform translate-x-2 -translate-y-2 group-hover:scale-110 transition-transform duration-500">
+                            <svg class="w-32 h-32" fill="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <p class="text-red-100 font-medium text-sm mb-1 uppercase tracking-wider">Total Pengeluaran</p>
+                        <h4 class="text-2xl lg:text-3xl font-bold truncate" title="Rp {{ number_format($totalExpenses, 0, ',', '.') }}">Rp {{ number_format($totalExpenses, 0, ',', '.') }}</h4>
+                        <div class="mt-4 flex items-center text-xs text-red-100">
+                            <span class="bg-white/20 px-2 py-1 rounded-md cursor-pointer hover:bg-white/30 transition-colors" onclick="window.location='{{ route('expense-categories.index') }}'">Lihat Saluran Dana →</span>
+                        </div>
+                    </div>
+
+                    <!-- Net Cashflow -->
+                    @php $isPositive = $netCashflow >= 0; @endphp
+                    <div class="bg-gradient-to-br {{ $isPositive ? 'from-blue-500 to-indigo-600' : 'from-yellow-500 to-orange-600' }} rounded-xl p-6 text-white shadow-lg relative overflow-hidden group">
+                        <div class="absolute right-0 top-0 opacity-10 transform translate-x-2 -translate-y-2 group-hover:scale-110 transition-transform duration-500">
+                            <svg class="w-32 h-32" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M12 7a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0V8.414l-4.293 4.293a1 1 0 01-1.414 0L8 10.414l-4.293 4.293a1 1 0 01-1.414-1.414l5-5a1 1 0 011.414 0L11 10.586 14.586 7H12z" clip-rule="evenodd"></path>
+                            </svg>
+                        </div>
+                        <p class="text-white/80 font-medium text-sm mb-1 uppercase tracking-wider">Cashflow Bersih</p>
+                        <h4 class="text-2xl lg:text-3xl font-bold truncate" title="Rp {{ number_format($netCashflow, 0, ',', '.') }}">Rp {{ number_format($netCashflow, 0, ',', '.') }}</h4>
+                        <div class="mt-4 flex items-center text-xs text-white/80">
+                            <span class="bg-white/20 px-2 py-1 rounded-md">{{ $isPositive ? 'Surplus' : 'Defisit' }} Periode Ini</span>
                         </div>
                     </div>
 
@@ -108,27 +137,27 @@
                                 <path fill-rule="evenodd" d="M10 2a4 4 0 00-4 4v1H5a1 1 0 00-.994.89l-1 9A1 1 0 004 18h12a1 1 0 00.994-1.11l-1-9A1 1 0 0015 7h-1V6a4 4 0 00-4-4zm2 5V6a2 2 0 10-4 0v1h4zm-6 3a1 1 0 112 0 1 1 0 01-2 0zm7-1a1 1 0 100 2 1 1 0 000-2z" clip-rule="evenodd"></path>
                             </svg>
                         </div>
-                        <p class="text-gray-200 font-medium mb-1">Potensi Pendapatan (Unpaid)</p>
-                        <h4 class="text-3xl font-bold">Rp {{ number_format($potentialRevenue, 0, ',', '.') }}</h4>
-                        <div class="mt-4 flex items-center text-sm text-gray-300">
-                            <span class="bg-white/10 px-2 py-1 rounded-md">{{ $pendingInvoices + $overdueInvoices }} Invoice Belum Lunas</span>
+                        <p class="text-gray-200 font-medium text-sm mb-1 uppercase tracking-wider">Potensi Pendapatan</p>
+                        <h4 class="text-2xl lg:text-3xl font-bold truncate" title="Rp {{ number_format($potentialRevenue, 0, ',', '.') }}">Rp {{ number_format($potentialRevenue, 0, ',', '.') }}</h4>
+                        <div class="mt-4 flex items-center text-xs text-gray-300">
+                            <span class="bg-white/10 px-2 py-1 rounded-md">{{ $pendingInvoices + $overdueInvoices }} Inv. Belum Lunas</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- Charts -->
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    <!-- Line Chart: Revenue Trend -->
+                <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                    <!-- Line Chart: Cashflow Trend -->
                     <div class="lg:col-span-2 bg-gray-50 dark:bg-gray-700/30 rounded-xl p-4 border border-gray-100 dark:border-gray-600">
-                        <h4 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4">Tren Pendapatan Tahun {{ $year }}</h4>
+                        <h4 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4">Tren Cashflow Tahun {{ $year }}</h4>
                         <div class="h-64">
                             <canvas id="revenueChart"></canvas>
                         </div>
                     </div>
 
                     <!-- Doughnut Chart: Status -->
-                    <div class="bg-gray-50 dark:bg-gray-700/30 rounded-xl p-4 border border-gray-100 dark:border-gray-600">
-                        <h4 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4">Distribusi Status Invoice</h4>
+                    <div class="lg:col-span-1 bg-gray-50 dark:bg-gray-700/30 rounded-xl p-4 border border-gray-100 dark:border-gray-600">
+                        <h4 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4">Status Invoice</h4>
                         <div class="h-48 flex justify-center">
                             <canvas id="statusChart"></canvas>
                         </div>
@@ -137,6 +166,35 @@
                             <div class="flex items-center"><span class="w-3 h-3 bg-blue-500 rounded-full mr-2"></span> Sent: {{ $statusChart['sent'] }}</div>
                             <div class="flex items-center"><span class="w-3 h-3 bg-red-500 rounded-full mr-2"></span> Overdue: {{ $statusChart['overdue'] }}</div>
                             <div class="flex items-center"><span class="w-3 h-3 bg-gray-400 rounded-full mr-2"></span> Draft: {{ $statusChart['draft'] }}</div>
+                        </div>
+                    </div>
+
+                    <!-- Top Expenses List -->
+                    <div class="lg:col-span-1 bg-gray-50 dark:bg-gray-700/30 rounded-xl p-4 border border-gray-100 dark:border-gray-600 flex flex-col">
+                        <h4 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4 flex justify-between items-center">
+                            Top Pengeluaran
+                            <a href="{{ route('expense-categories.index') }}" class="text-xs text-blue-600 hover:underline">Lihat Semua</a>
+                        </h4>
+                        <div class="flex-1 overflow-y-auto pr-2 space-y-3">
+                            @forelse($expensesByCategory as $ec)
+                                <div class="flex flex-col border-b border-gray-200 dark:border-gray-600/50 pb-2 last:border-0">
+                                    <div class="flex justify-between items-center mb-1">
+                                        <span class="text-xs font-bold text-gray-800 dark:text-gray-200 truncate pr-2">{{ $ec->category->name ?? 'Tanpa Kategori' }}</span>
+                                        <span class="text-xs font-black text-rose-600 dark:text-rose-400 whitespace-nowrap">Rp {{ number_format($ec->total, 0, ',', '.') }}</span>
+                                    </div>
+                                    @if($ec->category && $ec->category->budget_limit)
+                                        @php $pct = min(100, ($ec->total / $ec->category->budget_limit) * 100); @endphp
+                                        <div class="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-1.5 mt-1">
+                                            <div class="bg-{{ $pct >= 100 ? 'red' : 'rose' }}-500 h-1.5 rounded-full" style="width: {{ $pct }}%"></div>
+                                        </div>
+                                    @endif
+                                </div>
+                            @empty
+                                <div class="h-full flex flex-col items-center justify-center text-gray-400 mt-8">
+                                    <svg class="w-8 h-8 mb-2 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
+                                    <span class="text-xs text-center">Belum ada pengeluaran periode ini</span>
+                                </div>
+                            @endforelse
                         </div>
                     </div>
                 </div>
@@ -197,15 +255,26 @@
             type: 'line',
             data: {
                 labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'],
-                datasets: [{
-                    label: 'Pendapatan (Rp)',
-                    data: @json($revenueChart),
-                    borderColor: '#10B981', // green-500
-                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
-                    borderWidth: 2,
-                    fill: true,
-                    tension: 0.4
-                }]
+                datasets: [
+                    {
+                        label: 'Pemasukan (Rp)',
+                        data: @json($revenueChart),
+                        borderColor: '#10B981', // green-500
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4
+                    },
+                    {
+                        label: 'Pengeluaran (Rp)',
+                        data: @json($expenseChart),
+                        borderColor: '#F43F5E', // rose-500
+                        backgroundColor: 'rgba(244, 63, 94, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4
+                    }
+                ]
             },
             options: {
                 responsive: true,

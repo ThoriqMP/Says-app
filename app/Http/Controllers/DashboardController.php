@@ -38,6 +38,14 @@ class DashboardController extends Controller
         // Potential Revenue (Sent + Overdue + Draft)
         $potentialRevenue = (clone $invoiceQuery)->whereIn('status', ['sent', 'overdue'])->sum('grand_total');
 
+        // Expense Stats
+        $expenseQuery = \App\Models\Expense::query()->whereYear('date', $year);
+        if ($month) {
+            $expenseQuery->whereMonth('date', $month);
+        }
+        $totalExpenses = (clone $expenseQuery)->sum('amount');
+        $netCashflow = $revenue - $totalExpenses;
+
         // Chart Data 1: Monthly Revenue Trend (For the selected Year)
         // Ignores 'month' filter to show full year trend
         $monthlyRevenueData = Invoice::whereYear('jatuh_tempo', $year)
@@ -56,6 +64,21 @@ class DashboardController extends Controller
             $revenueChart[] = $monthlyRevenueData[$i] ?? 0;
         }
 
+        // Chart Data: Monthly Expense Trend
+        $monthlyExpenseData = \App\Models\Expense::whereYear('date', $year)
+            ->select(
+                DB::raw('MONTH(date) as month'),
+                DB::raw('SUM(amount) as total')
+            )
+            ->groupBy('month')
+            ->pluck('total', 'month')
+            ->toArray();
+
+        $expenseChart = [];
+        for ($i = 1; $i <= 12; $i++) {
+            $expenseChart[] = $monthlyExpenseData[$i] ?? 0;
+        }
+
         // Chart Data 2: Status Distribution (For the selected Period)
         $statusDistribution = (clone $invoiceQuery)
             ->select('status', DB::raw('count(*) as count'))
@@ -70,11 +93,20 @@ class DashboardController extends Controller
             'draft' => $statusDistribution['draft'] ?? 0,
         ];
 
+        // Expenses By Category (Top 5)
+        $expensesByCategory = (clone $expenseQuery)
+            ->with('category')
+            ->select('expense_category_id', DB::raw('SUM(amount) as total'))
+            ->groupBy('expense_category_id')
+            ->orderByDesc('total')
+            ->take(5)
+            ->get();
+
         return view('dashboard', compact(
             'totalInvoices', 'totalStudents', 'totalServices',
             'pendingInvoices', 'paidInvoices', 'overdueInvoices', 'draftInvoices',
-            'revenue', 'potentialRevenue',
-            'revenueChart', 'statusChart',
+            'revenue', 'potentialRevenue', 'totalExpenses', 'netCashflow',
+            'revenueChart', 'expenseChart', 'statusChart', 'expensesByCategory',
             'year', 'month'
         ));
     }

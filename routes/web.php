@@ -123,6 +123,7 @@ Route::middleware(['auth'])->group(function () {
     });
 
     // Expense Management Routes
+    Route::post('expense-categories/parse', [\App\Http\Controllers\ExpenseCategoryController::class, 'parseText'])->name('expense-categories.parse');
     Route::resource('expense-categories', \App\Http\Controllers\ExpenseCategoryController::class);
     Route::post('expense-categories/{expense_category}/expenses', [\App\Http\Controllers\ExpenseController::class, 'store'])->name('expense-categories.expenses.store');
     Route::delete('expense-categories/{expense_category}/expenses/{expense}', [\App\Http\Controllers\ExpenseController::class, 'destroy'])->name('expense-categories.expenses.destroy');

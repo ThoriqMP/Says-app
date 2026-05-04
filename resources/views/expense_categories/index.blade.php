@@ -3,7 +3,7 @@
 @section('title', 'Saluran Pengeluaran')
 
 @section('content')
-<div class="py-12" x-data="{ showExpenseModal: false, selectedCategory: null, categoryName: '' }">
+<div class="py-12" x-data="{ showExpenseModal: false, showParseModal: false, selectedCategory: null, categoryName: '' }">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
             <div class="p-6 text-gray-900 dark:text-gray-100">
@@ -12,10 +12,16 @@
                         <h2 class="text-2xl font-black text-gray-900 dark:text-white tracking-tight">Saluran Dana</h2>
                         <p class="text-sm font-medium text-gray-500 mt-1">Kelola kategori pengeluaran dan pantau anggaran.</p>
                     </div>
-                    <a href="{{ route('expense-categories.create') }}" class="flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-xl font-black text-xs uppercase tracking-widest hover:bg-blue-700 transition-all shadow-lg shadow-blue-600/30 active:scale-95">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
-                        Buat Saluran
-                    </a>
+                    <div class="flex flex-col sm:flex-row gap-3">
+                        <button @click="showParseModal = true" class="flex justify-center items-center gap-2 px-6 py-3 bg-indigo-600 text-white rounded-xl font-black text-xs uppercase tracking-widest hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-600/30 active:scale-95">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
+                            Catat via Teks
+                        </button>
+                        <a href="{{ route('expense-categories.create') }}" class="flex justify-center items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-xl font-black text-xs uppercase tracking-widest hover:bg-blue-700 transition-all shadow-lg shadow-blue-600/30 active:scale-95">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                            Buat Saluran
+                        </a>
+                    </div>
                 </div>
 
                 @if (session('success'))
@@ -170,6 +176,69 @@
                     <div class="flex gap-3 pt-2 border-t border-gray-100 dark:border-gray-700 mt-6">
                         <button type="button" @click="showExpenseModal = false" class="flex-1 px-4 py-3 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 font-bold text-sm rounded-xl hover:bg-gray-200 dark:hover:bg-gray-600 transition active:scale-95">Batal</button>
                         <button type="submit" class="flex-1 px-4 py-3 bg-blue-600 text-white font-bold text-sm rounded-xl hover:bg-blue-700 shadow-lg shadow-blue-600/30 transition active:scale-95">Simpan Data</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Parse Chat Modal -->
+    <div x-show="showParseModal" 
+         class="fixed inset-0 z-50 overflow-y-auto" 
+         style="display: none;"
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0"
+         x-transition:enter-end="opacity-100"
+         x-transition:leave="transition ease-in duration-200"
+         x-transition:leave-start="opacity-100"
+         x-transition:leave-end="opacity-0">
+        <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:p-0">
+            <div class="fixed inset-0 transition-opacity bg-gray-900/75 backdrop-blur-sm" @click="showParseModal = false"></div>
+
+            <div class="relative inline-block w-full max-w-lg p-6 overflow-hidden text-left align-middle transition-all transform bg-white dark:bg-gray-800 shadow-xl rounded-3xl"
+                 x-show="showParseModal"
+                 x-transition:enter="transition ease-out duration-300"
+                 x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                 x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
+                 x-transition:leave="transition ease-in duration-200"
+                 x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
+                 x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95">
+                
+                <div class="flex justify-between items-center mb-5">
+                    <h3 class="text-xl font-black text-gray-900 dark:text-white flex items-center gap-2">
+                        <svg class="w-6 h-6 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                        Catat via Teks
+                    </h3>
+                    <button @click="showParseModal = false" class="text-gray-400 hover:text-gray-500 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 p-2 rounded-full transition-all">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
+                </div>
+                
+                <div class="mb-4 text-sm text-gray-600 dark:text-gray-400">
+                    Tempel teks dari pesan (misal: WhatsApp) yang berisi daftar pengeluaran. Sistem akan mengekstrak data secara otomatis.
+                </div>
+
+                <form action="{{ route('expense-categories.parse') }}" method="POST">
+                    @csrf
+                    <div class="mb-6">
+                        <label class="block text-[10px] font-black text-gray-700 dark:text-gray-300 uppercase tracking-widest mb-2 ml-1">Teks Laporan</label>
+                        <textarea name="chat_text" rows="10" class="w-full rounded-2xl border-gray-200 dark:border-gray-700 dark:bg-gray-900 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 px-4 py-3 text-sm font-medium text-gray-900 dark:text-white font-mono" required placeholder="PEMBAYARAN TAGIHAN BULAN MEI
+
+1️⃣PDAM✅
+No pengguna : 21261083
+Jumlah : 43.800
+Total : 46.300
+
+2️⃣ Iyuran Bulanan✅
+..."></textarea>
+                    </div>
+
+                    <div class="flex gap-3 pt-2 border-t border-gray-100 dark:border-gray-700 mt-6">
+                        <button type="button" @click="showParseModal = false" class="flex-1 px-4 py-3 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 font-bold text-sm rounded-xl hover:bg-gray-200 dark:hover:bg-gray-600 transition active:scale-95">Batal</button>
+                        <button type="submit" class="flex-1 px-4 py-3 bg-indigo-600 text-white font-bold text-sm rounded-xl hover:bg-indigo-700 shadow-lg shadow-indigo-600/30 transition active:scale-95 flex justify-center items-center gap-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                            Catat Otomatis
+                        </button>
                     </div>
                 </form>
             </div>
