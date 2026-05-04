@@ -12,6 +12,7 @@ class AdminManagementController extends Controller
     private $permissions = [
         'dashboard' => 'Dashboard',
         'invoices.index' => 'Invoice',
+        'expense-categories.index' => 'Saluran Dana',
         'reports.manage' => 'Manajemen Raport',
         'assessments.index' => 'Personal Mapping',
         'psychological-assessments.index' => 'Asesmen Psikologis',
