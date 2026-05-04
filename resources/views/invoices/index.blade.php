@@ -124,15 +124,17 @@
                 <!-- Cards Container -->
                 <div :class="viewLayout === 'grid' ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6' : 'flex flex-col gap-4'">
                     @forelse($invoices as $invoice)
-                        <div :class="viewLayout === 'grid' ? 'flex flex-col' : 'flex flex-col md:flex-row md:items-center'" class="bg-white dark:bg-gray-800 rounded-[24px] border border-gray-100 dark:border-gray-700 p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative overflow-hidden group">
+                        <div :class="viewLayout === 'grid' ? 'flex flex-col' : 'flex flex-col md:flex-row md:items-center'" class="bg-white dark:bg-gray-800 rounded-[24px] border border-gray-100 dark:border-gray-700 p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative group">
                             <!-- Status Indicator -->
-                            <div class="absolute top-0 right-0 w-32 h-32 -mr-16 -mt-16 opacity-10 group-hover:opacity-20 transition-opacity rotate-45"
-                                :class="{
-                                    'bg-green-500': '{{ $invoice->status }}' == 'paid',
-                                    'bg-blue-500': '{{ $invoice->status }}' == 'sent',
-                                    'bg-red-500': '{{ $invoice->status }}' == 'overdue' || '{{ $invoice->status }}' == 'unpaid',
-                                    'bg-gray-500': '{{ $invoice->status }}' == 'draft'
-                                }">
+                            <div class="absolute inset-0 overflow-hidden rounded-[24px] pointer-events-none">
+                                <div class="absolute top-0 right-0 w-32 h-32 -mr-16 -mt-16 opacity-10 group-hover:opacity-20 transition-opacity rotate-45"
+                                    :class="{
+                                        'bg-green-500': '{{ $invoice->status }}' == 'paid',
+                                        'bg-blue-500': '{{ $invoice->status }}' == 'sent',
+                                        'bg-red-500': '{{ $invoice->status }}' == 'overdue' || '{{ $invoice->status }}' == 'unpaid',
+                                        'bg-gray-500': '{{ $invoice->status }}' == 'draft'
+                                    }">
+                                </div>
                             </div>
 
                             <div class="relative z-10 flex flex-col md:flex-row flex-1 h-full gap-4 md:gap-6">
@@ -151,16 +153,16 @@
                                     </div>
                                     
                                     <div class="relative" x-data="{ open: false, status: '{{ $invoice->status }}', updating: false }">
-                                        <button @click="open = !open" class="px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border flex items-center gap-1 transition-all"
+                                        <button @click="open = !open" class="px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border flex items-center justify-between gap-2 transition-all w-full max-w-[150px] sm:max-w-[200px]"
                                             :class="{
                                                 'bg-green-50 text-green-700 border-green-200': status === 'paid',
                                                 'bg-blue-50 text-blue-700 border-blue-200': status === 'sent',
                                                 'bg-red-50 text-red-700 border-red-200': status === 'overdue' || status === 'unpaid',
                                                 'bg-gray-50 text-gray-700 border-gray-200': !['paid','sent','overdue','unpaid'].includes(status),
                                                 'opacity-50 cursor-not-allowed': updating
-                                            }" :disabled="updating">
-                                            <span x-text="status"></span>
-                                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                            }" :disabled="updating" :title="status">
+                                            <span class="truncate text-left flex-1" x-text="status"></span>
+                                            <svg class="w-3 h-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                                         </button>
                                         <div x-show="open" @click.away="open = false" style="display: none;" class="absolute z-50 right-0 mt-2 w-32 bg-white dark:bg-gray-800 rounded-md shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
                                             <template x-for="s in ['draft', 'sent', 'paid', 'unpaid', 'overdue']">
