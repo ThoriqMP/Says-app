@@ -5,7 +5,7 @@
 @section('content')
 <div class="py-12" x-data="{ showPreviewModal: false, previewUrl: '', viewLayout: localStorage.getItem('invoiceViewLayout') || 'grid' }" x-init="$watch('viewLayout', val => localStorage.setItem('invoiceViewLayout', val))">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+        <div class="bg-white dark:bg-gray-800 shadow-sm sm:rounded-lg">
             <div class="p-6 text-gray-900 dark:text-gray-100">
                 <div class="flex flex-col gap-4 mb-6">
                     <div class="flex flex-col md:flex-row justify-between items-center gap-4">
@@ -124,7 +124,12 @@
                 <!-- Cards Container -->
                 <div :class="viewLayout === 'grid' ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6' : 'flex flex-col gap-4'">
                     @forelse($invoices as $invoice)
-                        <div :class="viewLayout === 'grid' ? 'flex flex-col' : 'flex flex-col md:flex-row md:items-center'" class="bg-white dark:bg-gray-800 rounded-[24px] border border-gray-100 dark:border-gray-700 p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative group">
+                        <div x-data="{ open: false, status: '{{ $invoice->status }}', updating: false }" 
+                             :class="[
+                                viewLayout === 'grid' ? 'flex flex-col' : 'flex flex-col md:flex-row md:items-center',
+                                open ? 'z-50' : 'z-0'
+                             ]" 
+                             class="bg-white dark:bg-gray-800 rounded-[24px] border border-gray-100 dark:border-gray-700 p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative group">
                             <!-- Status Indicator -->
                             <div class="absolute inset-0 overflow-hidden rounded-[24px] pointer-events-none">
                                 <div class="absolute top-0 right-0 w-32 h-32 -mr-16 -mt-16 opacity-10 group-hover:opacity-20 transition-opacity rotate-45"
@@ -137,8 +142,8 @@
                                 </div>
                             </div>
 
-                            <div class="relative z-10 flex flex-col md:flex-row flex-1 h-full gap-4 md:gap-6">
-                                <div class="flex-1 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                            <div class="relative z-10 flex flex-1 h-full gap-4 md:gap-6" :class="viewLayout === 'grid' ? 'flex-col' : 'flex-col lg:flex-row lg:items-center'">
+                                <div class="flex-1 flex justify-between gap-4" :class="viewLayout === 'grid' ? 'flex-row items-start' : 'flex-col sm:flex-row sm:items-center'">
                                     <div class="min-w-0">
                                         <div class="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-1">
                                             {{ $invoice->no_invoice }}
@@ -152,7 +157,7 @@
                                         </div>
                                     </div>
                                     
-                                    <div class="relative" x-data="{ open: false, status: '{{ $invoice->status }}', updating: false }">
+                                    <div class="relative">
                                         <button @click="open = !open" class="px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border flex items-center justify-between gap-2 transition-all w-full max-w-[150px] sm:max-w-[200px]"
                                             :class="{
                                                 'bg-green-50 text-green-700 border-green-200': status === 'paid',
@@ -186,7 +191,7 @@
                                     </div>
                                 </div>
 
-                                <div class="grid grid-cols-2 gap-4" :class="viewLayout === 'grid' ? 'mb-8' : 'md:w-64 mb-0'">
+                                <div class="grid grid-cols-2 gap-4 flex-shrink-0" :class="viewLayout === 'grid' ? 'mb-8' : 'lg:w-64 mb-0'">
                                     <div class="p-4 bg-gray-50 dark:bg-gray-900/50 rounded-2xl border border-gray-100 dark:border-gray-800 flex flex-col justify-center">
                                         <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Tanggal</p>
                                         <p class="text-sm font-black text-gray-900 dark:text-white">{{ $invoice->tanggal_invoice->format('d M Y') }}</p>
@@ -198,7 +203,7 @@
                                 </div>
 
                                 <div class="mt-auto flex items-center justify-between pt-6 border-t border-gray-50 dark:border-gray-700"
-                                     :class="viewLayout === 'list' ? 'md:pt-0 md:border-t-0 md:ml-4' : ''">
+                                     :class="viewLayout === 'list' ? 'lg:pt-0 lg:border-t-0 lg:ml-4' : ''">
                                     <div class="flex gap-2">
                                         <a href="{{ route('invoices.show', $invoice) }}" 
                                            class="p-3 bg-gray-100 dark:bg-gray-700 text-gray-500 hover:bg-blue-600 hover:text-white rounded-xl transition-all active:scale-90" title="Detail">
