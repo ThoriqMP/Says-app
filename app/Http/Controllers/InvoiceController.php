@@ -435,4 +435,25 @@ class InvoiceController extends Controller
 
         return $months[$month] ?? '';
     }
+
+    /**
+     * Update payment status quickly via AJAX
+     */
+    public function updateStatus(Request $request, Invoice $invoice)
+    {
+        $validator = Validator::make($request->all(), [
+            'status' => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['success' => false, 'message' => 'Status tidak valid.'], 422);
+        }
+
+        try {
+            $invoice->update(['status' => $request->status]);
+            return response()->json(['success' => true, 'message' => 'Status berhasil diubah.']);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => 'Gagal mengubah status.'], 500);
+        }
+    }
 }

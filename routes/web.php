@@ -54,6 +54,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/invoices/{invoice}', [InvoiceController::class, 'show'])->name('invoices.show');
         Route::get('/invoices/{invoice}/edit', [InvoiceController::class, 'edit'])->name('invoices.edit');
         Route::put('/invoices/{invoice}', [InvoiceController::class, 'update'])->name('invoices.update');
+        Route::patch('/invoices/{invoice}/status', [InvoiceController::class, 'updateStatus'])->name('invoices.update-status');
         Route::delete('/invoices/{invoice}', [InvoiceController::class, 'destroy'])->name('invoices.destroy');
         Route::get('/invoices/{invoice}/pdf', [InvoiceController::class, 'downloadPdf'])->name('invoices.pdf');
         Route::get('/invoices/{invoice}/preview', [InvoiceController::class, 'previewPdf'])->name('invoices.preview');
@@ -120,6 +121,11 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/{assessment}', [\App\Http\Controllers\PsychologicalAssessment\PsychologicalAssessmentController::class, 'destroy'])->name('destroy');
         Route::get('/{assessment}/pdf', [\App\Http\Controllers\PsychologicalAssessment\PsychologicalAssessmentController::class, 'pdf'])->name('pdf');
     });
+
+    // Expense Management Routes
+    Route::resource('expense-categories', \App\Http\Controllers\ExpenseCategoryController::class);
+    Route::post('expense-categories/{expense_category}/expenses', [\App\Http\Controllers\ExpenseController::class, 'store'])->name('expense-categories.expenses.store');
+    Route::delete('expense-categories/{expense_category}/expenses/{expense}', [\App\Http\Controllers\ExpenseController::class, 'destroy'])->name('expense-categories.expenses.destroy');
 
     // Family Mapping Routes
     Route::middleware('permission:family-mapping.index')->group(function () {

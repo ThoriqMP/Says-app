@@ -3,7 +3,7 @@
 @section('title', 'Daftar Invoice')
 
 @section('content')
-<div class="py-12" x-data="{ showPreviewModal: false, previewUrl: '' }">
+<div class="py-12" x-data="{ showPreviewModal: false, previewUrl: '', viewLayout: localStorage.getItem('invoiceViewLayout') || 'grid' }" x-init="$watch('viewLayout', val => localStorage.setItem('invoiceViewLayout', val))">
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
             <div class="p-6 text-gray-900 dark:text-gray-100">
@@ -109,22 +109,35 @@
                     </div>
                 @endif
 
-                <!-- Grid Cards -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Layout Toggle -->
+                <div class="flex justify-end mb-4">
+                    <div class="bg-gray-100 dark:bg-gray-700 p-1 rounded-lg flex gap-1">
+                        <button @click="viewLayout = 'grid'" :class="viewLayout === 'grid' ? 'bg-white dark:bg-gray-600 shadow-sm text-blue-600 dark:text-blue-400' : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'" class="p-2 rounded-md transition">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+                        </button>
+                        <button @click="viewLayout = 'list'" :class="viewLayout === 'list' ? 'bg-white dark:bg-gray-600 shadow-sm text-blue-600 dark:text-blue-400' : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'" class="p-2 rounded-md transition">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Cards Container -->
+                <div :class="viewLayout === 'grid' ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6' : 'flex flex-col gap-4'">
                     @forelse($invoices as $invoice)
-                        <div class="bg-white dark:bg-gray-800 rounded-[24px] border border-gray-100 dark:border-gray-700 p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col relative overflow-hidden group">
+                        <div :class="viewLayout === 'grid' ? 'flex flex-col' : 'flex flex-col md:flex-row md:items-center'" class="bg-white dark:bg-gray-800 rounded-[24px] border border-gray-100 dark:border-gray-700 p-6 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative overflow-hidden group">
                             <!-- Status Indicator -->
-                            <div class="absolute top-0 right-0 w-32 h-32 -mr-16 -mt-16 opacity-10 group-hover:opacity-20 transition-opacity rotate-45
-                                @if($invoice->status == 'paid') bg-green-500
-                                @elseif($invoice->status == 'sent') bg-blue-500
-                                @elseif($invoice->status == 'overdue') bg-red-500
-                                @else bg-gray-500
-                                @endif">
+                            <div class="absolute top-0 right-0 w-32 h-32 -mr-16 -mt-16 opacity-10 group-hover:opacity-20 transition-opacity rotate-45"
+                                :class="{
+                                    'bg-green-500': '{{ $invoice->status }}' == 'paid',
+                                    'bg-blue-500': '{{ $invoice->status }}' == 'sent',
+                                    'bg-red-500': '{{ $invoice->status }}' == 'overdue' || '{{ $invoice->status }}' == 'unpaid',
+                                    'bg-gray-500': '{{ $invoice->status }}' == 'draft'
+                                }">
                             </div>
 
-                            <div class="relative z-10 flex flex-col h-full">
-                                <div class="flex justify-between items-start mb-6">
-                                    <div class="min-w-0 flex-1">
+                            <div class="relative z-10 flex flex-col md:flex-row flex-1 h-full gap-4 md:gap-6">
+                                <div class="flex-1 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                                    <div class="min-w-0">
                                         <div class="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-1">
                                             {{ $invoice->no_invoice }}
                                         </div>
@@ -136,28 +149,54 @@
                                             {{ $invoice->siswa->nama_orang_tua }}
                                         </div>
                                     </div>
-                                    <span class="px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border
-                                        @if($invoice->status == 'paid') bg-green-50 text-green-700 border-green-200
-                                        @elseif($invoice->status == 'sent') bg-blue-50 text-blue-700 border-blue-200
-                                        @elseif($invoice->status == 'overdue') bg-red-50 text-red-700 border-red-200
-                                        @else bg-gray-50 text-gray-700 border-gray-200
-                                        @endif">
-                                        {{ $invoice->status }}
-                                    </span>
+                                    
+                                    <div class="relative" x-data="{ open: false, status: '{{ $invoice->status }}', updating: false }">
+                                        <button @click="open = !open" class="px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border flex items-center gap-1 transition-all"
+                                            :class="{
+                                                'bg-green-50 text-green-700 border-green-200': status === 'paid',
+                                                'bg-blue-50 text-blue-700 border-blue-200': status === 'sent',
+                                                'bg-red-50 text-red-700 border-red-200': status === 'overdue' || status === 'unpaid',
+                                                'bg-gray-50 text-gray-700 border-gray-200': !['paid','sent','overdue','unpaid'].includes(status),
+                                                'opacity-50 cursor-not-allowed': updating
+                                            }" :disabled="updating">
+                                            <span x-text="status"></span>
+                                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                        </button>
+                                        <div x-show="open" @click.away="open = false" style="display: none;" class="absolute z-50 right-0 mt-2 w-32 bg-white dark:bg-gray-800 rounded-md shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+                                            <template x-for="s in ['draft', 'sent', 'paid', 'unpaid', 'overdue']">
+                                                <button @click="
+                                                    updating = true; open = false;
+                                                    fetch('{{ route('invoices.update-status', $invoice) }}', {
+                                                        method: 'PATCH',
+                                                        headers: {
+                                                            'Content-Type': 'application/json',
+                                                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                                            'Accept': 'application/json'
+                                                        },
+                                                        body: JSON.stringify({ status: s })
+                                                    }).then(res => res.json()).then(data => {
+                                                        if(data.success) { status = s; }
+                                                        updating = false;
+                                                    }).catch(() => { updating = false; });
+                                                " class="block w-full text-left px-4 py-2 text-xs uppercase font-bold text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700" x-text="s"></button>
+                                            </template>
+                                        </div>
+                                    </div>
                                 </div>
 
-                                <div class="grid grid-cols-2 gap-4 mb-8">
-                                    <div class="p-4 bg-gray-50 dark:bg-gray-900/50 rounded-2xl border border-gray-100 dark:border-gray-800">
+                                <div class="grid grid-cols-2 gap-4" :class="viewLayout === 'grid' ? 'mb-8' : 'md:w-64 mb-0'">
+                                    <div class="p-4 bg-gray-50 dark:bg-gray-900/50 rounded-2xl border border-gray-100 dark:border-gray-800 flex flex-col justify-center">
                                         <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Tanggal</p>
                                         <p class="text-sm font-black text-gray-900 dark:text-white">{{ $invoice->tanggal_invoice->format('d M Y') }}</p>
                                     </div>
-                                    <div class="p-4 bg-blue-50/50 dark:bg-blue-900/20 rounded-2xl border border-blue-100/50 dark:border-blue-800/50">
-                                        <p class="text-[10px] font-black text-blue-400 uppercase tracking-widest mb-1">Total Tagihan</p>
+                                    <div class="p-4 bg-blue-50/50 dark:bg-blue-900/20 rounded-2xl border border-blue-100/50 dark:border-blue-800/50 flex flex-col justify-center">
+                                        <p class="text-[10px] font-black text-blue-400 uppercase tracking-widest mb-1">Tagihan</p>
                                         <p class="text-sm font-black text-blue-600 dark:text-blue-400">Rp {{ number_format($invoice->grand_total, 0, ',', '.') }}</p>
                                     </div>
                                 </div>
 
-                                <div class="mt-auto flex items-center justify-between pt-6 border-t border-gray-50 dark:border-gray-700">
+                                <div class="mt-auto flex items-center justify-between pt-6 border-t border-gray-50 dark:border-gray-700"
+                                     :class="viewLayout === 'list' ? 'md:pt-0 md:border-t-0 md:ml-4' : ''">
                                     <div class="flex gap-2">
                                         <a href="{{ route('invoices.show', $invoice) }}" 
                                            class="p-3 bg-gray-100 dark:bg-gray-700 text-gray-500 hover:bg-blue-600 hover:text-white rounded-xl transition-all active:scale-90" title="Detail">
