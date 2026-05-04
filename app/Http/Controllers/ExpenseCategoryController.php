@@ -11,9 +11,29 @@ class ExpenseCategoryController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $categories = ExpenseCategory::with('creator')->withSum('expenses', 'amount')->paginate(10);
+        $query = ExpenseCategory::with('creator')->withSum('expenses', 'amount');
+        
+        if ($request->filled('search')) {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
+
+        if ($request->filled('sort')) {
+            if ($request->sort === 'terbesar') {
+                $query->orderBy('expenses_sum_amount', 'desc');
+            } elseif ($request->sort === 'terkecil') {
+                $query->orderBy('expenses_sum_amount', 'asc');
+            } elseif ($request->sort === 'terlama') {
+                $query->orderBy('created_at', 'asc');
+            } else {
+                $query->latest();
+            }
+        } else {
+            $query->latest();
+        }
+
+        $categories = $query->paginate(12)->withQueryString();
         return view('expense_categories.index', compact('categories'));
     }
 
@@ -47,11 +67,46 @@ class ExpenseCategoryController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(ExpenseCategory $expenseCategory)
+    public function show(Request $request, ExpenseCategory $expenseCategory)
     {
-        $expenseCategory->load(['expenses.creator', 'creator']);
+        $expenseCategory->load('creator');
+        
+        // Total global amount (unfiltered)
         $totalPengeluaran = $expenseCategory->expenses()->sum('amount');
-        return view('expense_categories.show', compact('expenseCategory', 'totalPengeluaran'));
+
+        // Filtered expenses query
+        $query = $expenseCategory->expenses()->with('creator');
+
+        if ($request->filled('search')) {
+            $query->where('description', 'like', '%' . $request->search . '%');
+        }
+
+        if ($request->filled('start_date')) {
+            $query->whereDate('date', '>=', $request->start_date);
+        }
+
+        if ($request->filled('end_date')) {
+            $query->whereDate('date', '<=', $request->end_date);
+        }
+
+        // Sort
+        if ($request->filled('sort')) {
+            if ($request->sort === 'amount_desc') {
+                $query->orderBy('amount', 'desc');
+            } elseif ($request->sort === 'amount_asc') {
+                $query->orderBy('amount', 'asc');
+            } elseif ($request->sort === 'date_asc') {
+                $query->orderBy('date', 'asc');
+            } else {
+                $query->orderBy('date', 'desc')->latest();
+            }
+        } else {
+            $query->orderBy('date', 'desc')->latest();
+        }
+
+        $expenses = $query->paginate(15)->withQueryString();
+
+        return view('expense_categories.show', compact('expenseCategory', 'totalPengeluaran', 'expenses'));
     }
 
     /**

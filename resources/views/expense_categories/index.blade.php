@@ -24,6 +24,34 @@
                     </div>
                 </div>
 
+                <!-- Search & Filter Bar -->
+                <div class="mb-8">
+                    <form action="{{ route('expense-categories.index') }}" method="GET" class="flex flex-col md:flex-row gap-4 bg-gray-50 dark:bg-gray-700/50 p-4 rounded-2xl border border-gray-100 dark:border-gray-700">
+                        <!-- Search -->
+                        <div class="flex-1 relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                            </div>
+                            <input type="text" name="search" value="{{ request('search') }}" class="w-full pl-10 pr-4 py-3 rounded-xl border-gray-200 dark:border-gray-600 dark:bg-gray-800 focus:ring-blue-500 focus:border-blue-500 text-sm font-medium dark:text-white shadow-sm" placeholder="Cari nama saluran dana...">
+                        </div>
+                        
+                        <!-- Sort -->
+                        <div class="md:w-64">
+                            <select name="sort" onchange="this.form.submit()" class="w-full py-3 rounded-xl border-gray-200 dark:border-gray-600 dark:bg-gray-800 focus:ring-blue-500 focus:border-blue-500 text-sm font-medium dark:text-white shadow-sm">
+                                <option value="terbaru" {{ request('sort') == 'terbaru' || !request('sort') ? 'selected' : '' }}>Urutkan: Terbaru</option>
+                                <option value="terbesar" {{ request('sort') == 'terbesar' ? 'selected' : '' }}>Pengeluaran Terbesar</option>
+                                <option value="terkecil" {{ request('sort') == 'terkecil' ? 'selected' : '' }}>Pengeluaran Terkecil</option>
+                                <option value="terlama" {{ request('sort') == 'terlama' ? 'selected' : '' }}>Terlama</option>
+                            </select>
+                        </div>
+
+                        <!-- Submit Button (Mobile mainly) -->
+                        <div class="md:hidden">
+                            <button type="submit" class="w-full bg-blue-600 text-white font-bold py-3 rounded-xl">Terapkan</button>
+                        </div>
+                    </form>
+                </div>
+
                 @if (session('success'))
                     <div class="mb-4 bg-green-50 text-green-800 p-4 rounded-lg">
                         {{ session('success') }}
