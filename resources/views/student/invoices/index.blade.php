@@ -36,9 +36,13 @@
                                 <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Jatuh Tempo</p>
                                 <p class="text-sm font-bold text-gray-700 dark:text-gray-300">{{ $invoice->jatuh_tempo ? $invoice->jatuh_tempo->format('d M Y') : '-' }}</p>
                             </div>
-                            <div class="col-span-2 lg:col-span-1 flex gap-2">
+                             <div class="col-span-2 lg:col-span-1 flex gap-2">
                                 <a href="{{ route('student.invoices.show', $invoice) }}" class="flex-1 lg:flex-none px-6 py-3 bg-gray-900 dark:bg-gray-700 text-white rounded-2xl font-black text-sm text-center hover:bg-blue-600 transition-colors active:scale-95">
                                     Detail
+                                </a>
+                                <a href="{{ route('student.invoices.pdf', $invoice) }}" class="flex-1 lg:flex-none px-6 py-3 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-2xl font-black text-sm text-center hover:bg-green-600 hover:text-white transition-colors active:scale-95 flex items-center justify-center gap-2" title="Download PDF">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                                    PDF
                                 </a>
                                 @if($invoice->status !== 'paid')
                                     <button class="flex-1 lg:flex-none px-6 py-3 bg-blue-600 text-white rounded-2xl font-black text-sm text-center hover:bg-blue-700 transition-colors shadow-lg shadow-blue-600/20 active:scale-95">
